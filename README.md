@@ -1,5 +1,5 @@
 # Seven-Nation-Army
-You are one of the seven Great Powers prior to World War I and your goal is to conquer all of Europe! (well… at least half of it)
+You are one of the seven Great Powers prior to World War I and your goal is to conquer all of Europe! \ (well… at least half of it)
 
 # The Team
 [Christopher Greer](https://github.com/BornIncompetence)\
