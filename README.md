@@ -8,3 +8,4 @@ You are one of the seven Great Powers prior to World War I and your goal is to c
 [David Lepore](https://github.com/Davidlepore)\
 [Samantha Wiley](https://github.com/samanthawiley)\
 [Tomas Ponce](https://github.com/Ponce-1)
+[Mercer Denholm](https://github.com/MataMercer)
