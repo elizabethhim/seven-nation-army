@@ -3,9 +3,9 @@ You are one of the seven Great Powers prior to World War I and your goal is to c
 
 # The Team
 [Christopher Greer](https://github.com/BornIncompetence)\
+[David Lepore](https://github.com/Davidlepore)\
 [Elizabeth Him](https://github.com/elizabethhim/)\
 [Enrique Zuniga](https://github.com/zuniganoel)\
-[David Lepore](https://github.com/Davidlepore)\
-[Samantha Wiley](https://github.com/samanthawiley)\
-[Tomas Ponce](https://github.com/Ponce-1)\
 [Mercer Denholm](https://github.com/MataMercer)\
+[Samantha Wiley](https://github.com/samanthawiley)\
+[Tomas Ponce](https://github.com/Ponce-1)
