@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <style>
+		.container {
+            display: grid;
+            user-drag: none; 
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-drag: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+		.resize_fit_center {
+		    position: fixed;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    max-width: 100%;
+		    max-height: 100%;
+		    margin: auto;
+		    overflow: auto;
+		}
+		.background {
+			z-index: 0;
+		}
+		.screen_item {
+			position: fixed;
+			max-width: auto;
+			max-height: 15vh;
+			z-index: 1;
+		}
+		.item:hover{
+			transform: scale(1.1);
+		}
+    </style>
+	</head>
+
+	<body>
+		<div class='container'>
+			<img class= "resize_fit_center background" src= "images/main_menu_bg_w_title.png">
+			<img class= "item resize_fit_center screen_item" src= "images/main_menu_new_game.png">
+			<img class= "item resize_fit_center screen_item" style="top: 30%;" src= "images/main_menu_continue.png">
+			<img class= "item resize_fit_center screen_item" style="top: 60%;" src= "images/main_menu_settings.png">
+		</div>
+	</body>
+</html>
