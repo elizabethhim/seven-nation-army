@@ -13,7 +13,7 @@
 import { app, BrowserWindow, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
 
 export default class AppUpdater {
   constructor() {
@@ -114,7 +114,7 @@ const mainMenuTemplate = [
       {
         label: 'Overlay',
         click(menuItem, browserWindow, event) {
-          browserWindow.loadURL(`file://${__dirname}/components/Map.js`);
+          browserWindow.loadURL(`file://${__dirname}/app.html`);
         }
       },
       {
