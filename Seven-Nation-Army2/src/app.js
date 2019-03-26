@@ -10,9 +10,6 @@ class App extends Component {
         <p>helege</p>
         <h1>feroiijofije</h1>
         <Button color="danger">Danger!</Button>
-
- 
-
       </div>
     );
   }
