@@ -25,3 +25,8 @@
     overflow: auto;
     z-index: 0;
 }
+
+.map_overlay{
+    z-index: 1;
+    
+}
