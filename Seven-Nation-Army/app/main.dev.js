@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -93,10 +93,36 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 });
+// menu template
+const mainMenuTemplate = [
+  {
+    label: 'Change Page',
+    submenu: [
+      {
+        label: 'Chat',
+        click(menuItem, browserWindow, event) {
+          browserWindow.loadURL(`file://${__dirname}/components/Chat.html`);
+        }
+      },
+      {
+        label: 'Overlay',
+        click(menuItem, browserWindow, event) {
+          browserWindow.loadURL(`file://${__dirname}/components/Map.js`);
+        }
+      },
+      {
+        label: 'Quit',
+        click() {
+          app.quit();
+        }
+      }
+    ]
+  }
+];

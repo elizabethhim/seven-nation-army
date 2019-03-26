@@ -11,7 +11,7 @@ import GamePage from './containers/GamePage';
 export default () => (
   <App>
     <Switch>
-     <Route path={routes.WELCOME} exact={true} component={WelcomePage} />
+      <Route path={routes.WELCOME} exact={true} component={WelcomePage} />
       <Route path={routes.HOME} component={HomePage} />
       <Route path={routes.GAME} component={GamePage} />
     </Switch>
