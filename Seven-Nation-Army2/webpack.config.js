@@ -10,6 +10,15 @@ const config = {
     module: {
         rules: [
             {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: [
+                  {
+                    loader: 'source-map-loader',
+                  },
+                ],
+              },
+            {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader'
@@ -19,6 +28,7 @@ const config = {
                 use: ['style-loader', 'css-loader'],
               }
         ]
-    }
+    },
+    devtool: 'inline-source-map',
 };
 module.exports = config;

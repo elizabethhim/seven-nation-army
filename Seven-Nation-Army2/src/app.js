@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
+// import { Button } from 'reactstrap';
+import AppRouter from './routers/AppRouter';
+
 
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        
-        <p>helege</p>
-        <h1>feroiijofije</h1>
-        <Button color="danger">Danger!</Button>
+        <AppRouter/>
       </div>
     );
   }
