@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "reactstrap";
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import "../css/Login.css";
 
 export default class Login extends Component {
@@ -30,31 +30,14 @@ export default class Login extends Component {
     return (
         <div className="Login">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
-            <ControlLabel>Email</ControlLabel>
-            <FormControl
-              autoFocus
-              type="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <Button
-            block
-            bsSize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-          >
-            Login
-          </Button>
+            <FormGroup>
+            <Label for="exampleEmail">Email</Label>
+            <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+        </FormGroup>
+        <FormGroup>
+            <Label for="examplePassword">Password</Label>
+            <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" />
+        </FormGroup>
         </form>
       </div>
     );

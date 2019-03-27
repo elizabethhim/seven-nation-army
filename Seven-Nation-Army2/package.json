@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "webpack --mode=development --devtool eval-source-map && electron .",
     "build": "webpack --mode=development --devtool eval-source-map",
     "dev-server": "webpack-dev-server --mode=development --devtool eval-source-map"
   },
