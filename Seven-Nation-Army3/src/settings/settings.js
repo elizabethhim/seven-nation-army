@@ -43,7 +43,7 @@ export default class Example extends React.Component {
                 <NavLink href="/settings.js">Settings</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="">Help</NavLink>
+                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
@@ -51,10 +51,10 @@ export default class Example extends React.Component {
                   </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    About
+                    Option 1
                     </DropdownItem>
                   <DropdownItem>
-                    Simple Mode
+                    Option 2
                     </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>
