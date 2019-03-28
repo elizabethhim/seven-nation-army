@@ -36,6 +36,7 @@
 }
 .chat .chat-header .chat-num-messages {
   color: #92959e;
+  font-size: 12px;
 }
 .chat .chat-header .fa-star {
   float: right;
@@ -52,8 +53,12 @@
 .chat .chat-history .message-data {
   margin-bottom: 10px;
 }
+.chat .chat-history .message-data-name {
+  font-size: 12px;
+}
 .chat .chat-history .message-data-time {
   color: #a8aab1;
+  font-size: 12px;
   padding-left: 2px;
 }
 .chat .chat-history .message {
