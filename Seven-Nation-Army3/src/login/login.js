@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Container, Row, Col, CardBody, Jumbotron } from 'reactstrap';
+import {Link } from "react-router-dom";
 import "../styles/Login.css";
 
 
@@ -32,18 +33,22 @@ export default class Login extends Component {
         <Container className=".LoginBody">
    
         
+        
+        <Col className="col-md-5 col-md-12 mt4">
 
-        <Col className="col-md-5 col-md-12">
-    
+        <Row>
         <Card body className="text-center">
-        <h1 className="display-3">Seven Nation Army</h1>
-        <p className="lead">The Diplomacy Board Game Desktop App</p>
+        <h2 className="display-3">Diplomacy</h2>
+        <p className="lead">An Online Board Game Desktop App</p>
         </Card>
+        </Row>
 
-        <Card className="LoginCard" >
+
+        <Row>
+        <Card className="LoginCard" >        
         <CardBody>
-        <form onSubmit={this.handleSubmit}>
         <CardTitle className="text-center">Sign-in</CardTitle>
+        <form onSubmit={this.handleSubmit}>
         <hr className="my-2" />
             <FormGroup>
             <Label for="exampleEmail">Email</Label>
@@ -53,11 +58,11 @@ export default class Login extends Component {
             <Label for="examplePassword">Password</Label>
             <Input type="password" name="password" id="examplePassword" placeholder="******" />
         </FormGroup>
-        <Button color="primary">Submit</Button>
+        <Link to="/"><Button color="primary">Login</Button></Link> <Button color="primary" >Sign-up</Button>
         </form>
-        </CardBody>
-        
+        </CardBody> 
         </Card>
+        </Row>
         </Col>
       </Container>
     );
