@@ -6,6 +6,7 @@ import {AnimatedSwitch} from 'react-router-transition';
 import Home from './home';
 import About from './about';
 import Login from './login/login';
+import Map from './game/map/map';
 import PageNotFound from './common/components/PageNotFound';
 
 export default (
@@ -15,7 +16,7 @@ export default (
       atActive={{ opacity: 1 }}
       className="switch-wrapper"
   >
-    <Route exact path="/" component={Home}/>
+    <Route exact path="/" component={Map}/>
     <Route path="/login" component={Login}/>
     <Route component={PageNotFound} />
   </AnimatedSwitch>
