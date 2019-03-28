@@ -1,17 +1,69 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input, Container } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Container,  Collapse, Navbar, NavbarToggler, NavbarBrand,Nav,
+    NavItem,
+    NavLink,
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem } from 'reactstrap';
 import "../styles/Setting.scss";
 
 export default class Example extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false
+        };
+        }
+        toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
   render() {
     return (
         <Container className=".settingsBody">
+
         <div className="fullscreen-bg">
             <video loop muted autoPlay poster={require("../media/images/BackgroundVidStill.png")} className="fullscreen-bg__video">
                 <source src={require("../media/videos/OceanBackground.mp4")} type="video/mp4"/>
                 <source src={require("../media/videos/OceanBackground.ogv")} type="video/ogg"/>
             </video>
         </div>
+        <nav class ="navbar navbar-expand-lg" >
+            <NavbarBrand href="/">Diplomacy</NavbarBrand>
+            <NavbarToggler onClick={this.toggle} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav className="ml-auto" navbar>
+                <NavItem>
+                  <NavLink href="/settings.js">Settings</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                </NavItem>
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret>
+                    Options
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem>
+                      Option 1
+                    </DropdownItem>
+                    <DropdownItem>
+                      Option 2
+                    </DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem>
+                      Reset
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </Nav>
+            </Collapse>
+
+        </nav>
       <Form>
         <FormGroup>
           <Label for="exampleEmail">Change Display Name</Label>
