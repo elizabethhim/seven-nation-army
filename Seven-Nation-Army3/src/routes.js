@@ -14,7 +14,7 @@ import PageNotFound from './common/components/PageNotFound';
 
 
 export default (
-  <Router>
+
     <AnimatedSwitch
     atEnter={{ opacity: 0 }}
         atLeave={{ opacity: 0 }}
@@ -29,5 +29,5 @@ export default (
       <Route path="/login" component={Login}/>
       <Route component={PageNotFound} />
     </AnimatedSwitch>
-  </Router>
+
 );
