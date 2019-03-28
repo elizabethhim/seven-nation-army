@@ -1,37 +1,37 @@
-.about {
+.person-about {
     float: left;
     margin-top: 8px;
     padding-left: 8px;
 }
 
-.status {
-    font-size: 9px;
-    color: #92959e;
-}
-
-.img {
+.person-img {
     float: left;
     width: 35px;
     height: 35px;
 }
 
-.name {
+.person-name {
     font-size: 12px;
 }
 
-.me {
+.person-status {
+    font-size: 9px;
+    color: #92959e;
+}
+
+.person-me {
     margin-right: 2px;
     font-size: 6px;
     color: #94c2ed;
 }
 
-.online {
+.person-online {
     margin-right: 2px;
     font-size: 6px;
     color: #86bb71;
 }
 
-.offline {
+.person-offline {
     margin-right: 2px;
     font-size: 6px;
     color: #e38968;

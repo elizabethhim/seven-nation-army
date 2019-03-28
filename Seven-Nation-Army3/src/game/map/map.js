@@ -9,6 +9,7 @@ import "../../styles/Map.scss";
 // Holdover from first Seven-Nation-Army --Chris
 // import Popup from '../../chat/components/Popup';
 import ChatContainer from '../../chat/components/ChatContainer';
+import BackButton from './BackButton';
 
 export default class Map extends Component {
 
@@ -138,6 +139,7 @@ export default class Map extends Component {
 		return (
 			// The displayArea class will keep everything centered on the screen and resize it with the window
 			<Fragment>
+				<BackButton />
 				<ChatContainer />
 				<div className="displayArea">
 					<img

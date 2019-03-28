@@ -29,16 +29,16 @@ class ChatContainer extends Component {
         {!chatIsVisible && (
           <Button
             onClick={this.toggle}
-            className="button"
+            className="chat-container-button"
             active={chatIsVisible}
           >
-            <FontAwesomeIcon icon={faAngleUp} className="maximize" />
-            <span className="chat-text">Chat</span>
+            <FontAwesomeIcon icon={faAngleUp} className="maximize-icon" />
+            <span className="chat-container-button-text">Chat</span>
           </Button>
         )}
         {chatIsVisible && (
-          <div className="container">
-            <PeopleList className="list" />
+          <div className="chat-container">
+            <PeopleList className="people-list" />
             <ChatHistory />
           </div>
         )}

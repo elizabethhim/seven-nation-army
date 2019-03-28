@@ -11,13 +11,13 @@ export default class Person extends Component {
     const { name, isOnline, status, source } = this.props;
     return (
       <li className="clearfix">
-        <img src={source} alt="avatar" className="img" />
-        <div className="about">
-          <div className="name">{name}</div>
-          <div className="status">
+        <img src={source} alt="avatar" className="person-img" />
+        <div className="person-about">
+          <div className="person-name">{name}</div>
+          <div className="person-status">
             <FontAwesomeIcon
               icon={faCircle}
-              className={isOnline ? 'online' : 'offline'}
+              className={isOnline ? 'person-online' : 'person-offline'}
             />
             {status}
           </div>

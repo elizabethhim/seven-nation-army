@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Container, Row, Col, CardBody, InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
-import {Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/Login.scss";
 
 
@@ -30,32 +30,32 @@ export default class Register extends Component {
 
   render() {
     return (
-        <Container className=".LoginBody">
-   
-        
-        
+      <Container className=".LoginBody">
+
+
+
         <Col className="col-md-5 col-md-12 mt4">
 
 
-        <Row>
-        <Card className="LoginCard" >        
-        <CardBody>
-        <CardTitle className="text-center">Register a new account</CardTitle>
-        <form onSubmit={this.handleSubmit}>
-        <hr className="my-2" />
-            <FormGroup>
-            <Label for="exampleEmail">Email</Label>
-            <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
-        </FormGroup>
-        <FormGroup>
-            <Label for="examplePassword">Password</Label>
-            <Input type="password" name="password" id="examplePassword" placeholder="******" />
-        </FormGroup>
-        <Link to="/Login"><Button color="primary">Submit</Button></Link> <Link to="/Login"><Button color="primary">Cancel</Button></Link> 
-        </form>
-        </CardBody> 
-        </Card>
-        </Row>
+          <Row>
+            <Card className="LoginCard" >
+              <CardBody>
+                <CardTitle className="text-center">Register a new account</CardTitle>
+                <form onSubmit={this.handleSubmit}>
+                  <hr className="my-2" />
+                  <FormGroup>
+                    <Label for="exampleEmail">Email</Label>
+                    <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="examplePassword">Password</Label>
+                    <Input type="password" name="password" id="examplePassword" placeholder="******" />
+                  </FormGroup>
+                  <Link to="/Login"><Button color="primary">Submit</Button></Link> <Link to="/Login"><Button color="primary">Cancel</Button></Link>
+                </form>
+              </CardBody>
+            </Card>
+          </Row>
         </Col>
       </Container>
     );
