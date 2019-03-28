@@ -38,9 +38,16 @@ export default class Login extends Component {
           </video>
         </div>
         <Col className="col-md-5 col-md-12 mt4">
+          
+
           <Row>
-            <img src={require("../media/images/title.png")}></img>
-          </Row>
+        <Card body className="text-center titlecard">
+        <CardBody>
+        <h2 className="display-3"> <img src={require("../media/images/title.png")}></img></h2>
+        <p className="lead">An Online Board Game Desktop App</p>
+        </CardBody>
+        </Card>
+        </Row>
           <Row>
             <Card className="LoginCard" >
               <CardBody>

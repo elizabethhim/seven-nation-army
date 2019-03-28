@@ -34,8 +34,13 @@ body {
   object-fit: fill;
 }
 
+.titlecard{
+  background: none;
+  border: none;
+}
+
 img {
-  display: block;
+  
   max-height: 150px;
   width: auto;
   height: auto;
