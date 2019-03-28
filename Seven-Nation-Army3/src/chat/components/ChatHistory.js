@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import '../../styles/Chat.scss';
+
 // TODO: Port Chat History from the Chat.html file to React
 export default class ChatHistory extends Component {
   render() {
