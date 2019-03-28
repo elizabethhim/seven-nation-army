@@ -26,7 +26,7 @@ class Home extends Component {
 		return (
 
 			<div>
-			{/* <Container>
+			{ <Container>
 			<nav class ="navbar navbar-expand-lg" >
 				<NavbarBrand href="/">Diplomacy</NavbarBrand>
 				<NavbarToggler onClick={this.toggle} />
@@ -58,7 +58,7 @@ class Home extends Component {
 				</Nav>
 				</Collapse>
 			</nav>
-			</Container> */}
+			</Container> }
 				<div className="fullscreen-bg">
 					<video loop muted autoPlay poster={require("../media/images/BackgroundVidStill.png")} className="fullscreen-bg__video">
 						<source src={require("../media/videos/OceanBackground.mp4")} type="video/mp4"/>

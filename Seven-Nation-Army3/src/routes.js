@@ -11,6 +11,7 @@ import Map from './game/map/map';
 import Settings from './settings/settings';
 import Help from './help/help';
 import PageNotFound from './common/components/PageNotFound';
+import Chat from './game/chat/chat';
 
 
 export default (
@@ -27,6 +28,7 @@ export default (
       <Route path="/help" component={Help}/>
       <Route path="/about" component={About}/>
       <Route path="/login" component={Login}/>
+      <Route path ="/chat" component={Chat}/>
       <Route component={PageNotFound} />
     </AnimatedSwitch>
 

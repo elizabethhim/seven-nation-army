@@ -31,7 +31,7 @@ export default class Chat extends Component {
                         <li className="clearfix" data-component="Person">
                         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
                         <div className="about">
-                            <div className="name">Vincent Porter</div>
+                            <div className="name">Austria</div>
                             <div className="status">
                             <i className="fa fa-circle online"></i> online
                             </div>
@@ -41,7 +41,7 @@ export default class Chat extends Component {
                         <li className="clearfix">
                         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_02.jpg" alt="avatar" />
                         <div className="about">
-                            <div className="name">Aiden Chavez</div>
+                            <div className="name">Italy</div>
                             <div className="status">
                             <i className="fa fa-circle offline"></i> left 7 mins <br /> ago
                             </div>
@@ -51,7 +51,7 @@ export default class Chat extends Component {
                         <li className="clearfix">
                         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_03.jpg" alt="avatar" />
                         <div className="about">
-                            <div className="name">Mike Thomas</div>
+                            <div className="name">England</div>
                             <div className="status">
                             <i className="fa fa-circle online"></i> online
                             </div>
@@ -61,7 +61,7 @@ export default class Chat extends Component {
                         <li className="clearfix">
                         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_04.jpg" alt="avatar" />
                         <div className="about">
-                            <div className="name">Erica Hughes</div>
+                            <div className="name">France</div>
                             <div className="status">
                             <i className="fa fa-circle online"></i> online
                             </div>

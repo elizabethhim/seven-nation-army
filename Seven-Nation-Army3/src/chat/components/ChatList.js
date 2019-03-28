@@ -6,7 +6,7 @@ export default class ChatList extends Component {
     return (
       <Fragment>
         <Person
-          name="Vincent Porter"
+          name="Italy"
           isOnline
           status="online"
           source="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg"
