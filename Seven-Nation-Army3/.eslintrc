@@ -10,14 +10,21 @@
     "node": true,
     "es6": true
   },
-  "plugins": ["import", "react"],
+  "plugins": [
+    "import",
+    "react"
+  ],
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "sourceType": "module"
   },
   "rules": {
     "no-console": "off",
     "prefer-arrow-callback": 2,
-    "strict": ["error", "global"],
+    "strict": [
+      "error",
+      "global"
+    ],
     "curly": "warn"
   }
 }

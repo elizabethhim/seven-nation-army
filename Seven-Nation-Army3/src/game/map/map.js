@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Container, Row, Col, CardBody, Jumbotron } from 'reactstrap';
 
 import mapOverlay from "../../media/images/map_overlays.svg";
@@ -6,11 +6,15 @@ import mapLabels from "../../media/images/map_labels.svg";
 import mapImage from "../../media/images/standard_colored.png";
 import "../../styles/Map.scss";
 
+// Holdover from first Seven-Nation-Army --Chris
+// import Popup from '../../chat/components/Popup';
+import ChatContainer from '../../chat/components/ChatContainer';
+
 export default class Map extends Component {
 
 	constructor(props) {
 		super(props)
-	};
+	}
 
 	highlight() {
 		// Array of all the territory names, used as reference
@@ -106,7 +110,7 @@ export default class Map extends Component {
 			const svgDoc = highlight_layer.contentDocument;
 			for (let i = 0; i < 76; i++) {
 				const value = svgDoc.getElementById(names[i]);
-				if(value){
+				if (value) {
 					value.style.fill = "yellow";
 					value.addEventListener(
 						'mouseenter',
@@ -133,28 +137,31 @@ export default class Map extends Component {
 	render() {
 		return (
 			// The displayArea class will keep everything centered on the screen and resize it with the window
-			<div className="displayArea">
-				<img
-					className='resize_fit_center'
-					src={mapImage}
-					id="map_image"
-				/>
-				<object
-					className="resize_fit_center"
-					data={mapOverlay}
-					type="image/svg+xml"
-					id="map_overlay"
-					onLoad={this.highlight}
-				/>
+			<Fragment>
+				<ChatContainer />
+				<div className="displayArea">
+					<img
+						className='resize_fit_center'
+						src={mapImage}
+						id="map_image"
+					/>
+					<object
+						className="resize_fit_center"
+						data={mapOverlay}
+						type="image/svg+xml"
+						id="map_overlay"
+						onLoad={this.highlight}
+					/>
 
 
-				<div className="popup" id="popupContainer">
-					<span className="popuptext" id="myPopup">
-						<p id="popupText"></p>
-					</span>
+					<div className="popup" id="popupContainer">
+						<span className="popuptext" id="myPopup">
+							<p id="popupText"></p>
+						</span>
+					</div>
+
 				</div>
-
-			</div>
+			</Fragment>
 		);
 	}
 }

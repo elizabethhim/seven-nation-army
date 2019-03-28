@@ -18,11 +18,11 @@ class UserRepos extends Component {
 		let { repos, isLoading } = this.props;
 
 		if (isLoading) {
-      pageContent = (
-        <div className="userReposLoader">
-          Loading...
+			pageContent = (
+				<div className="userReposLoader">
+					Loading...
         </div>
-      )
+			)
 		} else {
 			pageContent = (
 				<ul className="repos">

@@ -13,7 +13,7 @@ import { Container } from 'reactstrap';
 
 class Header extends Component {
 
-	constructor(props) {
+  constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
@@ -27,28 +27,28 @@ class Header extends Component {
     });
   }
 
-	render () {
-		return (
-	    <header>
-	    	<Container>
-					<Navbar color="faded" expand="md">
-	          <NavbarBrand href="/">CRA Boilerplate</NavbarBrand>
-	          <NavbarToggler onClick={this.toggle} />
-	          <Collapse isOpen={this.state.isOpen} navbar>
-	            <Nav className="ml-auto" navbar>
-	              <NavItem>
-	                <NavLink href="#/">Home</NavLink>
-	              </NavItem>
-	              <NavItem>
-	                <NavLink href="#/about">About</NavLink>
-	              </NavItem>
-	            </Nav>
-	          </Collapse>
-	        </Navbar>
+  render() {
+    return (
+      <header>
+        <Container>
+          <Navbar color="faded" expand="md">
+            <NavbarBrand href="/">CRA Boilerplate</NavbarBrand>
+            <NavbarToggler onClick={this.toggle} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav className="ml-auto" navbar>
+                <NavItem>
+                  <NavLink href="#/">Home</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href="#/about">About</NavLink>
+                </NavItem>
+              </Nav>
+            </Collapse>
+          </Navbar>
         </Container>
-	    </header>
-	  )
-	}
+      </header>
+    )
+  }
 }
 
 export default Header;
