@@ -1,18 +1,14 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable jsx-a11y/alt-text */
-import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
-// import routes from '../constants/routes';
+import React, { Component, Fragment } from 'react';
 import styles from './Map.css';
 import mapOverlay from '../../resources/images/map_overlays.svg';
 import mapLabels from '../../resources/images/map_labels.svg';
 import mapImage from '../../resources/images/standard_colored.png';
 
-type Props = {};
+import Popup from './Popup';
+import ChatContainer from './ChatContainer';
 
-export default class Map extends Component<Props> {
-  props: Props;
-
+export default class Map extends Component {
   highlight = () => {
     // Array of all the territory names, used as reference
     const names = [
@@ -110,7 +106,7 @@ export default class Map extends Component<Props> {
           for (let i = 0; i < 76; i += 1) {
             territories.push(svgDoc.getElementById(names[i]));
           }
-          territories.forEach((value, i) => {
+          territories.forEach(value => {
             if (value) {
               value.addEventListener(
                 'mouseover',
@@ -138,27 +134,34 @@ export default class Map extends Component<Props> {
   render() {
     return (
       // The displayArea class will keep everything centered on the screen and resize it with the window
-      <div className={styles.displayArea}>
-        <img
-          className={styles.resize_fit_center}
-          src={mapImage}
-          id="map_image"
-        />
-        <object
-          className={styles.resize_fit_center}
-          data={mapOverlay}
-          type="image/svg+xml"
-          id="map_overlay"
-        />
+      <Fragment>
+        <Popup country="Germany" player="Smith" id={1} />
+        <ChatContainer />
+        <div className={styles.displayArea}>
+          <img
+            className={styles.resize_fit_center}
+            src={mapImage}
+            id="map_image"
+            alt="map_image"
+          />
+          <object
+            className={styles.resize_fit_center}
+            data={mapOverlay}
+            type="image/svg+xml"
+            id="map_overlay"
+            title="map_overlay"
+          />
 
-        <object
-          className={styles.resize_fit_center}
-          data={mapLabels.svg}
-          type="image/svg+xml"
-          id="map_labels"
-          onLoad={this.highlight}
-        />
-      </div>
+          <object
+            className={styles.resize_fit_center}
+            data={mapLabels.svg}
+            type="image/svg+xml"
+            id="map_labels"
+            title="map_labels"
+            onLoad={this.highlight}
+          />
+        </div>
+      </Fragment>
     );
   }
 }
