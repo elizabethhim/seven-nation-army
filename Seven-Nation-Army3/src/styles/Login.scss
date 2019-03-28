@@ -1,0 +1,47 @@
+
+  .LoginCard{
+    margin: 0 auto;
+    max-width: 320px;
+
+  }
+
+.col{
+    padding: 2%;
+}
+
+.row{
+  padding: 2%;
+}
+
+  body{
+    background-color: #7F7979;
+  }
+
+  .fullscreen-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -100;
+}
+
+.fullscreen-bg__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+img {
+  display: block;
+  max-height:150px;
+  width: auto;
+  height: auto;
+}
+
+
+

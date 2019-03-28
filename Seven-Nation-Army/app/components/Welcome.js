@@ -7,28 +7,33 @@ import './Welcome.css';
 export default class Welcome extends Component {
   render() {
     return (
-      <NavLink to="/game" exact>
         <div className="container">
+          
           <img
             className="background resize_fit_center"
             src="../resources/images/main_menu_bg_w_title.png"
           />
+    
+          <NavLink to="/game" exact> 
+          <div>
           <img
             className="screen_item resize_fit_center item"
             src="../resources/images/main_menu_new_game.png"
           />
-          <img
-            className="screen_item resize_fit_center item"
-            style={{ top: '30%' }}
-            src="../resources/images/main_menu_continue.png"
-          />
+        </div>
+           </NavLink>
+          
+          <NavLink to="/settings" exact>
+          <div>
           <img
             className="screen_item resize_fit_center item"
             style={{ top: '60%' }}
             src="../resources/images/main_menu_settings.png"
           />
+          </div>
+          </NavLink>
         </div>
-      </NavLink>
+      
       // <div>
       //   <NavLink to="/game" exact>
       //     <Button color="danger">New Game</Button>
