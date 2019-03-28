@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Container, Row, Col, CardBody, Jumbotron } from 'reactstrap';
 import {Link } from "react-router-dom";
-import "../styles/Login.css";
+import "../styles/Login.scss";
 
 
 export default class Login extends Component {
