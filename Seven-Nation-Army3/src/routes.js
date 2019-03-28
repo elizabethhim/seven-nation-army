@@ -7,6 +7,7 @@ import Home from './home';
 import About from './about';
 import Login from './login/login';
 import PageNotFound from './common/components/PageNotFound';
+import Settings from './settings/settings';
 
 export default (
   <AnimatedSwitch
@@ -17,6 +18,7 @@ export default (
   >
     <Route exact path="/" component={Home}/>
     <Route path="/login" component={Login}/>
+    <Route exact path="/settings" component={Settings}/>
     <Route component={PageNotFound} />
   </AnimatedSwitch>
 );

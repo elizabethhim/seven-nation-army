@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './Chat.css';
+import styles from '../components/css/chat';
 
 export default class Map extends Component {
     render() {
