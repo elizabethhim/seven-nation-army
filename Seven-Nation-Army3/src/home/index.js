@@ -67,8 +67,7 @@ class Home extends Component {
 						<source src={require("../media/videos/OceanBackground.ogv")} type="video/ogg" />
 					</video>
 				</div>
-				<div>
-
+				<div className="spacer">
 					<NavLink to="/map" exact>
 						<img
 							className="screen_item resize_fit_center item"
@@ -80,13 +79,14 @@ class Home extends Component {
 						style={{ top: '30%' }}
 						src={require("../media/images/main_menu_continue.png")}
 					/>
-					<img
-						className="screen_item resize_fit_center item"
-						style={{ top: '60%' }}
-						src={require("../media/images/main_menu_settings.png")}
-					/>
+					<NavLink to="/settings" exact>
+						<img
+							className="screen_item resize_fit_center item"
+							style={{ top: '60%' }}
+							src={require("../media/images/main_menu_settings.png")}
+						/>
+					</NavLink>
 				</div>
-
 			</div>
 		);
 	}
