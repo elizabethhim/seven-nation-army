@@ -93,7 +93,7 @@ export default class Map extends Component {
 			'Yorkshire'
 		];
 
-		var highlight_layer = document.getElementById('map_overlay');
+		const highlight_layer = document.getElementById('map_overlay');
 		let territories = [];
 
 		// Opens the map_overlay svg document and iterates over all paths within it
@@ -103,9 +103,9 @@ export default class Map extends Component {
 		// Currently it is set to change the color and opacity on enter and exit
 		if (highlight_layer) {
 
-			let svgDoc = highlight_layer.contentDocument;
+			const svgDoc = highlight_layer.contentDocument;
 			for (let i = 0; i < 76; i++) {
-				let value = svgDoc.getElementById(names[i]);
+				const value = svgDoc.getElementById(names[i]);
 				if(value){
 					value.style.fill = "yellow";
 					value.addEventListener(
@@ -121,8 +121,8 @@ export default class Map extends Component {
 					value.addEventListener(
 						'click',
 						() => {
-							const popup = document.getElementById('myPopup');
-							popup.classList.toggle('show');
+							document.getElementById("popupText").innerHTML = "Country:" + value.id + "<br/><br/>" + "Player: " + value.id;
+							document.getElementById('myPopup').classList.toggle('show');
 						}, false);
 				}
 
@@ -148,10 +148,9 @@ export default class Map extends Component {
 				/>
 
 
-				<div className="popup" onClick={this.popupInfo}>
+				<div className="popup" id="popupContainer">
 					<span className="popuptext" id="myPopup">
-						<p>Country: Germany</p>
-						<p>Player: Smith</p>
+						<p id="popupText"></p>
 					</span>
 				</div>
 
