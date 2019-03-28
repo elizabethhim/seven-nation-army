@@ -43,10 +43,8 @@ export default class Login extends Component {
         <Col className="col-md-5 col-md-12 mt4">
 
         <Row>
-        <Card body className="text-center">
-        <h2 className="display-3">Diplomacy</h2>
-        <p className="lead">An Online Board Game Desktop App</p>
-        </Card>
+    
+        <img src={require("../media/images/title.png")}></img>
         </Row>
 
 
