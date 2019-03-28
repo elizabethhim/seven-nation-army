@@ -16,7 +16,9 @@ export default (
       atActive={{ opacity: 1 }}
       className="switch-wrapper"
   >
-    <Route exact path="/" component={Map}/>
+    <Route exact path="/" component={Home}/>
+    <Route path="/map" component={Map}/>
+    <Route path="/about" component={About}/>
     <Route path="/login" component={Login}/>
     <Route component={PageNotFound} />
   </AnimatedSwitch>
