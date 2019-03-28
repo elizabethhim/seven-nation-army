@@ -33,7 +33,7 @@ export default class Example extends React.Component {
             </video>
         </div>
         <nav class ="navbar navbar-expand-lg" >
-            <NavbarBrand href="/">Diplomacy</NavbarBrand>
+            <NavbarBrand href="/">Seven Nation Army</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
