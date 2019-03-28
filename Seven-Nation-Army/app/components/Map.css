@@ -2,17 +2,18 @@
     margin: 0;
     padding: 0;
 }
+
 .displayArea {
     display: grid;
     height: 100%;
     width: 100%;
-    user-drag: none; 
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-drag: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
+
 .resize_fit_center {
     position: fixed;
     top: 0;
@@ -26,7 +27,6 @@
     z-index: 0;
 }
 
-.map_overlay{
+.map_overlay {
     z-index: 1;
-    
 }
