@@ -31,7 +31,13 @@ export default class Login extends Component {
   render() {
     return (
         <Container className=".LoginBody">
-   
+        <div className="fullscreen-bg">
+                    <video loop muted autoPlay poster={require("../media/images/BackgroundVidStill.png")} className="fullscreen-bg__video">
+                    
+                        <source src={require("../media/videos/OceanBackground.mp4")} type="video/mp4"/>
+                        <source src={require("../media/videos/OceanBackground.ogv")} type="video/ogg"/>
+                    </video>
+                </div>
         
         
         <Col className="col-md-5 col-md-12 mt4">
@@ -58,7 +64,7 @@ export default class Login extends Component {
             <Label for="examplePassword">Password</Label>
             <Input type="password" name="password" id="examplePassword" placeholder="******" />
         </FormGroup>
-        <Link to="/"><Button color="primary">Login</Button></Link> <Button color="primary" >Sign-up</Button>
+        <Link to="/"><Button color="primary">Login</Button></Link>  <Link to="/register"><Button color="primary" >Sign-up</Button></Link>
         </form>
         </CardBody> 
         </Card>
