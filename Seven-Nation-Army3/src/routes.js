@@ -24,7 +24,7 @@ export default (
     <Route exact path="/" component={Home} />
     <Route path="/map" component={Map} />
     <Route path="/settings" component={Settings} />
-    <Route path="/help" component={Help} />
+    {/*<Route path="/help" component={Help} />*/}
     <Route path="/about" component={About} />
     <Route path="/login" component={Login} />
     {/*<Route path ="/chat" component={Chat}/>*/}
