@@ -37,34 +37,33 @@ export default class Login extends Component {
             <source src={require("../media/videos/OceanBackground.ogv")} type="video/ogg" />
           </video>
         </div>
-        <Col className="col-md-5 col-md-12 mt4">
-          
 
+        <Col className="col-md-5 col-md-12 mt4">
           <Row>
-        <Card body className="text-center titlecard">
-        <CardBody>
-        <h2 className="display-3"> <img src={require("../media/images/title.png")}></img></h2>
-        <p className="lead">An Online Board Game Desktop App</p>
-        </CardBody>
-        </Card>
-        </Row>
+            <Card body className="text-center titlecard">
+              <CardBody>
+                <h2 className="display-3"> <img src={require("../media/images/title_SNA.png")}></img></h2>
+                <p className="lead" style={{color: "black"}} >An Online Board Game Desktop App</p>
+              </CardBody>
+            </Card>
+          </Row>
           <Row>
             <Card className="LoginCard" >
               <CardBody>
-                <CardTitle className="text-center">Sign-in</CardTitle>
+                <CardTitle style={{color: "black"}} className="text-center">Sign-in</CardTitle>
                 <form onSubmit={this.handleSubmit}>
-                  <hr className="my-2" />
-                  <FormGroup>
-                    <Label for="exampleEmail">Email</Label>
-                    <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="examplePassword">Password</Label>
-                    <Input type="password" name="password" id="examplePassword" placeholder="******" />
-                  </FormGroup>
-                  <Link to="/"><Button color="primary">Login</Button></Link>  <Link to="/register"><Button color="primary" >Sign-up</Button></Link>
-                </form>
-              </CardBody>
+                <hr className="my-2" />
+                <FormGroup>
+                  <Label style={{color: "black"}} for="exampleEmail">Email</Label>
+                  <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
+                </FormGroup>
+                <FormGroup>
+                  <Label style={{color: "black"}} for="examplePassword">Password</Label>
+                  <Input type="password" name="password" id="examplePassword" placeholder="******" />
+                </FormGroup>
+                <Link to="/"><Button color="primary">Login</Button></Link>  <Link to="/register"><Button color="primary" >Sign-up</Button></Link>
+              </form>
+            </CardBody>
             </Card>
           </Row>
         </Col>
