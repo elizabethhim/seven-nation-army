@@ -3,7 +3,7 @@
   color: white;
   display: flex;
   position: absolute;
-  bottom: 20px;
+  bottom: 0;
   left: 20px;
   z-index: 2;
 }
@@ -27,13 +27,13 @@
   float: left;
   display: flex;
   position: absolute;
-  bottom: 20px;
+  bottom: 0;
   left: 20px;
   z-index: 2;
 }
 
 .people-list {
   width: 150px;
-  height: 430px;
+  height: 460px;
   float: left;
 }
