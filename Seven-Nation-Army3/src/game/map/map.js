@@ -14,10 +14,53 @@ import BackButton from './BackButton';
 export default class Map extends Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
+		this.starting = [
+				  [["Vienna", 0], ["Budapest", 0], ["Trieste", 1]],
+				  [["Edinburgh", 1], ["Liverpool", 0], ["London", 1]],
+				  [["Brest", 1], ["Paris", 0], ["Marseilles", 0]],
+				  [["Kiel", 1], ["Berlin", 0], ["Munich", 0]],
+				  [["Venice", 0], ["Rome", 0], ["Naples", 1]],
+				  [["St_Petersburg", 1], ["Moscow", 0], ["Warsaw", 0], ["Sevastopol", 1]],
+				  [["Constantinople", 0], ["Ankara", 1], ["Smyrna", 0]]
+				 ];
+		this.init = this.init.bind(this);
+	}
+
+	init(){
+		const countries = ["Austria_Hungary", "England", "France", "Germany", "Italy", "Russia", "Turkey"];
+		const colors = ["#ed497d", "#605aa7", "#9a9148", "#c0495e", "#cb75db", "#c95df6", "#7b69b8"];
+		// 2D array
+		// const starting = [
+		// 				  [["Vienna", 0], ["Budapest", 0], ["Trieste", 1]],
+		// 				  [["Edinburgh", 1], ["Liverpool", 0], ["London", 1]],
+		// 				  [["Brest", 1], ["Paris", 0], ["Marseilles", 0]],
+		// 				  [["Kiel", 1], ["Berlin", 0], ["Munich", 0]],
+		// 				  [["Venice", 0], ["Rome", 0], ["Naples", 1]],
+		// 				  [["St_Petersburg", 1], ["Moscow", 0], ["Warsaw", 0], ["Sevastopol", 1]],
+		// 				  [["Constantinople", 0], ["Ankara", 1], ["Smyrna", 0]]
+		// 				 ];
+		const highlight_layer = document.getElementById('map_overlay');
+		if(highlight_layer){
+			const svgDoc = highlight_layer.contentDocument;
+			for (let i = 0; i < this.starting.length; i++){
+				for (let j = 0; j < this.starting[i].length; j++){
+					const value = svgDoc.getElementById(this.starting[i][j][0]);
+					if(value){
+						value.setAttribute('stroke', colors[i]);
+						value.setAttribute('stroke-width', 8);
+						value.setAttribute('stroke-opacity', .5);
+					}
+				}
+			}
+		}
+		this.highlight();
 	}
 
 	highlight() {
+		const countries = ["Austria_Hungary", "England", "France", "Germany", "Italy", "Russia", "Turkey"];
+		const colors = ["#ed497d", "#605aa7", "#9a9148", "#c0495e", "#cb75db", "#c95df6", "#7b69b8"];
+
 		// Array of all the territory names, used as reference
 		const names = [
 			'Switzerland',
@@ -117,17 +160,36 @@ export default class Map extends Component {
 						'mouseenter',
 						() => {
 							value.setAttribute("fill-opacity", 0.33);
+							const territoryOwner = typeof(countries[colors.indexOf(value.getAttribute('stroke'))]) != 'undefined' ? countries[colors.indexOf(value.getAttribute('stroke'))] : 'Unoccupied';
+							document.getElementById('myPopup').classList.toggle('show');
+							const arr = this.starting[countries.indexOf(countries[colors.indexOf(value.getAttribute('stroke'))])];
+							let unit = "None";
+							if(typeof arr != "undefined"){
+								for(let i = 0; i < arr.length; i++){
+									if(value.id == arr[i][0]){
+										unit = arr[i][1] == 0 ? "Army" : "Fleet";
+										break;
+									}
+								}
+							}
+	
+							document.getElementById("popupText").innerHTML = "Country: " + territoryOwner + 
+																			"<br/> Territory: " + value.id + 
+																			"<br/> Unit: " + unit + 
+																			"<br/>" + "Player:  None";
 						}, false);
 					value.addEventListener(
 						'mouseout',
 						() => {
 							value.setAttribute("fill-opacity", 0);
+							if (document.getElementsByClassName('show').length != 0){
+								document.getElementById('myPopup').classList.toggle('show');
+							}
 						}, false);
 					value.addEventListener(
 						'click',
 						() => {
-							document.getElementById("popupText").innerHTML = "Country:" + value.id + "<br/><br/>" + "Player: " + value.id;
-							document.getElementById('myPopup').classList.toggle('show');
+							console.log("CLICK");
 						}, false);
 				}
 
@@ -147,14 +209,14 @@ export default class Map extends Component {
 						src={mapImage}
 						id="map_image"
 					/>
+
 					<object
 						className="resize_fit_center"
 						data={mapOverlay}
 						type="image/svg+xml"
 						id="map_overlay"
-						onLoad={this.highlight}
+						onLoad={this.init}
 					/>
-
 
 					<div className="popup" id="popupContainer">
 						<span className="popuptext" id="myPopup">
