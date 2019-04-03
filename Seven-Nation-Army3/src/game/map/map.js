@@ -109,12 +109,19 @@ export default class Map extends Component {
 
 		this.territoryObjects = [];
 
+		this.coordsX = 0;
+		this.coordsY = 0;
+
 		this.init = this.init.bind(this);
-		this.mouseMove = this.mouseMove.bind(this);
+		this.movePopup = this.movePopup.bind(this);
 	}
 
-	mouseMove(){
-
+	movePopup(e){
+		this.coordsX = e.clientX;
+		this.coordsY = e.clientY;
+   		document.getElementById('popupContainer').style.top = this.coordsY - 10 + 'px';
+  		document.getElementById('popupContainer').style.left = this.coordsX + 75 + 'px';
+  		console.log(this.coordsX, this.coordsY);
 	}
 
 	init(){
@@ -124,6 +131,7 @@ export default class Map extends Component {
 			for(let i = 0; i < this.territoryNames.length; i++){
 				const territory = svgDoc.getElementById(this.territoryNames[i]);
 				if(territory){
+					territory.style.fill = "yellow";
 					territory.setAttribute('country', 'Unclaimed');
 					territory.setAttribute('unit', 'None');
 
@@ -157,13 +165,17 @@ export default class Map extends Component {
 
 	addListeners() {
 	    for (let i in this.territoryObjects) {
+
 	    	let territory = this.territoryObjects[i];
 	    	if(territory){
-		      	territory.style.fill = "yellow";
+		      	territory.addEventListener('mouseenter', () => {
+					document.getElementById('myPopup').classList.toggle('show'); 
+		      		territory.addEventListener('mousemove', this.movePopup);
+		      	});
+
 		      	territory.addEventListener('mouseenter', () => {
 					territory.setAttribute("fill-opacity", 0.33);
 
-					document.getElementById('myPopup').classList.toggle('show');
 					document.getElementById("popupText").innerHTML = "Country: " + territory.getAttribute('country') + 
 																	"<br/> Territory: " + territory.id + 
 																	"<br/> Unit: " + territory.getAttribute('unit') + 
@@ -176,6 +188,7 @@ export default class Map extends Component {
 						document.getElementById('myPopup').classList.toggle('show');
 					}
 				});
+
 	    	}
 	    }
 	}

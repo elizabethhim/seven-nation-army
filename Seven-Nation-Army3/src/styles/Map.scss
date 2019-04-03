@@ -47,7 +47,7 @@
 .popup .popuptext {
     visibility: hidden;
     width: 160px;
-    background-color: #555;
+    background-color: rgba(85,85,85,0.9);
     color: #fff;
     text-align: center;
     border-radius: 6px;
@@ -58,10 +58,11 @@
     left: 50%;
     margin-left: -80px;
     font-size: 15px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 /* Popup arrow */
-.popup .popuptext::after {
+/*.popup .popuptext::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -70,7 +71,7 @@
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
-}
+}*/
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
 .popup .show {
