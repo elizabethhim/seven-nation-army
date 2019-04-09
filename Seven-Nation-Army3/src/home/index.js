@@ -76,7 +76,7 @@ class Home extends Component {
 	                </div>
           
 					<div className='spacer'>
-						<NavLink to='/map' exact>
+						<NavLink to='/game' exact>
 							<img
 								className='screen_item resize_fit_center item'
 								style={{width: '50vh'}}
