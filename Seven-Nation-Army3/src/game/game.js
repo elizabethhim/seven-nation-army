@@ -159,11 +159,10 @@ export default class Game extends Component {
 	render() {
 		return (
 			<Fragment>
-				<BackButton />
 				<ChatContainer />
 				<Map />
 				<PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
-				<Legend/>
+				<Legend />
 			</Fragment>
 		);
 	}
