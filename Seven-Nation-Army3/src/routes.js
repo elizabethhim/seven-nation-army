@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Route, Switch } from 'react-router-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
 // Configure routes
@@ -9,7 +9,7 @@ import About from './about';
 import Login from './login/login';
 import Map from './game/map/map';
 import Settings from './settings/settings';
-import Help from './help/help';
+/* import Help from './help/help'; */
 import PageNotFound from './common/components/PageNotFound';
 import Game from './game/game';
 // import Chat from './game/chat/chat';
