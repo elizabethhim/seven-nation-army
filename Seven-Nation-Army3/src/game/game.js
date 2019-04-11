@@ -163,6 +163,7 @@ export default class Game extends Component {
 				<ChatContainer />
 				<Map />
 				<PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
+				<Legend/>
 			</Fragment>
 		);
 	}
