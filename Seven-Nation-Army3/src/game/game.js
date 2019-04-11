@@ -4,6 +4,7 @@ import React, { Button, Component, Fragment } from 'react';
 import PopUp from './popup/PopUp';
 import ChatContainer from '../chat/components/ChatContainer';
 import BackButton from './back/BackButton';
+import Legend from './legend';
 import Map from './map/map';
 
 export default class Game extends Component {
@@ -203,8 +204,9 @@ export default class Game extends Component {
 		return (
 			<Fragment>
 				<BackButton/>
-				<ChatContainer/>
+				<ChatContainer/> 
 				<Map/>
+				<Legend/>
 				<PopUp/>
 			</Fragment>
 		);
