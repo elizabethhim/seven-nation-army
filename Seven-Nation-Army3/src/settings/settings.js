@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, FormGroup, Label, Input, Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav,
+  Button, Form, FormGroup, Label, Input, Container, Collapse, NavbarToggler, NavbarBrand, Nav,
   NavItem,
   NavLink,
   UncontrolledDropdown,
@@ -46,20 +46,12 @@ export default class Example extends React.Component {
                 <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-                  </DropdownToggle>
+                <DropdownToggle nav caret>Options</DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>
-                    Option 1
-                    </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-                    </DropdownItem>
+                  <DropdownItem>Option 1</DropdownItem>
+                  <DropdownItem>Option 2</DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem>
-                    Reset
-                    </DropdownItem>
+                  <DropdownItem>Reset</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Container, Row, Col, CardBody, Jumbotron } from 'reactstrap';
+import { Button, FormGroup, Label, Input, Card, CardTitle, Container, Row, Col, CardBody } from 'reactstrap';
 import { Link } from "react-router-dom";
 import "../styles/Login.scss";
 
@@ -42,28 +42,48 @@ export default class Login extends Component {
           <Row>
             <Card body className="text-center titlecard">
               <CardBody>
-                <h2 className="display-3"> <img src={require("../media/images/title_SNA.png")}></img></h2>
-                <p className="lead" style={{color: "black"}} >An Online Board Game Desktop App</p>
+                <h2 className="display-3">
+                  <img
+                    src={require("../media/images/title_SNA.png")}
+                    alt="Seven-Nation-Army"
+                  />
+                </h2>
+                <p style={{ color: "black" }} >An Online Board Game Desktop App</p>
               </CardBody>
             </Card>
           </Row>
           <Row>
             <Card className="LoginCard" >
               <CardBody>
-                <CardTitle style={{color: "black"}} className="text-center">Sign-in</CardTitle>
+                <CardTitle style={{ color: "black" }} className="text-center">Sign-in</CardTitle>
                 <form onSubmit={this.handleSubmit}>
-                <hr className="my-2" />
-                <FormGroup>
-                  <Label style={{color: "black"}} for="exampleEmail">Email</Label>
-                  <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
-                </FormGroup>
-                <FormGroup>
-                  <Label style={{color: "black"}} for="examplePassword">Password</Label>
-                  <Input type="password" name="password" id="examplePassword" placeholder="******" />
-                </FormGroup>
-                <Link to="/"><Button color="primary">Login</Button></Link>  <Link to="/register"><Button color="primary" >Sign-up</Button></Link>
-              </form>
-            </CardBody>
+                  <hr className="my-2" />
+                  <FormGroup>
+                    <Label style={{ color: "black" }} for="exampleEmail">Email</Label>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="exampleEmail"
+                      placeholder="Email"
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label style={{ color: "black" }} for="examplePassword">Password</Label>
+                    <Input
+                      type="password"
+                      name="password"
+                      id="examplePassword"
+                      placeholder="******"
+                    />
+                  </FormGroup>
+                  <Link to="/">
+                    <Button color="primary">Login</Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button color="primary" >Sign-up</Button>
+                  </Link>
+                </form>
+              </CardBody>
             </Card>
           </Row>
         </Col>

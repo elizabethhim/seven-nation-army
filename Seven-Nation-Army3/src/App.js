@@ -11,8 +11,10 @@ import './App.scss';
 import routes from './routes';
 
 // common components
+/*
 import Header from './common/components/Header'
 import Footer from './common/components/Footer'
+*/
 
 class App extends Component {
 
@@ -21,11 +23,9 @@ class App extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div className="App">
-    
             <div className="wrap">
               {routes}
             </div>
- 
           </div>
         </ConnectedRouter>
       </Provider>
