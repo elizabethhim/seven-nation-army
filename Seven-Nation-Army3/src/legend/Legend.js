@@ -9,10 +9,6 @@ import BackButton from './BackButton';
 import '../styles/Legend.scss';
 
 export default class Legend extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { toggleLegend } = this.props;
     return (

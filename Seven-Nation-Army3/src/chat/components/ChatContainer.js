@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
@@ -9,55 +7,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../styles/ChatContainer.scss';
 import PeopleList from './PeopleList';
 import ChatHistory from './ChatHistory';
-import toggleChat from '../actions/toggleChat';
+/* import toggleChat from '../actions/toggleChat'; */
 
-class ChatContainer extends Component {
+export default class ChatContainer extends Component {
   constructor(props) {
     super(props);
-    this.toggle = this.toggle.bind(this);
+    this.state = {
+      chatIsVisible: false,
+    }
+    this.toggleChat = this.toggleChat.bind(this);
   }
 
-  toggle() {
-    // eslint-disable-next-line react/destructuring-assignment
-    this.props.toggleChat();
+  toggleChat() {
+    this.setState({
+      chatIsVisible: !this.state.chatIsVisible,
+    });
   }
 
   render() {
-    const { chatIsVisible } = this.props;
+    const { chatIsVisible } = this.state;
     return (
       <Fragment>
-        {!chatIsVisible && (
-          <Button
-            onClick={this.toggle}
-            className="chat-container-button"
-            active={chatIsVisible}
-          >
-            <FontAwesomeIcon icon={faAngleUp} className="maximize-icon" />
-            <span className="chat-container-button-text">Chat</span>
-          </Button>
-        )}
-        {chatIsVisible && (
+        {chatIsVisible ? (
           <div className="chat-container">
-            <PeopleList className="people-list" />
+            <PeopleList className="people-list" toggleChat={this.toggleChat} />
             <ChatHistory />
           </div>
-        )}
+        ) : (
+            <Button className="chat-container-button" onClick={this.toggleChat}>
+              <FontAwesomeIcon icon={faAngleUp} className="maximize-icon" />
+              <span className="chat-container-button-text">Chat</span>
+            </Button>
+          )}
       </Fragment>
     );
   }
 }
-
-ChatContainer.propTypes = {
-  toggleChat: PropTypes.func.isRequired,
-  chatIsVisible: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = state => ({
-  chatIsVisible: state.chat.toggleReducer.chatIsVisible
-});
-
-export default connect(
-  mapStateToProps,
-  { toggleChat }
-)(ChatContainer);
-
