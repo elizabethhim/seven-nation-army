@@ -1,14 +1,23 @@
 import React from 'react';
 import {
-  Button, Form, FormGroup, Label, Input, Container, Collapse, NavbarToggler, NavbarBrand, Nav,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Container,
+  Collapse,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
   NavItem,
   NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
-import "../styles/Setting.scss";
+import '../styles/Setting.scss';
 
 export default class Example extends React.Component {
   constructor(props) {
@@ -16,25 +25,36 @@ export default class Example extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
   toggle() {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   }
   render() {
     return (
       <Container className=".settingsBody">
-
         <div className="fullscreen-bg">
-          <video loop muted autoPlay poster={require("../media/images/BackgroundVidStill.png")} className="fullscreen-bg__video">
-            <source src={require("../media/videos/OceanBackground.mp4")} type="video/mp4" />
-            <source src={require("../media/videos/OceanBackground.ogv")} type="video/ogg" />
+          <video
+            loop
+            muted
+            autoPlay
+            poster={require('../media/images/BackgroundVidStill.png')}
+            className="fullscreen-bg__video"
+          >
+            <source
+              src={require('../media/videos/OceanBackground.mp4')}
+              type="video/mp4"
+            />
+            <source
+              src={require('../media/videos/OceanBackground.ogv')}
+              type="video/ogg"
+            />
           </video>
         </div>
-        <nav className="navbar navbar-expand-lg" >
+        <nav className="navbar navbar-expand-lg">
           <NavbarBrand href="/">Seven Nation Army</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -43,10 +63,14 @@ export default class Example extends React.Component {
                 <NavLink href="/settings.js">Settings</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                <NavLink href="https://github.com/reactstrap/reactstrap">
+                  GitHub
+                </NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>Options</DropdownToggle>
+                <DropdownToggle nav caret>
+                  Options
+                </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>Option 1</DropdownItem>
                   <DropdownItem>Option 2</DropdownItem>
@@ -56,16 +80,25 @@ export default class Example extends React.Component {
               </UncontrolledDropdown>
             </Nav>
           </Collapse>
-
         </nav>
         <Form>
           <FormGroup>
             <Label for="exampleEmail">Change Display Name</Label>
-            <Input type="email" name="email" id="exampleEmail" placeholder="Name" />
+            <Input
+              type="email"
+              name="email"
+              id="exampleEmail"
+              placeholder="Name"
+            />
           </FormGroup>
           <FormGroup>
             <Label for="examplePassword">Change Password</Label>
-            <Input type="password" name="password" id="examplePassword" placeholder="Password " />
+            <Input
+              type="password"
+              name="password"
+              id="examplePassword"
+              placeholder="Password "
+            />
           </FormGroup>
           <FormGroup>
             <Label for="exampleSelect">Select Prefered Number of players</Label>
@@ -82,17 +115,15 @@ export default class Example extends React.Component {
           <h1>Preferences</h1>
           <FormGroup>
             <Label check>
-              <Input type="radio" name="radio1" />{' '}
-              Notify end of round.
+              <Input type="radio" name="radio1" /> Notify end of round.
             </Label>
           </FormGroup>
-          <FormGroup  >
+          <FormGroup>
             <Label check>
-              <Input type="radio" name="radio2" />{' '}
-              Notify end of game.
+              <Input type="radio" name="radio2" /> Notify end of game.
             </Label>
           </FormGroup>
-          <Button color='primary'>Save Settings</Button>
+          <Button color="primary">Save Settings</Button>
         </Form>
       </Container>
     );

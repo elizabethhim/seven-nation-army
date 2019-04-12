@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import store, { history } from './configureStore';
 
 // Styles
@@ -17,15 +17,12 @@ import Footer from './common/components/Footer'
 */
 
 class App extends Component {
-
   render() {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div className="App">
-            <div className="wrap">
-              {routes}
-            </div>
+            <div className="wrap">{routes}</div>
           </div>
         </ConnectedRouter>
       </Provider>

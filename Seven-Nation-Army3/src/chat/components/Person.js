@@ -31,5 +31,5 @@ Person.propTypes = {
   name: PropTypes.string.isRequired,
   isOnline: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  source: PropTypes.string.isRequired
+  source: PropTypes.string.isRequired,
 };

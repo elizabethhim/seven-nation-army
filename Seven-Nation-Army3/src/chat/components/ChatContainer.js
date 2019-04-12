@@ -14,7 +14,7 @@ export default class ChatContainer extends Component {
     super(props);
     this.state = {
       chatIsVisible: false,
-    }
+    };
     this.toggleChat = this.toggleChat.bind(this);
   }
 
@@ -34,11 +34,11 @@ export default class ChatContainer extends Component {
             <ChatHistory />
           </div>
         ) : (
-            <Button className="chat-container-button" onClick={this.toggleChat}>
-              <FontAwesomeIcon icon={faAngleUp} className="maximize-icon" />
-              <span className="chat-container-button-text">Chat</span>
-            </Button>
-          )}
+          <Button className="chat-container-button" onClick={this.toggleChat}>
+            <FontAwesomeIcon icon={faAngleUp} className="maximize-icon" />
+            <span className="chat-container-button-text">Chat</span>
+          </Button>
+        )}
       </Fragment>
     );
   }

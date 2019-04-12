@@ -15,10 +15,7 @@ export default class PeopleList extends Component {
     const { toggleChat } = this.props;
     return (
       <div>
-        <Button
-          onClick={toggleChat}
-          className="chat-button-center"
-        >
+        <Button onClick={toggleChat} className="chat-button-center">
           <FontAwesomeIcon icon={faAngleDown} className="minimize" />
         </Button>
         <ChatSearch className="search" />

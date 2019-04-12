@@ -14,7 +14,7 @@ export default class LegendContainer extends Component {
     this.state = {
       legendIsVisible: true,
     };
-    this.toggleLegend = this.toggleLegend.bind(this)
+    this.toggleLegend = this.toggleLegend.bind(this);
   }
 
   toggleLegend() {
@@ -30,16 +30,16 @@ export default class LegendContainer extends Component {
         {legendIsVisible ? (
           <Legend toggleLegend={this.toggleLegend} />
         ) : (
-            <div className="resize_fit_top_left">
-              <span className="legend-header">
-                <BackButton />
-                <text>Legend</text>
-                <Button className="minimize-legend" onClick={this.toggleLegend}>
-                  <FontAwesomeIcon icon={faAngleDown} />
-                </Button>
-              </span>
-            </div>
-          )}
+          <div className="resize_fit_top_left">
+            <span className="legend-header">
+              <BackButton />
+              <text>Legend</text>
+              <Button className="minimize-legend" onClick={this.toggleLegend}>
+                <FontAwesomeIcon icon={faAngleDown} />
+              </Button>
+            </span>
+          </div>
+        )}
       </Fragment>
     );
   }

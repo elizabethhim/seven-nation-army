@@ -1,7 +1,7 @@
-import { TOGGLE_CHAT } from './actionTypes'
+import { TOGGLE_CHAT } from './actionTypes';
 
 export default function toggleChat() {
   return {
-    type: TOGGLE_CHAT
+    type: TOGGLE_CHAT,
   };
 }

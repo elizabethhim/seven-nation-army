@@ -14,7 +14,6 @@ import PageNotFound from './common/components/PageNotFound';
 import Game from './game/game';
 // import Chat from './game/chat/chat';
 
-
 export default (
   <AnimatedSwitch
     atEnter={{ opacity: 0 }}

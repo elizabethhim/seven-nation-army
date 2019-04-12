@@ -6,24 +6,22 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
 } from 'reactstrap';
 import { Container } from 'reactstrap';
 
-
 class Header extends Component {
-
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
   toggle() {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   }
 
@@ -47,7 +45,7 @@ class Header extends Component {
           </Navbar>
         </Container>
       </header>
-    )
+    );
   }
 }
 
