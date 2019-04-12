@@ -3,12 +3,10 @@ import React, { Component, Fragment } from 'react';
 // Holdover from first Seven-Nation-Army --Chris
 import PopUp from './popup/PopUp';
 import ChatContainer from '../chat/components/ChatContainer';
-import BackButton from './back/BackButton';
-import Legend from './legend';
+import LegendContainer from '../legend/LegendContainer';
 import Map from './map/map';
 
 export default class Game extends Component {
-
 	constructor(props) {
 		super(props);
 
@@ -174,11 +172,10 @@ export default class Game extends Component {
 	render() {
 		return (
 			<Fragment>
-				<BackButton />
 				<ChatContainer/>
 				<Map />
 				<PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
-				<Legend /> 
+				<LegendContainer  /> 
 			</Fragment>
 		);
 	}

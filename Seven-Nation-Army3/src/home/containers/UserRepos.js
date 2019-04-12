@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Repo from '../components/Repo';
-import getUserRepos from '../thunks/getUserRepos';
+import getUserRepos from '../../store/thunks/getUserRepos';
 
 import { bindActionCreators } from 'redux'
 

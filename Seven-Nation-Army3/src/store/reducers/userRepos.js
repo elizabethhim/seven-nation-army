@@ -10,8 +10,7 @@ let initialState = {
   errors: []
 };
 
-function userRepos(state = initialState, action) {
-
+export default function userRepos(state = initialState, action) {
   switch (action.type) {
     case ITEMS_IS_LOADING:
       return Object.assign({}, state, {
@@ -34,5 +33,3 @@ function userRepos(state = initialState, action) {
       return state;
   }
 }
-
-export default userRepos;

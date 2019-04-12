@@ -2,7 +2,6 @@
   "name": "cra-boilerplate",
   "version": "2.1.1",
   "main": "./src/main.js",
-  "homepage": "./",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
@@ -26,6 +25,7 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "prettier": "1.16.4",
     "redux-devtools": "^3.4.2",
     "redux-devtools-extension": "^2.13.5",
     "source-map-explorer": "^1.6.0"
@@ -36,7 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "dev": "nf start"
+    "dev": "nf start",
+    "lint": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\""
   },
   "keywords": [
     "react",
