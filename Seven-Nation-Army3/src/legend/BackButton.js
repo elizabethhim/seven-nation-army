@@ -5,7 +5,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from 'reactstrap';
-import '../../styles/BackButton.scss';
+import '../styles/BackButton.scss';
 
 export default class BackButton extends Component {
   render() {
@@ -14,7 +14,7 @@ export default class BackButton extends Component {
         <Button className="back-button">
           <FontAwesomeIcon icon={faArrowLeft} />
         </Button>
-      </NavLink >
-    )
+      </NavLink>
+    );
   }
 }
