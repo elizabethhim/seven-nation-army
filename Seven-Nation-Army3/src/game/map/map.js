@@ -7,7 +7,7 @@ import "../../styles/Map.scss";
 export default class Map extends Component {
 	render() {
 		return (
-			<div className="displayArea">
+			<div className="displayArea" id = 'displayCanvas'>
 				<img
 					className='resize_fit_center'
 					src={mapImage}

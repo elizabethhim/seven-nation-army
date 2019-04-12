@@ -120,6 +120,21 @@ export default class Game extends Component {
 				});
 			}
 		}
+
+		const displayCanvas = document.getElementById('displayCanvas');
+		const popup = document.getElementById('myPopup');
+		displayCanvas.addEventListener('mouseleave', () => {
+			document.getElementById('myPopup').classList.toggle('show');
+		});
+		displayCanvas.addEventListener('mouseenter', () => {
+			document.getElementById('myPopup').classList.toggle('show');
+		});
+		popup.addEventListener('mouseenter', () => {
+			document.getElementById('myPopup').classList.toggle('show');
+		});
+		popup.addEventListener('mouseleave', () => {
+			document.getElementById('myPopup').classList.toggle('show');
+		});
 	}
 
 	componentDidMount() {
@@ -151,7 +166,7 @@ export default class Game extends Component {
 			}
 		}
 
-		document.getElementById('myPopup').classList.toggle('show');
+		// document.getElementById('myPopup').classList.toggle('show');
 		document.getElementById('popupContainer').setAttribute('mutable', true);
 		this.addListeners();
 	}
@@ -160,10 +175,10 @@ export default class Game extends Component {
 		return (
 			<Fragment>
 				<BackButton />
-				<ChatContainer />
+				<ChatContainer/>
 				<Map />
 				<PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
-				<Legend/>
+				<Legend /> 
 			</Fragment>
 		);
 	}
