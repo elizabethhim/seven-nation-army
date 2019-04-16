@@ -106,12 +106,20 @@ export default class Login extends Component {
                       placeholder="******"
                     />
                   </FormGroup>
-                  <Link to="/">
-                    <Button color="primary">Login</Button>
-                  </Link>
-                  <Link to="/register">
-                    <Button color="primary">Sign-up</Button>
-                  </Link>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-evenly',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Link to="/">
+                      <Button color="primary">Login</Button>
+                    </Link>
+                    <Link to="/register">
+                      <Button color="primary">Sign-up</Button>
+                    </Link>
+                  </div>
                 </form>
               </CardBody>
             </Card>
