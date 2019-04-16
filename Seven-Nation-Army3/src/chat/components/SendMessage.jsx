@@ -30,12 +30,13 @@ class ConnectedForm extends Component {
     handleSubmit(event) {
         console.log("called");
         event.preventDefault();
-        const { message } = <ChatMessage 
-                                myMessage={true}
-                                time={"10:10 AM, Today"}
-                                name={"Olia"}
-                                message={this.state.message}
-                            />
+        const { message } = this.state;
+        // <ChatMessage 
+        //                         myMessage={true}
+        //                         time={"10:10 AM, Today"}
+        //                         name={"Olia"}
+        //                         message={this.state}
+        //                     />
         const id = uuidv1();
         this.props.addMessage({ message, id});
         this.setState({ message: "" });
