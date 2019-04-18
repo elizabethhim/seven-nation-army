@@ -7,6 +7,7 @@ import '../../styles/Popup.scss';
 export default class PopUp extends Component {
 	render() {
 		const { buttonIsVisible } = this.props;
+
 		return (
 			<div className="popup" id="popupContainer">
 				<span className="popuptext" id="myPopup">
@@ -14,12 +15,12 @@ export default class PopUp extends Component {
 					{buttonIsVisible && (
 						<ButtonGroup vertical>
 							<ButtonGroup>
-								<Button style={{ backgroundColor: '#434651' }}>Hold</Button>
-								<Button style={{ backgroundColor: '#434651' }}>Move</Button>
+								<Button id='holdButton' style={{ backgroundColor: '#434651' }}>Hold</Button>
+								<Button id='moveButton' style={{ backgroundColor: '#434651' }}>Move</Button>
 							</ButtonGroup>
 							<ButtonGroup>
-								<Button style={{ backgroundColor: '#434651' }}>Convoy</Button>
-								<Button style={{ backgroundColor: '#434651' }}>Support</Button>
+								<Button id='convoyButton' style={{ backgroundColor: '#434651' }}>Convoy</Button>
+								<Button id='supportButton' style={{ backgroundColor: '#434651' }}>Support</Button>
 							</ButtonGroup>
 						</ButtonGroup>
 					)}
