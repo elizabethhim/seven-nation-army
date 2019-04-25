@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -16,6 +17,7 @@ export const login = credentials => {
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(() => {
         dispatch({ type: LOGIN_SUCCESS });
+        dispatch(push('/'));
       })
       .catch(err => {
         console.log(err);

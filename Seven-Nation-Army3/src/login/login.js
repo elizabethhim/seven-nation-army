@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 
 import '../styles/Login.scss';
@@ -100,8 +101,8 @@ class Login extends Component {
                   {this.props.authError ? (
                     <p style={warningText}>{this.props.authError}</p>
                   ) : (
-                    <Fragment />
-                  )}
+                      <Fragment />
+                    )}
 
                   <div
                     style={{
@@ -127,6 +128,7 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
   authError: PropTypes.string,
   auth: PropTypes.object,
 };
@@ -141,6 +143,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     login: creds => dispatch(login(creds)),
+    push,
   };
 };
 
