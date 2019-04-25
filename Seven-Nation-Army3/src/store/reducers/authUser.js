@@ -5,6 +5,9 @@ import {
   LOGOUT_FAIL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  SETTINGS_NAME_CHANGED,
+  SETTINGS_LEFT_ALONE,
+  SETTINGS_ERROR,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -45,6 +48,24 @@ export default function auth(state = initialState, action) {
       };
     case REGISTER_FAIL:
       console.log('Registration failed');
+      return {
+        ...state,
+        authError: action.err.message,
+      };
+    case SETTINGS_NAME_CHANGED:
+      console.log('Settings changed!');
+      return {
+        ...state,
+        authError: null,
+      };
+    case SETTINGS_LEFT_ALONE:
+      console.log('Settings left alone.');
+      return {
+        ...state,
+        authError: null,
+      };
+    case SETTINGS_ERROR:
+      console.log('An error occured while changing settings');
       return {
         ...state,
         authError: action.err.message,

@@ -12,94 +12,98 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
 } from 'reactstrap';
-import '../styles/Setting.scss';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-export default class Example extends React.Component {
+import '../styles/Setting.scss';
+import Video from '../common/components/Video';
+import { logout, save } from '../store/actions/authUser';
+
+class Settings extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
+      password: '',
+      displayName: '',
     };
   }
+
+  onLogout = event => {
+    event.preventDefault();
+    console.log('Logout pressed!');
+    console.log(this.state);
+    console.log(this.props);
+    // this.props.logout();
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    this.props.save(this.state);
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value,
+    });
+  };
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
+
   render() {
+    const { password, displayName } = this.state;
     return (
       <Container className=".settingsBody">
-        <div className="fullscreen-bg">
-          <video
-            loop
-            muted
-            autoPlay
-            poster={require('../media/images/BackgroundVidStill.png')}
-            className="fullscreen-bg__video"
-          >
-            <source
-              src={require('../media/videos/OceanBackground.mp4')}
-              type="video/mp4"
-            />
-            <source
-              src={require('../media/videos/OceanBackground.ogv')}
-              type="video/ogg"
-            />
-          </video>
-        </div>
+        <Video />
         <nav className="navbar navbar-expand-lg">
-          <NavbarBrand href="/">Seven Nation Army</NavbarBrand>
+          <NavbarBrand href="/#/home">Seven Nation Army</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/settings.js">Settings</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">
+                <NavLink href="https://github.com/elizabethhim/Seven-Nation-Army">
                   GitHub
                 </NavLink>
               </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>Option 1</DropdownItem>
-                  <DropdownItem>Option 2</DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>Reset</DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+              <NavItem>
+                <NavLink>
+                  <div onClick={this.onLogout}>Logout</div>
+                </NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </nav>
-        <Form>
+        <Form onSubmit={this.onSubmit.bind(this)}>
           <FormGroup>
-            <Label for="exampleEmail">Change Display Name</Label>
+            <Label for="displayName">Change Display Name</Label>
             <Input
-              type="email"
-              name="email"
-              id="exampleEmail"
-              placeholder="Name"
+              type="text"
+              name="text"
+              id="displayName"
+              placeholder={this.props.auth.displayName}
+              value={displayName}
+              onChange={this.onChange}
             />
           </FormGroup>
           <FormGroup>
-            <Label for="examplePassword">Change Password</Label>
+            <Label for="password">Change Password</Label>
             <Input
               type="password"
               name="password"
-              id="examplePassword"
-              placeholder="Password "
+              id="password"
+              placeholder="********"
+              value={password}
+              onChange={this.onChange}
             />
           </FormGroup>
+          {/* Why the heck is this option here anyways? It should be in New Game */}
           <FormGroup>
             <Label for="exampleSelect">Select Prefered Number of players</Label>
             <Input type="select" name="select" id="exampleSelect">
@@ -112,7 +116,9 @@ export default class Example extends React.Component {
               <option>7</option>
             </Input>
           </FormGroup>
+          {/* Why the heck is this option here anyways? It should be in New Game */}
           <h1>Preferences</h1>
+          {/* TODO(Christopher: Save inside collections */}
           <FormGroup>
             <Label check>
               <Input type="radio" name="radio1" /> Notify end of round.
@@ -123,9 +129,36 @@ export default class Example extends React.Component {
               <Input type="radio" name="radio2" /> Notify end of game.
             </Label>
           </FormGroup>
+          {/* TODO(Christopher: Save inside collections */}
           <Button color="primary">Save Settings</Button>
         </Form>
       </Container>
     );
   }
 }
+
+Settings.propTypes = {
+  logout: PropTypes.func.isRequired,
+  save: PropTypes.func.isRequired,
+  authError: PropTypes.string,
+  auth: PropTypes.object,
+};
+
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.authError,
+    auth: state.firebase.auth,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout()),
+    save: state => dispatch(save(state)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Settings);
