@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Button,
   FormGroup,
@@ -12,9 +12,17 @@ import {
   CardBody,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import '../styles/Login.scss';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-export default class Login extends Component {
+import '../styles/Login.scss';
+import Video from '../common/components/Video';
+import { login } from '../store/actions/authUser';
+
+const labelStyle = { color: 'black' };
+const warningText = { fontSize: '12px', color: 'red' };
+
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -24,42 +32,22 @@ export default class Login extends Component {
     };
   }
 
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
-
-  handleChange(event) {
+  onChange = event => {
     this.setState({
       [event.target.id]: event.target.value,
     });
   }
 
-  handleSubmit(event) {
+  onSubmit = event => {
     event.preventDefault();
+    this.props.login(this.state);
   }
 
   render() {
+    const { email, password } = this.state;
     return (
-      <Container className=".LoginBody">
-        <div className="fullscreen-bg">
-          <video
-            loop
-            muted
-            autoPlay
-            poster={require('../media/images/BackgroundVidStill.png')}
-            className="fullscreen-bg__video"
-          >
-            <source
-              src={require('../media/videos/OceanBackground.mp4')}
-              type="video/mp4"
-            />
-            <source
-              src={require('../media/videos/OceanBackground.ogv')}
-              type="video/ogg"
-            />
-          </video>
-        </div>
-
+      <Container className="LoginBody">
+        <Video />
         <Col className="col-md-5 col-md-12 mt4">
           <Row>
             <Card body className="text-center titlecard">
@@ -70,42 +58,51 @@ export default class Login extends Component {
                     alt="Seven-Nation-Army"
                   />
                 </h2>
-                <p style={{ color: 'black' }}>
-                  An Online Board Game Desktop App
-                </p>
+                <p style={labelStyle}>An Online Board Game Desktop App</p>
               </CardBody>
             </Card>
           </Row>
           <Row>
             <Card className="LoginCard">
               <CardBody>
-                <CardTitle style={{ color: 'black' }} className="text-center">
+                <CardTitle style={labelStyle} className="text-center">
                   Sign-in
                 </CardTitle>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.onSubmit.bind(this)}>
                   <hr className="my-2" />
                   <FormGroup>
-                    <Label style={{ color: 'black' }} for="exampleEmail">
+                    <Label style={labelStyle} for="email">
                       Email
                     </Label>
                     <Input
                       type="email"
                       name="email"
-                      id="exampleEmail"
+                      id="email"
                       placeholder="Email"
+                      value={email}
+                      onChange={this.onChange}
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label style={{ color: 'black' }} for="examplePassword">
+                    <Label style={labelStyle} for="password">
                       Password
                     </Label>
                     <Input
                       type="password"
                       name="password"
-                      id="examplePassword"
+                      id="password"
                       placeholder="******"
+                      value={password}
+                      onChange={this.onChange}
                     />
                   </FormGroup>
+
+                  {this.props.authError ? (
+                    <p style={warningText}>{this.props.authError}</p>
+                  ) : (
+                      <Fragment />
+                    )}
+
                   <div
                     style={{
                       display: 'flex',
@@ -113,9 +110,7 @@ export default class Login extends Component {
                       flexWrap: 'wrap',
                     }}
                   >
-                    <Link to="/">
-                      <Button color="primary">Login</Button>
-                    </Link>
+                    <Button color="primary">Login</Button>
                     <Link to="/register">
                       <Button color="primary">Sign-up</Button>
                     </Link>
@@ -129,3 +124,27 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  authError: PropTypes.string,
+  auth: PropTypes.object,
+};
+
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.authError,
+    auth: state.firebase.auth,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: creds => dispatch(login(creds)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

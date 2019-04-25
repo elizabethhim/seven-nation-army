@@ -4,14 +4,15 @@ import { Route } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
 // Configure routes
-import Home from './home';
 import About from './about';
-import Login from './login/login';
-import Map from './game/map/map';
-import Settings from './settings/settings';
-/* import Help from './help/help'; */
 import PageNotFound from './common/components/PageNotFound';
 import Game from './game/game';
+import Map from './game/map/map';
+import Home from './home';
+import Login from './login/login';
+import Register from './login/register';
+import Settings from './settings/settings';
+/* import Help from './help/help'; */
 // import Chat from './game/chat/chat';
 
 export default (
@@ -28,6 +29,7 @@ export default (
     {/*<Route path="/help" component={Help} />*/}
     <Route path="/about" component={About} />
     <Route path="/login" component={Login} />
+    <Route path="/register" component={Register} />
     {/*<Route path ="/chat" component={Chat}/>*/}
     <Route component={PageNotFound} />
   </AnimatedSwitch>

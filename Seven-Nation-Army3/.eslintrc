@@ -15,9 +15,10 @@
     "react"
   ],
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 9,
     "sourceType": "module"
   },
+  "parser": "babel-eslint",
   "rules": {
     "no-console": "off",
     "prefer-arrow-callback": 2,
