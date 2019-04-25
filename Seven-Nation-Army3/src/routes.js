@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Route, Switch } from 'react-router-dom';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
 // Configure routes
@@ -21,9 +21,12 @@ export default (
     atActive={{ opacity: 1 }}
     className="switch-wrapper"
   >
+    <Route exact path="/">
+      <Redirect to="/login" />
+    </Route>
     <Route path="/login" component={Login} />
     <Route path="/register" component={Register} />
-    <Route exact path="/" component={Home} />
+    <Route path="/home" component={Home} />
     <Route path="/about" component={About} />
     <Route path="/settings" component={Settings} />
     {/*<Route path="/map" component={Map} />*/}

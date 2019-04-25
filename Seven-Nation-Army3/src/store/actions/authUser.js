@@ -17,7 +17,7 @@ export const login = credentials => {
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(() => {
         dispatch({ type: LOGIN_SUCCESS });
-        dispatch(push('/'));
+        dispatch(push('/home'));
       })
       .catch(err => {
         console.log(err);
