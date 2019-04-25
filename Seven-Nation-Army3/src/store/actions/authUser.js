@@ -35,6 +35,7 @@ export const logout = () => {
       .signOut()
       .then(() => {
         dispatch({ type: LOGOUT_SUCCESS });
+        dispatch(push('/login'));
       })
       .error(err => {
         dispatch({ type: LOGOUT_FAIL, err });
@@ -60,6 +61,7 @@ export const register = user => {
       })
       .then(() => {
         dispatch({ type: REGISTER_SUCCESS });
+        dispatch(push('/login'));
       })
       .catch(err => {
         console.log(err);

@@ -29,6 +29,7 @@ class Register extends Component {
     this.state = {
       email: '',
       password: '',
+      displayName: '',
     };
   }
 
@@ -44,7 +45,7 @@ class Register extends Component {
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, displayName } = this.state;
     return (
       <Container className="LoginBody">
         <Video />
@@ -57,6 +58,19 @@ class Register extends Component {
                 </CardTitle>
                 <form onSubmit={this.onSubmit.bind(this)}>
                   <hr className="my-2" />
+                  <FormGroup>
+                    <Label style={labelStyle} for="displayName">
+                      Display Name
+                    </Label>
+                    <Input
+                      type="text"
+                      name="displayName"
+                      id="displayName"
+                      placeholder=""
+                      value={displayName}
+                      onChange={this.onChange}
+                    />
+                  </FormGroup>
                   <FormGroup>
                     <Label style={labelStyle} for="email">
                       Email
