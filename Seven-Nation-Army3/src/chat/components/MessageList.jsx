@@ -3,11 +3,6 @@ import { connect } from 'react-redux';
 import '../../styles/Chat.scss';
 import ChatMessage from './ChatMessage';
 
-const mapStateToProps = state => {
-  console.log(state);
-  return { messages: state.chatHistory.addMessageReducer.messages };
-};
-
 const ConnectedList = ({ messages }) => {
   return (
     messages &&
@@ -23,6 +18,9 @@ const ConnectedList = ({ messages }) => {
   );
 };
 
-const MessageList = connect(mapStateToProps)(ConnectedList);
+const mapStateToProps = state => ({
+  // console.log(state);
+  messages: state.chatHistory.messages
+});
 
-export default MessageList;
+export default connect(mapStateToProps)(ConnectedList);

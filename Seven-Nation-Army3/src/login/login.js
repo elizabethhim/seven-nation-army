@@ -36,12 +36,12 @@ class Login extends Component {
     this.setState({
       [event.target.id]: event.target.value,
     });
-  }
+  };
 
   onSubmit = event => {
     event.preventDefault();
     this.props.login(this.state);
-  }
+  };
 
   render() {
     const { email, password } = this.state;
@@ -100,8 +100,8 @@ class Login extends Component {
                   {this.props.authError ? (
                     <p style={warningText}>{this.props.authError}</p>
                   ) : (
-                      <Fragment />
-                    )}
+                    <Fragment />
+                  )}
 
                   <div
                     style={{

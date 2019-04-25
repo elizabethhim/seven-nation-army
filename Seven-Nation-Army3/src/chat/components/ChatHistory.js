@@ -5,7 +5,6 @@ import SendMessage from './SendMessage.jsx';
 
 // TODO: Port Chat History from the Chat.html file to React
 export default class ChatHistory extends Component {
-
   render() {
     return (
       <div className="chat">
@@ -24,11 +23,11 @@ export default class ChatHistory extends Component {
         {/* <!-- end chat-header --> */}
 
         <div className="chat-history">
-          <MessageList/>
+          <MessageList />
         </div>
         {/* <!-- end chat-history --> */}
 
-        <SendMessage/>
+        <SendMessage />
         {/* <!-- end chat-message --> */}
       </div>
     );

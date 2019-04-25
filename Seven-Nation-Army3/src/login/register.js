@@ -87,8 +87,8 @@ class Register extends Component {
                   {this.props.authError ? (
                     <p style={warningText}>{this.props.authError}</p>
                   ) : (
-                      <Fragment />
-                    )}
+                    <Fragment />
+                  )}
 
                   <div
                     style={{

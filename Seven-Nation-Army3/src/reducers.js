@@ -7,7 +7,7 @@ import { firebaseReducer as firebase } from 'react-redux-firebase';
 import home from './store/reducers/userRepos';
 import chat from './store/reducers/userRepos';
 import auth from './store/reducers/authUser';
-import chatHistory from './chat/reducers';
+import chatHistory from './store/reducers/addMessage';
 
 export default history =>
   combineReducers({

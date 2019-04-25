@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import PropTypes from 'prop-types';
 
-import addMessage from "../actions/addMessage";
+import addMessage from "../../store/actions/addMessage";
 import '../../styles/Chat.scss';
 // import ChatMessage from './ChatMessage';
 
@@ -18,7 +18,7 @@ class ConnectedForm extends Component {
   handleChange = event => {
     this.setState({
       [event.target.id]:
-      [event.target.value]
+        [event.target.value]
     });
   }
 
