@@ -6,6 +6,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   SETTINGS_NAME_CHANGED,
+  SETTINGS_PASSWORD_CHANGED,
   SETTINGS_LEFT_ALONE,
   SETTINGS_ERROR,
 } from '../actions/actionTypes';
@@ -54,6 +55,12 @@ export default function auth(state = initialState, action) {
       };
     case SETTINGS_NAME_CHANGED:
       console.log('Settings changed!');
+      return {
+        ...state,
+        authError: null,
+      };
+    case SETTINGS_PASSWORD_CHANGED:
+      console.log('Password changed! Logging out...');
       return {
         ...state,
         authError: null,

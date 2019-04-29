@@ -7,6 +7,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   SETTINGS_NAME_CHANGED,
+  SETTINGS_PASSWORD_CHANGED,
   SETTINGS_LEFT_ALONE,
   SETTINGS_ERROR,
 } from './actionTypes';
@@ -23,7 +24,6 @@ export const login = credentials => {
         dispatch(push('/home'));
       })
       .catch(err => {
-        console.log(err);
         dispatch({ type: LOGIN_FAIL, err });
       });
   };
@@ -40,7 +40,7 @@ export const logout = () => {
         dispatch({ type: LOGOUT_SUCCESS });
         dispatch(push('/login'));
       })
-      .error(err => {
+      .catch(err => {
         dispatch({ type: LOGOUT_FAIL, err });
       });
   };
@@ -63,22 +63,21 @@ export const register = user => {
         dispatch(push('/login'));
       })
       .catch(err => {
-        console.log(err);
         dispatch({ type: REGISTER_FAIL, err });
       });
   };
 };
 
-export const save = state => {
+export const save = displayName => {
   return (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
 
     const user = firebase.auth().currentUser;
 
-    if (state.displayName !== '') {
+    if (displayName !== '') {
       user
         .updateProfile({
-          displayName: state.displayName,
+          displayName,
         })
         .then(() => {
           dispatch({ type: SETTINGS_NAME_CHANGED });
@@ -94,4 +93,16 @@ export const save = state => {
   };
 };
 
-// TODO(Christopher): Implement change password
+export const changePassword = password => {
+  return (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase();
+    const user = firebase.auth().currentUser;
+
+    user.updatePassword(password).then(() => {
+      dispatch({ type: SETTINGS_PASSWORD_CHANGED });
+      dispatch(logout());
+    }).catch(err => {
+      dispatch({ type: SETTINGS_ERROR, err });
+    });
+  }
+}

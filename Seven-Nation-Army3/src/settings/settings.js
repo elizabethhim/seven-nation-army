@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import '../styles/Setting.scss';
 import Video from '../common/components/Video';
-import { logout, save } from '../store/actions/authUser';
+import { logout, save, changePassword } from '../store/actions/authUser';
 
 class Settings extends React.Component {
   constructor(props) {
@@ -34,15 +34,18 @@ class Settings extends React.Component {
 
   onLogout = event => {
     event.preventDefault();
-    console.log('Logout pressed!');
-    console.log(this.state);
-    console.log(this.props);
-    // this.props.logout();
+    this.props.logout();
   };
 
   onSubmit = event => {
+    const { displayName, password } = this.state;
     event.preventDefault();
-    this.props.save(this.state);
+    if (displayName !== '') {
+      this.props.save(displayName);
+    }
+    if (password !== '') {
+      this.props.changePassword(password);
+    }
   };
 
   onChange = event => {
@@ -140,6 +143,7 @@ class Settings extends React.Component {
 Settings.propTypes = {
   logout: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
   authError: PropTypes.string,
   auth: PropTypes.object,
 };
@@ -154,7 +158,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
-    save: state => dispatch(save(state)),
+    save: displayName => dispatch(save(displayName)),
+    changePassword: password => dispatch(changePassword(password))
   };
 };
 
