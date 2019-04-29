@@ -98,11 +98,14 @@ export const changePassword = password => {
     const firebase = getFirebase();
     const user = firebase.auth().currentUser;
 
-    user.updatePassword(password).then(() => {
-      dispatch({ type: SETTINGS_PASSWORD_CHANGED });
-      dispatch(logout());
-    }).catch(err => {
-      dispatch({ type: SETTINGS_ERROR, err });
-    });
-  }
-}
+    user
+      .updatePassword(password)
+      .then(() => {
+        dispatch({ type: SETTINGS_PASSWORD_CHANGED });
+        dispatch(logout());
+      })
+      .catch(err => {
+        dispatch({ type: SETTINGS_ERROR, err });
+      });
+  };
+};

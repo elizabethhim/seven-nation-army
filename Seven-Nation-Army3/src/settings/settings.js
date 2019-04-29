@@ -159,7 +159,7 @@ const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
     save: displayName => dispatch(save(displayName)),
-    changePassword: password => dispatch(changePassword(password))
+    changePassword: password => dispatch(changePassword(password)),
   };
 };
 
