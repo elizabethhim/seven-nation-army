@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import * as scripts from './scripts.js';
 
 // Holdover from first Seven-Nation-Army --Chris
 import PopUp from './popup/PopUp';
@@ -7,359 +8,341 @@ import LegendContainer from '../legend/LegendContainer';
 import Map from './map/map';
 
 export default class Game extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		this.supplyCenters = [
-			'Ankara', 'Belgium', 'Berlin', 'Brest', 'Budapest', 'Bulgaria', 'Constantinople',
-			'Denmark', 'Edinburgh', 'Holland', 'Kiel', 'Liverpool', 'London', 'Marseilles',
-			'Moscow', 'Munich', 'Naples', 'Norway', 'Paris', 'Portugal', 'Rome', 'Rumania',
-			'Serbia', 'Sevastopol', 'Smyrna', 'Spain', 'St_Petersburg', 'Sweden', 'Trieste',
-			'Tunis', 'Venice', 'Vienna', 'Warsaw'
-		];
-		this.starting = [
-			[['Vienna', 'Army'], ['Budapest', 'Army'], ['Trieste', 'Fleet']],
-			[['Edinburgh', 'Fleet'], ['Liverpool', 'Army'], ['London', 'Fleet']],
-			[['Brest', 'Fleet'], ['Paris', 'Army'], ['Marseilles', 'Army']],
-			[['Kiel', 'Fleet'], ['Berlin', 'Army'], ['Munich', 'Army']],
-			[['Venice', 'Army'], ['Rome', 'Army'], ['Naples', 'Fleet']],
-			[['St_Petersburg', 'Fleet'], ['Moscow', 'Army'], ['Warsaw', 'Army'], ['Sevastopol', 'Fleet']],
-			[['Constantinople', 'Army'], ['Ankara', 'Fleet'], ['Smyrna', 'Army']]
-		];
-		this.countries = ['Austria_Hungary', 'England', 'France', 'Germany', 'Italy', 'Russia', 'Turkey'];
-		this.colors = ['#ed497d', '#605aa7', '#9a9148', '#c0495e', '#cb75db', '#c95df6', '#7b69b8'];
-		this.territoryNames = [
-			'Adriatic_Sea', 'Aegean_Sea', 'Albania', 'Ankara', 'Apulia', 'Armenia', 'Baltic_Sea',
-			'Barents_Sea', 'Belgium', 'Berlin', 'Black_Sea', 'Bohemia', 'Brest', 'Budapest',
-			'Bulgaria', 'Burgundy', 'Clyde', 'Constantinople', 'Denmark', 'Eastern_Mediterranean',
-			'Edinburgh', 'English_Channel', 'Finland', 'Galicia', 'Gascony', 'Greece',
-			'Gulf_of_Lyon', 'Gulf_of_Bothnia', 'Helgoland_Bight', 'Holland', 'Ionian_Sea',
-			'Irish_Sea', 'Kiel', 'Liverpool', 'Livonia', 'London', 'Marseilles',
-			'Mid-Atlantic_Ocean', 'Moscow', 'Munich', 'Naples', 'North_Atlantic_Ocean',
-			'North_Africa', 'North_Sea', 'Norway', 'Norwegian_Sea', 'Paris', 'Picardy', 'Piedmont',
-			'Portugal', 'Prussia', 'Rome', 'Ruhr', 'Rumania', 'Serbia', 'Sevastopol', 'Silesia',
-			'Skagerrak', 'Smyrna', 'Spain', 'St_Petersburg', 'Sweden', 'Syria', 'Trieste', 'Tunis',
-			'Tuscany', 'Tyrolia', 'Tyrrhenian_Sea', 'Ukraine', 'Venice', 'Vienna', 'Wales',
-			'Warsaw', 'Western_Mediterranean', 'Yorkshire'
-		];
-		this.adjacencyList = [
-			["Ionian_Sea", "Apulia", "Venice", "Trieste", "Albania"],
-			["Ionian_Sea", "Greece", "Bulgaria", "Constantinople", "Smyrna", "Eastern_Mediterranean"],
-			["Adriatic_Sea", "Trieste", "Serbia", "Greece", "Ionian_Sea"],
-			["Constantinople", "Black_Sea", "Armenia", "Smyrna"],
-			["Adriatic_Sea", "Ionian_Sea", "Naples", "Rome", "Venice"],
-			["Ankara", "Black_Sea", "Sevastopol", "Syria", "Smyrna"],
-			["Livonia", "Prussia", "Berlin", "Kiel", "Denmark", "Sweden", "Gulf_of_Bothnia"],
-			["St_Petersburg", "Finland", "Norway", "Norwegian_Sea"],
-			["Holland", "Ruhr", "Burgundy", "Picardy", "English_Channel", "North_Sea"],
-			["Baltic_Sea", "Prussia", "Silesia", "Munich", "Kiel"],
-			["Ankara", "Armenia", "Constantinople", "Bulgaria", "Rumania", "Sevastopol"],
-			["Silesia", "Galicia", "Vienna", "Tyrolia", "Munich"],
-			["Mid-Atlantic_Ocean", "English_Channel", "Picardy", "Paris", "Gascony"],
-			["Galicia", "Rumania", "Serbia", "Trieste", "Vienna"],
-			["Aegean_Sea", "Black_Sea", "Greece", "Serbia", "Rumania", "Constantinople"],
-			["Belgium", "Ruhr", "Munich", "Marseilles", "Gascony", "Paris", "Picardy"],
-			["North_Atlantic_Ocean", "Norwegian_Sea", "Edinburgh", "Liverpool"],
-			["Aegean_Sea", "Ankara", "Black_Sea", "Bulgaria", "Smyrna"],
-			["Baltic_Sea", "Kiel", "Helgoland_Bight", "North_Sea", "Skagerrak", "Sweden"],
-			["Aegean_Sea", "Smyrna", "Syria", "Ionian_Sea"],
-			["Clyde", "Norwegian_Sea", "North_Sea", "Yorkshire", "Liverpool"],
-			["Belgium", "Brest", "Picardy", "Mid-Atlantic_Ocean", "Irish_Sea", "Wales", "London", "North_Sea"],
-			["St_Petersburg", "Gulf_of_Bothnia", "Sweden", "Norway", "Adriatic_Sea"],
-			["Bohemia", "Budapest", "Vienna", "Silesia", "Warsaw", "Ukraine", "Rumania"],
-			["Brest", "Burgundy", "Paris", "Marseilles", "Spain", "Mid-Atlantic_Ocean"],
-			["Aegean_Sea", "Albania", "Bulgaria", "Serbia", "Ionian_Sea"],
-			["Baltic_Sea", "Finland", "Sweden", "St_Petersburg", "Livonia"],
-			["Tuscany", "Tyrrhenian_Sea", "Western_Mediterranean", "Spain", "Marseilles", "Piedmont"],
-			["Denmark", "Kiel", "Holland", "North_Sea"],
-			["Belgium", "Helgoland_Bight", "North_Sea", "Kiel", "Ruhr"],
-			["Adriatic_Sea", "Aegean_Sea", "Albania", "Apulia", "Eastern_Mediterranean", "Greece", "Tunis", "Tyrrhenian_Sea", "Naples"],
-			["English_Channel", "Mid-Atlantic_Ocean", "North_Atlantic_Ocean", "Wales"],
-			["Baltic_Sea", "Berlin", "Denmark", "Helgoland_Bight", "Holland", "Ruhr", "Munich"],
-			["Clyde", "Edinburgh", "Yorkshire", "Wales", "Irish_Sea", "North_Atlantic_Ocean"],
-			["Baltic_Sea", "Gulf_of_Bothnia", "St_Petersburg", "Moscow", "Warsaw", "Prussia"],
-			["English_Channel", "Wales", "Yorkshire", "North_Sea"],
-			["Burgundy", "Gascony", "Gulf_of_Lyon", "Spain", "Piedmont"],
-			["Brest", "English_Channel", "Gascony", "Irish_Sea", "North_Atlantic_Ocean", "Irish_Sea", "Spain", "Portugal", "Western_Mediterranean", "North_Africa"],
-			["Livonia", "St_Petersburg", "Warsaw", "Ukraine", "Sevastopol"],
-			["Berlin", "Bohemia", "Burgundy", "Kiel", "Silesia", "Tyrolia", "Ruhr"],
-			["Apulia", "Ionian_Sea", "Tyrrhenian_Sea", "Rome"],
-			["Mid-Atlantic_Ocean", "Western_Mediterranean", "Tunis"],
-			["Clyde", "Irish_Sea", "Liverpool", "Mid-Atlantic_Ocean", "Norwegian_Sea"],
-			["Belgium", "Denmark", "Edinburgh", "English_Channel", "Helgoland_Bight", "Holland", "London", "Norwegian_Sea", "Norway", "Skagerrak", "Yorkshire"],
-			["Barents_Sea", "Finland", "North_Sea", "St_Petersburg", "Sweden", "Skagerrak", "Norwegian_Sea"],
-			["Barents_Sea", "Clyde", "Edinburgh", "North_Atlantic_Ocean", "North_Sea", "Norway"],
-			["Brest", "Burgundy", "Gascony", "Picardy"],
-			["Belgium", "Brest", "Burgundy", "English_Channel", "Paris"],
-			["Gulf_of_Lyon", "Marseilles", "Tyrolia", "Venice", "Tuscany"],
-			["Mid-Atlantic_Ocean", "Spain"],
-			["Baltic_Sea", "Berlin", "Livonia", "Warsaw", "Silesia"],
-			["Apulia", "Naples", "Tyrrhenian_Sea", "Tuscany", "Venice"],
-			["Belgium", "Burgundy", "Holland", "Kiel", "Munich"],
-			["Black_Sea", "Budapest", "Bulgaria", "Galicia", "Ukraine", "Sevastopol", "Serbia"],
-			["Albania", "Budapest", "Bulgaria", "Greece", "Rumania", "Trieste"],
-			["Armenia", "Black_Sea", "Moscow", "Rumania", "Ukraine"],
-			["Berlin", "Bohemia", "Galicia", "Munich", "Prussia", "Warsaw"],
-			["Denmark", "North_Sea", "Norway", "Sweden"],
-			["Aegean_Sea", "Ankara", "Armenia", "Constantinople", "Eastern_Mediterranean", "Syria"],
-			["Gascony", "Gulf_of_Lyon", "Marseilles", "Mid-Atlantic_Ocean", "Portugal", "Western_Mediterranean"],
-			["Barents_Sea", "Finland", "Gulf_of_Bothnia", "Livonia", "Moscow", "Norway"],
-			["Baltic_Sea", "Denmark", "Finland", "Gulf_of_Bothnia", "Norway", "Skagerrak"],
-			["Eastern_Mediterranean", "Smyrna", "Armenia"],
-			["Serbia", "Albania", "Adriatic_Sea", "Venice", "Tyrolia", "Vienna", "Budapest"],
-			["North_Africa", "Western_Mediterranean", "Tyrrhenian_Sea", "Ionian_Sea"],
-			["Tyrrhenian_Sea", "Gulf_of_Lyon", "Piedmont", "Venice", "Rome"],
-			["Venice", "Munich", "Bohemia", "Vienna", "Trieste"],
-			["Ionian_Sea", "Tunis", "Western_Mediterranean", "Gulf_of_Lyon", "Tuscany", "Rome", "Naples"],
-			["Moscow", "Sevastopol", "Rumania", "Galicia", "Warsaw"],
-			["Piedmont", "Tyrolia", "Trieste", "Adriatic_Sea", "Apulia", "Rome", "Tuscany"],
-			["Budapest", "Trieste", "Tyrolia", "Bohemia", "Galicia"],
-			["Irish_Sea", "Liverpool", "Yorkshire", "London", "English_Channel"],
-			["Prussia", "Silesia", "Galicia", "Ukraine", "Moscow", "Livonia"],
-			["North_Africa", "Mid-Atlantic_Ocean", "Spain", "Gulf_of_Lyon", "Tyrrhenian_Sea", "Tunis"],
-			["London", "Wales", "Liverpool", "Edinburgh", "North_Sea"]];
+    //Used to iterate through the JSON and SVG objects
+    this.territoryNames = [
+      'Adriatic_Sea',
+      'Aegean_Sea',
+      'Albania',
+      'Ankara',
+      'Apulia',
+      'Armenia',
+      'Baltic_Sea',
+      'Barents_Sea',
+      'Belgium',
+      'Berlin',
+      'Black_Sea',
+      'Bohemia',
+      'Brest',
+      'Budapest',
+      'Bulgaria',
+      'Burgundy',
+      'Clyde',
+      'Constantinople',
+      'Denmark',
+      'Eastern_Mediterranean',
+      'Edinburgh',
+      'English_Channel',
+      'Finland',
+      'Galicia',
+      'Gascony',
+      'Greece',
+      'Gulf_of_Lyon',
+      'Gulf_of_Bothnia',
+      'Helgoland_Bight',
+      'Holland',
+      'Ionian_Sea',
+      'Irish_Sea',
+      'Kiel',
+      'Liverpool',
+      'Livonia',
+      'London',
+      'Marseilles',
+      'Mid-Atlantic_Ocean',
+      'Moscow',
+      'Munich',
+      'Naples',
+      'North_Atlantic_Ocean',
+      'North_Africa',
+      'North_Sea',
+      'Norway',
+      'Norwegian_Sea',
+      'Paris',
+      'Picardy',
+      'Piedmont',
+      'Portugal',
+      'Prussia',
+      'Rome',
+      'Ruhr',
+      'Rumania',
+      'Serbia',
+      'Sevastopol',
+      'Silesia',
+      'Skagerrak',
+      'Smyrna',
+      'Spain',
+      'St_Petersburg',
+      'Sweden',
+      'Syria',
+      'Trieste',
+      'Tunis',
+      'Tuscany',
+      'Tyrolia',
+      'Tyrrhenian_Sea',
+      'Ukraine',
+      'Venice',
+      'Vienna',
+      'Wales',
+      'Warsaw',
+      'Western_Mediterranean',
+      'Yorkshire'
+    ];
 
-		this.waterSpaces = ['Adriatic_Sea', 'Aegean_Sea', 'Baltic_Sea', 'Barents_Sea', 'Black_Sea',
-			'Eastern_Mediterranean', 'English_Channel', 'Gulf_of_Bothnia', 'Gulf_of_Lyon', 'Helgoland_Bight',
-			'Ionian_Sea', 'Irish_Sea', 'Mid-Atlantic_Ocean', 'North_Atlantic_Ocean', 'North_Sea',
-			'Norwegian_Sea', 'Skagerrak', 'Tyrrhenian_Sea', 'Western_Mediterranean'];
+    this.territoryObjects = [];
 
-		this.coastalSpaces = ['Albania', 'Ankara', 'Apulia', 'Armenia', 'Belgium',
-			'Berlin', 'Brest', 'Bulgaria', 'Clyde', 'Constantinople',
-			'Denmark', 'Edinburgh', 'Finland', 'Gascony', 'Greece',
-			'Holland', 'Kiel', 'Livonia', 'London', 'Marseilles', 'Naples',
-			'North_Africa', 'Norway', 'Picardy', 'Piedmont', 'Portugal',
-			'Prussia', 'Rome', 'Rumania', 'Sevastopol', 'Smyrna',
-			'Spain', 'St_Petersburg', 'Sweden', 'Syria', 'Trieste',
-			'Tunis', 'Tuscany', 'Venice', 'Wales', 'Yorkshire'];
+    this.state = {
+      buttonActionIsVisible: false
+    };
 
-		this.landLockedSpaces = ['Bohemia', 'Budapest', 'Burgundy', 'Galicia', 'Liverpool', 
-			'Moscow', 'Munich', 'Paris', 'Ruhr', 'Serbia', 
-			'Silesia', 'Tyrolia', 'Ukraine', 'Vienna', 'Warsaw'];
+    this.orders = [];
+    this.actionStruct = [
+      { unitOrigin: '' },
+      { actionID: '' },
+      { unitDest: '' },
+      { secondaryUnit: '' }
+    ];
+  }
 
-		this.territoryObjects = [];
+  addMouseListeners() {
+    const displayCanvas = document.getElementById('displayCanvas');
+    const popup = document.getElementById('myPopup');
+    const popupContainer = document.getElementById('popupContainer');
 
-		this.movePopup = this.movePopup.bind(this);
+    //Iterating over every territory object to add listeners
+    //Listeners are based on the current action being taken
+    //Action being taken is stored in this.actionStruct[1].actionID
+    for (let i in this.territoryObjects) {
+      const territory = this.territoryObjects[i];
 
-		this.state = {
-			buttonActionIsVisible: false,
-		}
-	}
+      //When the mouse leaves the bounds of a territory
+      territory.addEventListener('mouseout', () => {
+        scripts.deHighlight(territory);
+      });
 
-	movePopup(e) {
-		let x = e.clientX + 85;
-		let y = e.clientY - 20;
+      //When the mouse enters a territory's bounds it will be highlighted
+      //and the popup will be updated with the it's info.
+      territory.addEventListener('mouseenter', () => {
+        scripts.highlight(territory);
+        if (popupContainer.getAttribute('mutable') === 'true') {
+          document.getElementById('popupText').innerHTML = scripts.buildString(territory);
+        }
+      });
 
-		x = x >= window.innerWidth - 85 ? window.innerWidth - 85 : x
-		y = 100 >= y ? 100 : y
-		const popupContainer = document.getElementById('popupContainer');
+      //This one handles all the clicks.
+      territory.addEventListener('click', (e) => {
 
-		if (popupContainer.getAttribute('mutable') === 'true') {
-			popupContainer.style.top = y + 'px';
-			popupContainer.style.left = x + 'px';
-		}
-	}
+        switch (this.actionStruct[1].actionID) {
+          //If the move action was selected earlier, the next territory clicked is the destination
+          case 'move':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the move
+            //If its valid, it will be pushed to the list
+            //Regardless of validity, the 'move' action is completed and the game waits for another action
+            scripts.resetFill(this.actionStruct[2].unitDest);
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.orders.push(this.actionStruct);
+            }          
+            this.actionStruct[1].actionID = '';
+            break;
 
-	buildString(territory) {
-		const territoryName = `Territory: ${territory.id}<br/>`;
-		const country = territory.getAttribute('country') !== ''
-			? (`Country: ${territory.getAttribute('country')}<br/>`)
-			: '';
-		const unit = territory.getAttribute('unit') !== ''
-			? (`Unit: ${territory.getAttribute('unit')}<br/>`)
-			: '';
-		const player = territory.getAttribute('player') !== ''
-			? (`Player: ${territory.getAttribute('player')}<br/>`)
-			: '';
+          //If the support action was selected earlier, the next territory clicked is the destination
+          case 'support':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the support
+            //If its valid, it will continue on to find what action will be supported
+            //If a valid unit was not selected, the support is canceled by setting this.action[1].actionID to ''
+            scripts.resetFill(this.actionStruct[2].unitDest);
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.actionStruct[1].actionID = 'gettingsecondaryunit';
+              scripts.setFill([this.actionStruct[3].secondaryUnit[territory.id], 'green', .15]);
+            } else {
+              this.actionStruct[1].actionID = '';
+            }
+            break;
+          //If support was selected as an action earlier and a valid unit was selected afterwards,
+          //the next unit is the secondary unit for the support
+          case 'gettingsecondaryunit':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the secondary unit.
+            //If its valid, the order is pushed to the list
+            //If not the support is cancelled.
+            scripts.resetFill(this.actionStruct[3].secondaryUnit[this.actionStruct[2].unitDest]);
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.orders.push(this.actionStruct);
+            }
+            this.actionStruct[1].actionID = '';
+            break;
+          //Logic for hold and convoy incomming
+          case 'hold':
+            this.actionStruct[1].actionID = '';
+            break;
+          case 'convoy':
+            this.actionStruct[1].actionID = '';
+            break;
+          //The default logic for a click
+          default:
+            //Toggles the buttons in the popup depending on if the territory has a unit
+            //aslo responsible for closing the button menu when clicked away
+            this.setState({
+              buttonActionIsVisible: scripts.mouseClickFunc(territory)
+            });
+            //If the buttons have been opened, add listeners to them
+            //If the buttons have been closed, remove listeners (TBA)
+            //This will prevent hundreds of listeners from being added to the stack.
+            if (this.state.buttonActionIsVisible) this.addButtonListeners(territory);
+            else this.removeButtonListeners(territory);
+            break;
+        }
+      });
+    }
 
-		return country + territoryName + unit + player;
-	}
+    //Making the popup follow the mouse
+    displayCanvas.addEventListener('mousemove', scripts.movePopup);
 
-	addListeners() {
-		const displayCanvas = document.getElementById('displayCanvas');
-		const popup = document.getElementById('myPopup');
-		const popupContainer = document.getElementById('popupContainer');
+    //Closing the popup when the canvas loses mouse focus
+    displayCanvas.addEventListener('mouseleave', () => {
+      popup.classList.toggle('show');
+    });
 
-		displayCanvas.addEventListener('mousemove', this.movePopup);
+    //Opens the popup when reentering the canvas
+    //Also closes the button menu if it was open
+    //and makes the popup follow the mouse again in case it was frozen
+    displayCanvas.addEventListener('mouseenter', () => {
+      popup.classList.toggle('show');
+      popupContainer.setAttribute('mutable', true);
+      this.setState({
+        buttonActionIsVisible: false
+      });
+    });
 
-		for (let i in this.territoryObjects) {
-			const territory = this.territoryObjects[i];
-			const color = territory.getAttribute('fill');
+    popup.addEventListener('mouseenter', () => {
+      popup.classList.toggle('show');
+    });
 
-			territory.addEventListener('mouseenter', () => {
-				if(popupContainer.getAttribute('mutable') === 'true'){
-					document.getElementById('popupText').innerHTML = this.buildString(territory);
-				}
-				territory.setAttribute('fill-opacity', .25);
-				territory.setAttribute('fill', 'yellow');
-			});
+    popup.addEventListener('mouseleave', () => {
+      popup.classList.toggle('show');
+    });
+  }
 
-			territory.addEventListener('mouseout', () => {
-				if (color === 'yellow') {
-					territory.setAttribute('fill-opacity', 0);
-				}
-				territory.setAttribute('fill', color);
-			});
+  removeButtonListeners(){
 
-			territory.addEventListener('click', () => {
-				if (territory.getAttribute('unit') !== '' && popupContainer.getAttribute('mutable') === 'true') {
-					popupContainer.setAttribute('mutable', false);
-					this.setState({
-						buttonActionIsVisible: true,
-					});
-					this.buttonListener(territory);
-				} else {
-					popupContainer.setAttribute('mutable', true);
-					this.setState({
-						buttonActionIsVisible: false,
-					});
-				}
-			});
-		}
+  }
+  addButtonListeners(territory) {
+    const moveButton = document.getElementById('moveButton');
+    const holdButton = document.getElementById('holdButton');
+    const supportButton = document.getElementById('supportButton');
+    const convoyButton = document.getElementById('convoyButton');
 
+    this.actionStruct[0].unitOrigin = territory.id;
 
+    moveButton.addEventListener('click', (e) => {
+      this.actionStruct[1].actionID = 'move';
+      this.actionStruct[2].unitDest = scripts.findMovementSpaces(territory);
+    });
 
-		displayCanvas.addEventListener('mouseleave', () => {
-			popup.classList.toggle('show');
-		});
+    holdButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'hold';
+      // territory.setAttribute('fill-opacity', .6);
+    });
 
-		displayCanvas.addEventListener('mouseenter', () => {
-			popup.classList.toggle('show');
-			popupContainer.setAttribute('mutable', true);
-			this.setState({
-				buttonActionIsVisible: false,
-			});
-		});
+    supportButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'support';
+      const results = scripts.findSupportSpaces(territory);
+      this.actionStruct[2].unitDest = results[0];
+      this.actionStruct[3].secondaryUnit = results[1];
+    });
 
-		popup.addEventListener('mouseenter', () => {
-			popup.classList.toggle('show');
-		});
+    convoyButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'convoy';
+      // scripts.findSupportSpaces(territory);
+    });
+  }
 
-		popup.addEventListener('mouseleave', () => {
-			popup.classList.toggle('show');
-		});
-	}
+  componentDidMount() {
+    //Reads the JSON files from the scripts file
+    //This is probably temporary, once the server is running info will be pulled from there
+    let territoriesJSON = scripts.territoriesJSON;
+    let countriesJSON = scripts.countriesJSON;
 
-	buttonListener(territory){
-		const moveButton = document.getElementById('moveButton');
-		const holdButton = document.getElementById('holdButton');
-		const supportButton = document.getElementById('supportButton');
-		const convoyButton = document.getElementById('convoyButton');
-		const list = this.adjacencyList[this.territoryNames.indexOf(territory.id)];
-		moveButton.addEventListener('click', () => {
-			this.findMovementSpaces(territory);
-		});
+    //Looping through all the territories and adds them to a list
+    for (let i in this.territoryNames) {
+      //territory is the actual SVG object
+      //territoryInfo is the info from the JSON file
+      const territory = document.getElementById(this.territoryNames[i]);
+      const territyInfo = territoriesJSON[territory.id];
 
-		holdButton.addEventListener('click', () => {
-			territory.setAttribute('fill-opacity', .6);
-		});
+      //Setting default info as empty and color as yellow for highlighting
+      territory.setAttribute('fill', 'yellow');
+      territory.setAttribute('unit', '');
+      territory.setAttribute('player', '');
+      territory.setAttribute('country', '');
+      territory.setAttribute('countrycolor', territory.getAttribute('fill'));
+      territory.setAttribute('previouscolor', territory.getAttribute('fill'));
+      //Adds country attribute for supply centers
+      if (territyInfo.isSupplyCenter === 'yes') {
+        territory.setAttribute('country', 'Unclaimed');
+      }
 
-		supportButton.addEventListener('click', () => {
-			this.findSupportSpaces(territory);
-		});
-	}
+      //More details for territories that are owned by a country
+      //These are the starting points
+      if (territyInfo.country !== '') {
+        //Each country has its own color stored in the JSON
+        const color = countriesJSON[territyInfo.country].color;
 
-	findMovementSpaces(territory){
-		const unitType = territory.getAttribute('unit');
-		const country = territory.getAttribute('country');
-		const list = this.adjacencyList[this.territoryNames.indexOf(territory.id)];
+        //countrycolor attribute will be the color each territory
+        //defaults back to after being highlighted
+        //Fills in the relevant info from the JSON
+        territory.setAttribute('countrycolor', color);
+        territory.setAttribute('fill', color);
+        territory.setAttribute('fill-opacity', 0.15);
+        territory.setAttribute('stroke', color);
+        territory.setAttribute('stroke-width', 10);
+        territory.setAttribute('stroke-opacity', 0.15);
+        territory.setAttribute('country', territyInfo.country);
+        territory.setAttribute('unit', territyInfo.unit);
+        territory.setAttribute('previouscolor', color);
 
-		for(let i in list){
-			const territory2 = this.territoryObjects[this.territoryNames.indexOf(list[i])];
+        //Makes the needed units visible
+        if (territyInfo.unit === 'Army') {
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('fill-opacity', '1');
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('stroke-opacity', '1');
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('fill', color);
+        } else if (territyInfo.unit === 'Fleet') {
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('fill-opacity', '1');
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('stroke-opacity', '1');
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('fill', color);
+        }
+      }
 
-			const sameCountry = territory2.getAttribute('country') == country;
-			const isEmpty = (territory2.getAttribute('country') == '' || territory2.getAttribute('country') == 'Unclaimed');
+      this.territoryObjects.push(territory);
+    }
 
-			if(!sameCountry){
-				if(unitType == 'Fleet' && this.landLockedSpaces.indexOf(territory2.id) == -1){
-					territory2.setAttribute('fill', 'red');
-					territory2.setAttribute('stroke', 'red');
-					territory2.setAttribute('stroke-width', 4);
-					if(!isEmpty){
-						territory2.setAttribute('fill-opacity', .6);
-						territory2.setAttribute('stroke-opacity', .4);
-					} else if (isEmpty){
-						territory2.setAttribute('fill-opacity', .4);
-						territory2.setAttribute('stroke-opacity', .4);
-					} 
-				}else if(unitType == 'Army' && this.waterSpaces.indexOf(territory2.id) == -1){
-					territory2.setAttribute('fill', 'red');
-					territory2.setAttribute('stroke', 'red');
-					territory2.setAttribute('stroke-width', 4);
-					if(!isEmpty){
-						territory2.setAttribute('fill-opacity', .6);
-						territory2.setAttribute('stroke-opacity', .4);
-					} else if (isEmpty){
-						territory2.setAttribute('fill-opacity', .4);
-						territory2.setAttribute('stroke-opacity', .4);
-					} 
-				}
-			}
-		}
-	}
+    document.getElementById('popupContainer').setAttribute('mutable', true);
+    this.addMouseListeners();
+  }
 
-	findSupportSpaces(territory){
-		const unitType = territory.getAttribute('unit');
-		const country = territory.getAttribute('country');
-		const list = this.adjacencyList[this.territoryNames.indexOf(territory.id)];
-
-		for(let i in list){
-			const territory2 = this.territoryObjects[this.territoryNames.indexOf(list[i])];
-			const color = territory.getAttribute('fill');
-			if(territory2){
-				if (territory2.getAttribute('unit') !== ''){
-					territory2.setAttribute('fill', 'green');
-					territory2.setAttribute('fill-opacity', .6);
-					territory2.setAttribute('stroke', 'green');
-					territory2.setAttribute('stroke-opacity', .6);
-					territory2.setAttribute('stroke-width', 6);
-				}
-			}
-		}
-	}
-
-	componentDidMount() {
-		const svgLayer = document.getElementById('map_overlay');
-		if (svgLayer) {
-			/* const svgDoc = svgLayer.contentDocument; */
-			for (let i in this.territoryNames) {
-				const territory = svgLayer.getElementById(this.territoryNames[i]);
-				territory.setAttribute('fill', 'yellow');
-				territory.setAttribute('unit', '');
-				territory.setAttribute('player', '');
-				territory.setAttribute('country', '');
-				if (this.supplyCenters.indexOf(territory.id) > -1) {
-					territory.setAttribute('country', 'Unclaimed');
-				}
-				this.territoryObjects.push(territory);
-			}
-			for (let i in this.starting) {
-				for (let j in this.starting[i]) {
-					const territory = svgLayer.getElementById(this.starting[i][j][0]);
-					territory.setAttribute('fill', this.colors[i]);
-					territory.setAttribute('fill-opacity', 0.25);
-					territory.setAttribute('stroke', this.colors[i]);
-					territory.setAttribute('stroke-width', 10);
-					territory.setAttribute('stroke-opacity', .4);
-					territory.setAttribute('country', this.countries[i]);
-					territory.setAttribute('unit', this.starting[i][j][1]);
-				}
-			}
-		}
-
-		// document.getElementById('myPopup').classList.toggle('show');
-		document.getElementById('popupContainer').setAttribute('mutable', true);
-		this.addListeners();
-	}
-
-	render() {
-		return (
-			<Fragment>
-				<ChatContainer/>
-				<Map />
-				<PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
-				<LegendContainer  /> 
-			</Fragment>
-		);
-	}
+  render() {
+    return (
+      <Fragment>
+        <ChatContainer />
+        <Map />
+        <PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
+        <LegendContainer />
+      </Fragment>
+    );
+  }
 }

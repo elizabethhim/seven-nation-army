@@ -27,3 +27,27 @@ img.background {
 .svg_background {
     z-index: 0;
 }
+.svg_units {
+  z-index: 1;
+}
+.svg_territories{
+  z-index: 2;
+}
+
+.arrowContainer{
+  position: fixed;
+  z-index: 4;
+}
+.arrow{
+  fill: none;
+  fill-opacity: 0;
+  stroke: darkblue;
+  stroke-opacity: 1;
+  stroke-width: 5;
+  z-index: 5;
+}
+
+.arrowhead{
+  fill: darkblue;
+  z-index: 5;
+}
