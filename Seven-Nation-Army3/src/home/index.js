@@ -105,12 +105,14 @@ class Home extends Component {
               alt="new-game-card"
             />
           </NavLink>
-          <img
-            className="screen_item resize_fit_center item"
-            style={{ top: '24%', width: '50vh' }}
-            src={require('../media/images/main_menu_continue.png')}
-            alt="continue-game-card"
-          />
+          <NavLink to="/continue" exact>
+            <img
+              className="screen_item resize_fit_center item"
+              style={{ top: '24%', width: '50vh' }}
+              src={require('../media/images/main_menu_continue.png')}
+              alt="continue-game-card"
+            />
+          </NavLink>
           <NavLink to="/settings" exact>
             <img
               className="screen_item resize_fit_center item"

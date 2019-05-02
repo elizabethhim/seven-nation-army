@@ -11,6 +11,7 @@ import Home from './home';
 import Login from './login/login';
 import Register from './login/register';
 import Settings from './settings/settings';
+import Continue from './home/components/Continue';
 /* import Help from './help/help'; */
 // import Chat from './game/chat/chat';
 
@@ -31,6 +32,7 @@ export default (
     <Route path="/settings" component={Settings} />
     {/*<Route path="/map" component={Map} />*/}
     <Route path="/game" component={Game} />
+    <Route path="/continue" component={Continue} />
     {/*<Route path="/help" component={Help} />*/}
     {/*<Route path ="/chat" component={Chat}/>*/}
     <Route component={PageNotFound} />

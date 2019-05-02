@@ -13,7 +13,7 @@ import {
 } from './actionTypes';
 
 export const login = credentials => {
-  return (dispatch, getState, { getFirebase }) => {
+  return (dispatch, _, { getFirebase }) => {
     const firebase = getFirebase();
 
     firebase
@@ -30,7 +30,7 @@ export const login = credentials => {
 };
 
 export const logout = () => {
-  return (dispatch, getState, { getFirebase }) => {
+  return (dispatch, _, { getFirebase }) => {
     const firebase = getFirebase();
 
     firebase
@@ -47,7 +47,7 @@ export const logout = () => {
 };
 
 export const register = user => {
-  return (dispatch, getState, { getFirebase }) => {
+  return (dispatch, _, { getFirebase }) => {
     const firebase = getFirebase();
 
     firebase
@@ -69,7 +69,7 @@ export const register = user => {
 };
 
 export const save = displayName => {
-  return (dispatch, getState, { getFirebase }) => {
+  return (dispatch, _, { getFirebase }) => {
     const firebase = getFirebase();
 
     const user = firebase.auth().currentUser;
@@ -94,7 +94,7 @@ export const save = displayName => {
 };
 
 export const changePassword = password => {
-  return (dispatch, getState, { getFirebase }) => {
+  return (dispatch, _, { getFirebase }) => {
     const firebase = getFirebase();
     const user = firebase.auth().currentUser;
 
