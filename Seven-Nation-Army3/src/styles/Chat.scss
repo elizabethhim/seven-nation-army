@@ -52,21 +52,20 @@
   height: 275px;
 }
 .chat .chat-history .message-data {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .chat .chat-history .message-data-name {
   font-size: 12px;
 }
 .chat .chat-history .message-data-time {
   color: #a8aab1;
-  font-size: 12px;
-  padding-left: 2px;
+  font-size: 10px;
 }
 .chat .chat-history .message {
   color: white;
   padding: 10px 12px;
   line-height: 14px;
-  font-size: 10px;
+  font-size: 14px;
   border-radius: 7px;
   margin-bottom: 15px;
   width: 60%;
@@ -96,13 +95,13 @@
   left: 93%;
 }
 .chat .chat-message {
-  padding: 12px;
+  padding: 5px;
 }
 .chat .chat-message textarea {
   width: 100%;
   border: none;
   padding: 6px 12px;
-  font: 10px/14px "Lato", Arial, sans-serif;
+  font-size: 14px/20px "Lato", Arial, sans-serif;
   margin-bottom: 5px;
   border-radius: 5px;
   resize: none;

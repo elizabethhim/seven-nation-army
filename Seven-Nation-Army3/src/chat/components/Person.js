@@ -8,10 +8,10 @@ import '../../styles/Person.scss';
 
 export default class Person extends Component {
   render() {
-    const { name, isOnline, status, source } = this.props;
+    const { name, isOnline, status} = this.props;
     return (
       <li className="clearfix">
-        <img src={source} alt="avatar" className="person-img" />
+        {/* <img src={source} alt="avatar" className="person-img" /> */}
         <div className="person-about">
           <div className="person-name">{name}</div>
           <div className="person-status">
@@ -31,5 +31,5 @@ Person.propTypes = {
   name: PropTypes.string.isRequired,
   isOnline: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  source: PropTypes.string.isRequired,
+  // source: PropTypes.string.isRequired,
 };
