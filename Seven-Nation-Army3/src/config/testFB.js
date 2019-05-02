@@ -3,10 +3,12 @@
 import firebase from './fbConfig';
 
 const fb = firebase
-  .database()
-  .ref('sessions')
-  .once('value', snap => {
-    console.log('Once', snap.toJSON());
+  .ref('root/sessions')
+  .once('value', sessions => {
+    console.log('Sessions', sessions);
+    sessions.forEach(session => {
+      console.log('Session', session.val());
+    });
   })
   .then(res => {
     console.log('Realtime database', res);

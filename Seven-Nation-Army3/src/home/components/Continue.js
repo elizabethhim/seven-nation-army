@@ -6,12 +6,12 @@ import Video from '../../common/components/Video';
 import { getSessions } from '../../store/actions/getSession';
 
 class Continue extends Component {
-  // Get a list of sessions in progress
   componentDidMount() {
     this.props.getSessions();
   }
 
   render() {
+    console.log('Sessions', this.props.sessions);
     return <Video />;
   }
 }

@@ -1,4 +1,7 @@
-import { GET_SESSIONS_SUCCESS, GET_SESSIONS_FAIL } from '../actions/actionTypes';
+import {
+  GET_SESSIONS_SUCCESS,
+  GET_SESSIONS_FAIL,
+} from '../actions/actionTypes';
 
 const initialState = {};
 
