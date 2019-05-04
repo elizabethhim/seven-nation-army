@@ -11,14 +11,14 @@ export default class ChatMessage extends Component {
         {myMessage ? (
           <li className="clearfix">
             <div className="message-data align-right">
-              <span className="message-data-time">{time}</span> &nbsp; &nbsp;{' '}
+              <span className="message-data-time">{time}</span> &nbsp; &nbsp;
               <span className="message-data-name">{name}</span>
               <i className="fa fa-circle me" />
             </div>
             <div className="message other-message float-right">{message}</div>
           </li>
         ) : (
-          <div>
+          <li className="clearfix">
             <div className="message-data">
               <span className="message-data-name">
                 <i className="fa fa-circle online" />
@@ -27,7 +27,7 @@ export default class ChatMessage extends Component {
               <span className="message-data-time">{time}</span>
             </div>
             <div className="message my-message">{message}</div>
-          </div>
+          </li>
         )}
       </Fragment>
     );

@@ -7,14 +7,15 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
 import ChatSearch from './ChatSearch';
 import ChatList from './ChatList';
-import '../../styles/PeopleList.scss';
+// import '../../styles/PeopleList.scss';
+import '../../styles/Chat.scss'
 /* import toggleChat from '../actions/toggleChat'; */
 
 export default class PeopleList extends Component {
   render() {
     const { toggleChat } = this.props;
     return (
-      <div>
+      <div className = "people-list">
         <Button onClick={toggleChat} className="chat-button-center">
           <FontAwesomeIcon icon={faAngleDown} className="minimize" />
         </Button>

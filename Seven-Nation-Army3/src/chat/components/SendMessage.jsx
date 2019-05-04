@@ -64,12 +64,12 @@ class ConnectedForm extends Component {
           id="message"
           value={message}
           onChange={this.handleChange}
-          name="message-to-send"
-        // placeholder="Type your message"
-        // rows="2"
+          className="message-to-send"
+          placeholder="Type your message..."
+          rows="2"
         />
         <i className="fa fa-file-o" /> &nbsp;&nbsp;&nbsp;
-                <i className="fa fa-file-image-o" />
+        <i className="fa fa-file-image-o" />
         <button type="submit">Send</button>
       </form>
     );

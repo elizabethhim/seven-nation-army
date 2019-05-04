@@ -4,7 +4,8 @@ import { Button } from 'reactstrap';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import '../../styles/ChatContainer.scss';
+// import '../../styles/ChatContainer.scss';
+import '../../styles/Chat.scss';
 import PeopleList from './PeopleList';
 import ChatHistory from './ChatHistory';
 /* import toggleChat from '../actions/toggleChat'; */
@@ -29,7 +30,7 @@ export default class ChatContainer extends Component {
     return (
       <Fragment>
         {chatIsVisible ? (
-          <div className="chat-container">
+          <div className="chat-container clearfix">
             <PeopleList className="people-list" toggleChat={this.toggleChat} />
             <ChatHistory />
           </div>
