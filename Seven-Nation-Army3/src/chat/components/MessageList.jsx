@@ -8,10 +8,10 @@ const ConnectedList = ({ messages }) => {
     messages &&
     messages.map(el => (
       <ChatMessage
-        key={el.id}
+        key={el.messageID}
         myMessage={true}
-        time={'10:10 AM, Today'}
-        name={'Olia'}
+        time={el.time}
+        name={el.senderName}
         message={el.message}
       />
     ))

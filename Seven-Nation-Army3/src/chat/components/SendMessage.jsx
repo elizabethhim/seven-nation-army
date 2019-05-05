@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import PropTypes from 'prop-types';
-
 import addMessage from "../../store/actions/addMessage";
 import '../../styles/Chat.scss';
+import { getFirebase, firebaseStateReducer } from 'react-redux-firebase';
+
 // import ChatMessage from './ChatMessage';
 
 class ConnectedForm extends Component {
@@ -14,7 +15,25 @@ class ConnectedForm extends Component {
     this.state = {
       message: ""
     };
+    this.firebase = getFirebase();
+    this.userID = null;
+    this.username = "";
   }
+
+  componentDidMount() {
+    this.firebase.auth().onAuthStateChanged((user) => {
+      if(user) {
+        this.userID = user.uid;
+        //find username
+
+      }
+      else {
+        console.log("Something went wrong... User is not signed in");
+      }
+
+    });
+  }
+
   handleChange = event => {
     this.setState({
       [event.target.id]:
@@ -23,17 +42,15 @@ class ConnectedForm extends Component {
   }
 
   handleSubmit = event => {
-    console.log("called");
     event.preventDefault();
+    const messageID = uuidv1();
+    const senderID = this.userID;
+    const senderName = this.username;
+    const d = new Date();
+    const time = d.getHours() + ':' + d.getMinutes() + ', ' + d.getMonth() + "/" + d.getDay() + "/" + d.getFullYear();
+    console.log(time);
     const { message } = this.state;
-    // <ChatMessage 
-    //   myMessage={true}
-    //   time={"10:10 AM, Today"}
-    //   name={"Olia"}
-    //   message={this.state}
-    // />
-    const id = uuidv1();
-    this.props.addMessage({ message, id });
+    this.props.addMessage({ messageID, senderID, senderName, time, message });
     this.setState({ message: "" });
   }
 
@@ -47,12 +64,12 @@ class ConnectedForm extends Component {
           id="message"
           value={message}
           onChange={this.handleChange}
-          name="message-to-send"
-        // placeholder="Type your message"
-        // rows="2"
+          className="message-to-send"
+          placeholder="Type your message..."
+          rows="2"
         />
         <i className="fa fa-file-o" /> &nbsp;&nbsp;&nbsp;
-                <i className="fa fa-file-image-o" />
+        <i className="fa fa-file-image-o" />
         <button type="submit">Send</button>
       </form>
     );
