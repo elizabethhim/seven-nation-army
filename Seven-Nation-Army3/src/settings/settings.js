@@ -24,7 +24,6 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
       password: '',
@@ -54,11 +53,11 @@ class Settings extends React.Component {
     });
   };
 
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
-  }
+  };
 
   render() {
     const { password, displayName } = this.state;
@@ -77,7 +76,7 @@ class Settings extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink>
-                  <div onClick={this.onLogout}>Logout</div>
+                  <div onClick={this.onLogout.bind(this)}>Logout</div>
                 </NavLink>
               </NavItem>
             </Nav>
@@ -106,30 +105,16 @@ class Settings extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
-          {/* Why the heck is this option here anyways? It should be in New Game */}
-          <FormGroup>
-            <Label for="exampleSelect">Select Prefered Number of players</Label>
-            <Input type="select" name="select" id="exampleSelect">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-            </Input>
-          </FormGroup>
-          {/* Why the heck is this option here anyways? It should be in New Game */}
           <h1>Preferences</h1>
           {/* TODO(Christopher: Save inside collections */}
           <FormGroup>
             <Label check>
-              <Input type="radio" name="radio1" /> Notify end of round.
+              <Input type="checkbox" name="checkbox1" /> Notify end of round.
             </Label>
           </FormGroup>
           <FormGroup>
             <Label check>
-              <Input type="radio" name="radio2" /> Notify end of game.
+              <Input type="checkbox" name="checkbox2" /> Notify end of game.
             </Label>
           </FormGroup>
           {/* TODO(Christopher: Save inside collections */}

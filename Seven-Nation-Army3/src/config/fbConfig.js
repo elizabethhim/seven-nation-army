@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/database';
 
-var config = {
+const config = {
   apiKey: 'AIzaSyD7723JgXG7S-zZ4xaERl26ysbY0AAoL5w',
   authDomain: 'cecs475-b8e5c.firebaseapp.com',
   databaseURL: 'https://cecs475-b8e5c.firebaseio.com',
@@ -13,5 +13,6 @@ var config = {
 };
 firebase.initializeApp(config);
 firebase.firestore();
+firebase.database();
 
 export default firebase;

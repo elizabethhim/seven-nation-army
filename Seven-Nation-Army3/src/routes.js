@@ -8,6 +8,8 @@ import About from './about';
 import PageNotFound from './common/components/PageNotFound';
 import Game from './game/game';
 import Home from './home';
+import Continue from './home/components/Continue';
+import NewGame from './home/components/NewGame';
 import Login from './login/login';
 import Register from './login/register';
 import Settings from './settings/settings';
@@ -31,6 +33,8 @@ export default (
     <Route path="/settings" component={Settings} />
     {/*<Route path="/map" component={Map} />*/}
     <Route path="/game" component={Game} />
+    <Route path="/continue" component={Continue} />
+    <Route path="/new" component={NewGame} />
     {/*<Route path="/help" component={Help} />*/}
     {/*<Route path ="/chat" component={Chat}/>*/}
     <Route component={PageNotFound} />
