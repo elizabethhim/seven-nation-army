@@ -10,7 +10,7 @@ import '../styles/BackButton.scss';
 export default class BackButton extends Component {
   render() {
     return (
-      <NavLink to="/">
+      <NavLink to="/home">
         <Button className="back-button">
           <FontAwesomeIcon icon={faArrowLeft} />
         </Button>

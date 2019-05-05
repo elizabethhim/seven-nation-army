@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Container, NavbarBrand, NavbarToggler, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import Video from '../../common/components/Video';
 import { getSessions } from '../../store/actions/getSession';
 
 class Continue extends Component {
-  // Get a list of sessions in progress
   componentDidMount() {
     this.props.getSessions();
   }
 
   render() {
-    return <Video />;
+    console.log('Sessions', this.props.sessions);
+    return (
+      <Container className=".settingsBody">
+        <Video />
+        <Nav className="navbar navbar-expand-lg">
+          <NavbarBrand href="/#/home">Seven Nation Army</NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
+        </Nav>
+      </Container>
+    );
   }
 }
 

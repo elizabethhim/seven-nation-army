@@ -28,7 +28,6 @@ class Settings extends React.Component {
       isOpen: false,
       password: '',
       displayName: '',
-      players: [...Array(7).keys()].map(x => x + 1),
     };
   }
 
@@ -61,7 +60,7 @@ class Settings extends React.Component {
   };
 
   render() {
-    const { password, displayName, players } = this.state;
+    const { password, displayName } = this.state;
     return (
       <Container className=".settingsBody">
         <Video />
@@ -106,16 +105,6 @@ class Settings extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
-          {/* Why the heck is this option here anyways? It should be in New Game */}
-          <FormGroup>
-            <Label for="exampleSelect">Select Prefered Number of players</Label>
-            <Input type="select" name="select" id="exampleSelect">
-              {players.map(i => (
-                <option key={i}>{i}</option>
-              ))}
-            </Input>
-          </FormGroup>
-          {/* Why the heck is this option here anyways? It should be in New Game */}
           <h1>Preferences</h1>
           {/* TODO(Christopher: Save inside collections */}
           <FormGroup>
