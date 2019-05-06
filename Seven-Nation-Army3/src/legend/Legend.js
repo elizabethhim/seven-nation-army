@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
@@ -7,10 +7,64 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import BackButton from './BackButton';
 import '../styles/Legend.scss';
+import { getFirebase } from 'react-redux-firebase';
+
+const offline = { color: 'red' };
+const online = { color: 'green' };
 
 export default class Legend extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      players: [],
+    }
+    this.playerRef = getFirebase()
+      .database()
+      .ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/');
+  }
+
+  listenForPlayers = playerRef => {
+    const playerList = [];
+    playerRef.on('value', snapshot => {
+      snapshot.forEach(element => {
+        playerList.push({
+          id: element.key,
+          username: element.val().username,
+          country: element.val().country,
+        });
+      });
+      this.setState({
+        players: playerList,
+      });
+    });
+  };
+
+  colorOf = country => {
+    switch (country) {
+      case 'Austria':
+        return { color: '#ed497d' };
+      case 'England':
+        return { color: '#605aa7' };
+      case 'France':
+        return { color: '#9a9148' };
+      case 'Germany':
+        return { color: '#c0495e' };
+      case 'Italy':
+        return { color: '#cb75db' };
+      case 'Russia':
+        return { color: '#c95df6' };
+      case 'Turkey':
+        return { color: '#7b69b8' };
+    }
+  };
+
+  componentDidMount() {
+    this.listenForPlayers(this.playerRef);
+  }
+
   render() {
     const { toggleLegend } = this.props;
+    const { players } = this.state;
     return (
       <div className="resize_fit_top_left">
         <span className="legend-header">
@@ -20,61 +74,20 @@ export default class Legend extends Component {
             <FontAwesomeIcon icon={faAngleUp} />
           </Button>
         </span>
-        <p className="countryName" style={{ color: '#ed497d' }}>
-          <text style={{ color: 'red' }}>■</text>Austria
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#605aa7' }}>
-          <text style={{ color: 'green' }}>■</text>England
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#9a9148' }}>
-          <text style={{ color: 'green' }}>■</text>France
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#c0495e' }}>
-          <text style={{ color: 'red' }}>■</text>Germany
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#cb75db' }}>
-          <text style={{ color: 'green' }}>■</text>Italy
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#c95df6' }}>
-          <text style={{ color: 'red' }}>■</text>Russia
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
-
-        <p className="countryName" style={{ color: '#7b69b8' }}>
-          <text style={{ color: 'red' }}>■</text>Turkey
-        </p>
-        <p className="countryInfo">
-          • playerName
-          <br />• units
-        </p>
+        {players.map(el => {
+          return (
+            <div key={el.key}>
+              <p className="countryName" style={this.colorOf(el.country)}>
+                <text style={online}>■</text>
+                {el.country}
+              </p>
+              <p className="countryInfo">
+                • {el.username}
+                <br />• units
+              </p>
+            </div>
+          );
+        })}
       </div>
     );
   }

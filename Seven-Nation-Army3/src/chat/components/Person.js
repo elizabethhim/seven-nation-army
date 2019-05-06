@@ -9,10 +9,9 @@ import '../../styles/Chat.scss';
 
 export default class Person extends Component {
   render() {
-    const { name, isOnline, status} = this.props;
+    const { name, isOnline, status } = this.props;
     return (
       <li className="clearfix">
-        {/* <img src={source} alt="avatar" className="person-img" /> */}
         <div className="about">
           <div className="name">{name}</div>
           <div className="status">
@@ -20,7 +19,7 @@ export default class Person extends Component {
               icon={faCircle}
               className={isOnline ? 'person-online' : 'person-offline'}
             /> */}
-            <i class="fa fa-circle online"></i>
+            <i className={`fa fa-circle ${isOnline ? 'online' : 'offline'}`} />
             {status}
           </div>
         </div>
