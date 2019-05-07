@@ -9,7 +9,7 @@ import chat from './store/reducers/userRepos';
 import auth from './store/reducers/authUser';
 import chatHistory from './store/reducers/addMessage';
 import chatRoom from './store/reducers/openChatRoom'
-import sessionList from './store/reducers/getSession';
+import session from './store/reducers/getSession';
 
 export default history =>
   combineReducers({
@@ -21,6 +21,6 @@ export default history =>
     firestore,
     firebase,
     auth,
-    sessionList,
+    session,
     // rest of your reducers
   });
