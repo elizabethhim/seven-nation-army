@@ -37,7 +37,7 @@ class ConnectedForm extends Component {
   handleChange = event => {
     this.setState({
       [event.target.id]:
-        [event.target.value]
+        event.target.value
     });
   }
 
@@ -48,8 +48,8 @@ class ConnectedForm extends Component {
     const senderName = this.username;
     const d = new Date();
     const time = d.getHours() + ':' + d.getMinutes() + ', ' + d.getMonth() + "/" + d.getDay() + "/" + d.getFullYear();
-    console.log(time);
-    const { message } = this.state;
+    const message = this.state.message;
+    console.log(message);
     this.props.addMessage({ messageID, senderID, senderName, time, message });
     this.setState({ message: "" });
   }

@@ -14,6 +14,7 @@ export default function openChatRoom(friendID) {
                             type: OPEN_CHAT_ROOM_SUCCESS,
                             payload: { roomID: res.val().roomID, friendID: friendID },
                         });
+                        console.log("Open Chat succeeded - roomID: " + res.val().roomID);
                     }
                     else {
                         var roomRef = chatRoomsRef.push();
@@ -32,7 +33,7 @@ export default function openChatRoom(friendID) {
                                     type: OPEN_CHAT_ROOM_SUCCESS,
                                     payload: { roomID: roomRef.key, friendID: friendID },
                                 });
-                                console.log("Update succeeded - roomID to " + roomRef.key);
+                                console.log("Open Chat succedded- roomID: " + roomRef.key);
                             }
                         });
                     }
@@ -42,6 +43,7 @@ export default function openChatRoom(friendID) {
                                 type: OPEN_CHAT_ROOM_FAIL,
                                 payload: error,
                             });
+                            console.log("Open Chat failed");
                         }
                     });
             } else {

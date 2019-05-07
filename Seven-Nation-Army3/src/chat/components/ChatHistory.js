@@ -15,23 +15,34 @@ class ChatHistory extends Component {
       friendName: " "
     };
     this.firebase = getFirebase();
+    this.updateFriendUsername = this.updateFriendUsername.bind(this);
   }
 
-  componentDidLoad() {
-    const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + this.props.friendID);
-    friendRef.once("value").then(res => {
-      if(res) {
-        this.setState({friendName: res.val().username})
-      }
-    });
+  updateFriendUsername(props) {
+    if(props.roomData) {
+      console.log('hi');
+      const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.roomData.friendID);
+      friendRef.once("value").then(res => {
+        if (res) {
+          this.setState({ friendName: res.val().username })
+        }
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.roomData != nextProps.roomData) {
+      this.updateFriendUsername(nextProps);
+    }
   }
 
   render() {
+
     return (
       <div className="chat">
-        <ChatHeader 
-          name = {this.state.friendName}
-          totalMessages = "100"/>
+        <ChatHeader
+          name={this.state.friendName}
+          totalMessages="100" />
         {/* <!-- end chat-header --> */}
 
         <div className="chat-history">

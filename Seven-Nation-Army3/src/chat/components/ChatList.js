@@ -24,7 +24,6 @@ export default class ChatList extends Component {
           country: element.val().country
         });
       });
-      console.log(playerList);
       this.setState({
         players: playerList,
       });
@@ -36,7 +35,7 @@ export default class ChatList extends Component {
   }
 
   render() {
-    console.log(this.state.players);
+    // console.log(this.state.players);
     const players = this.state.players.map(el => {
       return (
         <Person
