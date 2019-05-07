@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import BackButton from './BackButton';
 import '../styles/Legend.scss';
 import { getFirebase } from 'react-redux-firebase';
 
-const offline = { color: 'red' };
+// const offline = { color: 'red' };
 const online = { color: 'green' };
 
 export default class Legend extends Component {
@@ -55,6 +55,8 @@ export default class Legend extends Component {
         return { color: '#c95df6' };
       case 'Turkey':
         return { color: '#7b69b8' };
+      default:
+        return { color: '#ffffff' };
     }
   };
 

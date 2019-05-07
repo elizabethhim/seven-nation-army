@@ -17,11 +17,10 @@ export default function openChatRoom(friendID) {
                         console.log("Open Chat succeeded - roomID: " + res.val().roomID);
                     }
                     else {
-                        var roomRef = chatRoomsRef.push();
+                        const roomRef = chatRoomsRef.push();
                         chatFriendsRef.update({
                             roomID: roomRef.key,
-                            "roomID": roomRef.key
-                        }, function (error) {
+                        }, error => {
                             if (error) {
                                 dispatch({
                                     type: OPEN_CHAT_ROOM_FAIL,
@@ -37,8 +36,8 @@ export default function openChatRoom(friendID) {
                             }
                         });
                     }
-                }, function(error) {
-                        if(error) {
+                }, error => {
+                        if (error) {
                             dispatch({
                                 type: OPEN_CHAT_ROOM_FAIL,
                                 payload: error,
@@ -53,4 +52,4 @@ export default function openChatRoom(friendID) {
         });
 
     };
-};
+}

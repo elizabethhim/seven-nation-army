@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Person from './Person';
-import { getFirebase, firebaseStateReducer } from 'react-redux-firebase';
-import PropTypes from 'prop-types';
+import { getFirebase } from 'react-redux-firebase';
 
 export default class ChatList extends Component {
   constructor(props) {

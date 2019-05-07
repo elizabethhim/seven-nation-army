@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getFirebase } from 'react-redux-firebase';
+import PropTypes from 'prop-types';
+
 import '../../styles/Chat.scss';
 import MessageList from './MessageList.jsx';
 import SendMessage from './SendMessage.jsx';
 import ChatHeader from './ChatHeader.js';
-import { getFirebase } from 'react-redux-firebase';
 
 // TODO: Port Chat History from the Chat.html file to React
 class ChatHistory extends Component {
@@ -19,7 +21,7 @@ class ChatHistory extends Component {
   }
 
   updateFriendUsername(props) {
-    if(props.roomData) {
+    if (props.roomData) {
       console.log('hi');
       const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.roomData.friendID);
       friendRef.once("value").then(res => {
@@ -30,8 +32,9 @@ class ChatHistory extends Component {
     }
   }
 
+  // eslint-disable-next-line react/no-deprecated
   componentWillReceiveProps(nextProps) {
-    if(this.props.roomData != nextProps.roomData) {
+    if (this.props.roomData !== nextProps.roomData) {
       this.updateFriendUsername(nextProps);
     }
   }
@@ -56,6 +59,10 @@ class ChatHistory extends Component {
     );
   }
 }
+
+ChatHistory.propTypes = {
+  roomData: PropTypes.any,
+};
 
 const mapStateToProps = state => ({
   // console.log(state);

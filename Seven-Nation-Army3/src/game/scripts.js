@@ -1,15 +1,12 @@
 import { getFirebase } from 'react-redux-firebase';
 
-export let orders = {'sessionID': ''};
+export let orders = { 'sessionID': '' };
 
-export function buildOrders(action){
-  if(orders['sessionID'] === ''){
+export function buildOrders(action) {
+  if (orders['sessionID'] === '') {
     orders['sessionID'] = getUserId();
   }
-  let x = 0;
-  for (let i in orders){
-    x+=1;
-  }
+  const x = Object.keys(orders).length;
   const exists = orderExists(action);
   let newObj = [
     { unitOrigin: action[0].unitOrigin },
@@ -23,30 +20,28 @@ export function buildOrders(action){
   getJSON();
 }
 
-function orderExists(action){
-  let x = 0;
-  for(let i in orders){
-    x+=1;
-    const temp = orders['actionList' + x]
-    if(temp){
-      if(temp[0].unitOrigin === action[0].unitOrigin){
-        return [true, x];
+function orderExists(action) {
+  for (let i = 1; i <= Object.keys(orders).length; i += 1) {
+    const temp = orders[`actionList${i}`]
+    if (temp) {
+      if (temp[0].unitOrigin === action[0].unitOrigin) {
+        return [true, i];
       }
     }
   }
   return [false];
 }
 
-export function getCurrentUser(){
+export function getCurrentUser() {
   const firebase = getFirebase();
   return firebase.auth().currentUser;
 }
 
-export function getUserId(){
+export function getUserId() {
   return getCurrentUser().uid;
 }
 
-export function validateUser(territory){
+export function validateUser(territory) {
   return territory.getAttribute('player') === (getCurrentUser()).displayName;
 }
 
@@ -93,9 +88,9 @@ export function highlight(territory) {
 }
 
 export function deHighlight(territory) {
-   if(territory.getAttribute('previouscolor') === 'yellow'){
-      territory.setAttribute('fill-opacity', 0);      
-   }
+  if (territory.getAttribute('previouscolor') === 'yellow') {
+    territory.setAttribute('fill-opacity', 0);
+  }
   territory.setAttribute('fill', territory.getAttribute('previouscolor'));
 }
 
@@ -226,7 +221,7 @@ export function movePopup(e) {
   }
 }
 
-export function holding(action){
+export function holding(action) {
   drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
 }
 
@@ -240,11 +235,11 @@ export function drawAction(origin, dest, actionId) {
     );
     arrow.parentNode.removeChild(arrow);
   }
-  if(hold){
+  if (hold) {
     hold.parentNode.removeChild(hold);
   }
 
-  if(actionId === 'hold'){
+  if (actionId === 'hold') {
     const territory = territoriesJSON[origin];
     const coords = [
       parseInt(document.getElementById(origin + '_Army').getAttribute('cx')),
@@ -258,16 +253,16 @@ export function drawAction(origin, dest, actionId) {
     holdIcon.setAttribute('class', 'holdIcon');
     holdIcon.setAttribute('id', origin + '_Hold');
     holdIcon.setAttribute('r', 20);
-    if(territory.unit === 'Army'){
+    if (territory.unit === 'Army') {
       holdIcon.setAttribute('cx', coords[0]);
       holdIcon.setAttribute('cy', coords[1]);
-    }else{
+    } else {
       holdIcon.setAttribute('cx', coords[0] + 10);
       holdIcon.setAttribute('cy', coords[1] + 6);
     }
-  document.getElementById('arrowContainer').append(holdIcon);
+    document.getElementById('arrowContainer').append(holdIcon);
   }
-  else{
+  else {
     //Getting coords for arrow start and end of arrow
     const originPoints = [
       parseInt(document.getElementById(origin + '_Army').getAttribute('cx')),
@@ -284,7 +279,7 @@ export function drawAction(origin, dest, actionId) {
     const d = Math.round(
       Math.sqrt(
         Math.pow(originPoints[0] - destinPoints[0], 2) +
-          Math.pow(originPoints[1] - destinPoints[1], 2)
+        Math.pow(originPoints[1] - destinPoints[1], 2)
       )
     );
     const curveAmount = 3;
@@ -377,7 +372,7 @@ export function drawAction(origin, dest, actionId) {
 }
 
 
-export function getJSON(){
+export function getJSON() {
 }
 
 export const territoriesJSON = {

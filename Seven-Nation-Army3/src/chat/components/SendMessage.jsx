@@ -4,7 +4,7 @@ import uuidv1 from "uuid";
 import PropTypes from 'prop-types';
 import addMessage from "../../store/actions/addMessage";
 import '../../styles/Chat.scss';
-import { getFirebase, firebaseStateReducer } from 'react-redux-firebase';
+import { getFirebase } from 'react-redux-firebase';
 
 // import ChatMessage from './ChatMessage';
 
@@ -22,7 +22,7 @@ class ConnectedForm extends Component {
 
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged((user) => {
-      if(user) {
+      if (user) {
         this.userID = user.uid;
         //find username
 
