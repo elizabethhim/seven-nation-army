@@ -1,82 +1,29 @@
 import React, { Component, Fragment } from 'react';
+import * as scripts from './scripts.js';
 
 // Holdover from first Seven-Nation-Army --Chris
 import PopUp from './popup/PopUp';
 import ChatContainer from '../chat/components/ChatContainer';
 import LegendContainer from '../legend/LegendContainer';
 import Map from './map/map';
+import { getFirebase } from 'react-redux-firebase';
 
 export default class Game extends Component {
   constructor(props) {
     super(props);
 
-    this.supplyCenters = [
-      'Ankara',
-      'Belgium',
-      'Berlin',
-      'Brest',
-      'Budapest',
-      'Bulgaria',
-      'Constantinople',
-      'Denmark',
-      'Edinburgh',
-      'Holland',
-      'Kiel',
-      'Liverpool',
-      'London',
-      'Marseilles',
-      'Moscow',
-      'Munich',
-      'Naples',
-      'Norway',
-      'Paris',
-      'Portugal',
-      'Rome',
-      'Rumania',
-      'Serbia',
-      'Sevastopol',
-      'Smyrna',
-      'Spain',
-      'St_Petersburg',
-      'Sweden',
-      'Trieste',
-      'Tunis',
-      'Venice',
-      'Vienna',
-      'Warsaw',
-    ];
-    this.starting = [
-      [['Vienna', 'Army'], ['Budapest', 'Army'], ['Trieste', 'Fleet']],
-      [['Edinburgh', 'Fleet'], ['Liverpool', 'Army'], ['London', 'Fleet']],
-      [['Brest', 'Fleet'], ['Paris', 'Army'], ['Marseilles', 'Army']],
-      [['Kiel', 'Fleet'], ['Berlin', 'Army'], ['Munich', 'Army']],
-      [['Venice', 'Army'], ['Rome', 'Army'], ['Naples', 'Fleet']],
-      [
-        ['St_Petersburg', 'Fleet'],
-        ['Moscow', 'Army'],
-        ['Warsaw', 'Army'],
-        ['Sevastopol', 'Fleet'],
-      ],
-      [['Constantinople', 'Army'], ['Ankara', 'Fleet'], ['Smyrna', 'Army']],
-    ];
-    this.countries = [
-      'Austria_Hungary',
-      'England',
-      'France',
-      'Germany',
-      'Italy',
-      'Russia',
-      'Turkey',
-    ];
-    this.colors = [
-      '#ed497d',
-      '#605aa7',
-      '#9a9148',
-      '#c0495e',
-      '#cb75db',
-      '#c95df6',
-      '#7b69b8',
-    ];
+
+    this.countryColors = {
+      'Russia':'#dd1efa',
+      'Austria_Hungary': '#c41717',
+      'Turkey': '#c49e17',
+      'Italy': '#2bb213',
+      'Germany': '#d896ea',
+      'France': '#3cb6c4',
+      'England': '#070291'
+    };
+
+    //Used to iterate through the JSON and SVG objects
     this.territoryNames = [
       'Adriatic_Sea',
       'Aegean_Sea',
@@ -157,126 +104,257 @@ export default class Game extends Component {
 
     this.territoryObjects = [];
 
-    this.movePopup = this.movePopup.bind(this);
-
     this.state = {
       buttonActionIsVisible: false,
     };
+
+    this.orders = [];
+    this.actionStruct = [
+      { unitOrigin: '' },
+      { actionID: '' },
+      { unitDest: '' },
+      { secondaryUnit: '' },
+    ];
+    this.firebase = getFirebase();
+    this.userInfo = 'help';
+    this.userID = null;
+    this.username = "";
   }
 
-  movePopup(e) {
-    let x = e.clientX + 85;
-    let y = e.clientY - 20;
+  addMouseListeners() {
+    const displayCanvas = document.getElementById('displayCanvas');
+    const popup = document.getElementById('myPopup');
+    const popupContainer = document.getElementById('popupContainer');
 
-    x = x >= window.innerWidth - 85 ? window.innerWidth - 85 : x;
-    y = 100 >= y ? 100 : y;
-
-    const popupAlert = document.getElementById('popupContainer');
-    if (popupAlert.getAttribute('mutable') === 'true') {
-      popupAlert.style.top = y + 'px';
-      popupAlert.style.left = x + 'px';
-    }
-  }
-
-  buildString(territory, event) {
-    const territoryName = `Territory: ${territory.id}<br/>`;
-    const country =
-      territory.getAttribute('country') !== ''
-        ? `Country: ${territory.getAttribute('country')}<br/>`
-        : '';
-    const unit =
-      territory.getAttribute('unit') !== ''
-        ? `Unit: ${territory.getAttribute('unit')}<br/>`
-        : '';
-    const player =
-      territory.getAttribute('player') !== ''
-        ? `Player: ${territory.getAttribute('player')}<br/>`
-        : '';
-
-    return country + territoryName + unit + player;
-  }
-
-  addListeners() {
+    //Iterating over every territory object to add listeners
+    //Listeners are based on the current action being taken
+    //Action being taken is stored in this.actionStruct[1].actionID
     for (let i in this.territoryObjects) {
       const territory = this.territoryObjects[i];
-      if (territory) {
-        const color = territory.getAttribute('fill');
 
-        territory.addEventListener('mousemove', this.movePopup);
+      //When the mouse leaves the bounds of a territory
+      territory.addEventListener('mouseout', () => {
+        scripts.deHighlight(territory);
+      });
 
-        territory.addEventListener('mouseenter', () => {
-          document.getElementById('popupText').innerHTML = this.buildString(
+      //When the mouse enters a territory's bounds it will be highlighted
+      //and the popup will be updated with the it's info.
+      territory.addEventListener('mouseenter', () => {
+        scripts.highlight(territory);
+        if (popupContainer.getAttribute('mutable') === 'true') {
+          document.getElementById('popupText').innerHTML = scripts.buildString(
             territory
           );
-          territory.setAttribute('fill-opacity', 0.25);
-          territory.setAttribute('fill', 'yellow');
-        });
+        }
+      });
 
-        territory.addEventListener('mouseout', () => {
-          if (color === 'yellow') {
-            territory.setAttribute('fill-opacity', 0);
-          }
-          territory.setAttribute('fill', color);
-        });
+      //This one handles all the clicks
+      territory.addEventListener('click', e => {
+        switch (this.actionStruct[1].actionID) {
+          //If the move action was selected earlier, the next territory clicked is the destination
+          case 'move':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the move
+            //If its valid, it will be pushed to the list
+            //Regardless of validity, the 'move' action is completed and the game waits for another action
+            scripts.resetFill(this.actionStruct[2].unitDest);
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.orders.push(this.actionStruct);
+            }
+            this.actionStruct[1].actionID = '';
+            break;
 
-        territory.addEventListener('click', () => {
-          if (
-            territory.getAttribute('unit') !== '' &&
-            document
-              .getElementById('popupContainer')
-              .getAttribute('mutable') === 'true'
-          ) {
-            document
-              .getElementById('popupContainer')
-              .setAttribute('mutable', false);
-            this.setState({
-              buttonActionIsVisible: true,
-            });
-          } else {
-            document
-              .getElementById('popupContainer')
-              .setAttribute('mutable', true);
-            this.setState({
-              buttonActionIsVisible: false,
-            });
-          }
-        });
-      }
+          //If the support action was selected earlier, the next territory clicked is the destination
+          case 'support':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the support
+            //If its valid, it will continue on to find what action will be supported
+            //If a valid unit was not selected, the support is canceled by setting this.action[1].actionID to ''
+            scripts.resetFill(this.actionStruct[2].unitDest);
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.actionStruct[1].actionID = 'gettingsecondaryunit';
+              scripts.setFill([
+                this.actionStruct[3].secondaryUnit[territory.id],
+                'green',
+                0.20,
+              ]);
+            } else {
+              this.actionStruct[1].actionID = '';
+            }
+            break;
+          //If support was selected as an action earlier and a valid unit was selected afterwards,
+          //the next unit is the secondary unit for the support
+          case 'gettingsecondaryunit':
+            //Destination along with the actionStruct is passed to a function
+            //that will verify the validity of the secondary unit.
+            //If its valid, the order is pushed to the list
+            //If not the support is cancelled.
+            scripts.resetFill(
+              this.actionStruct[3].secondaryUnit[this.actionStruct[2].unitDest]
+            );
+            if (scripts.validateMove(territory, this.actionStruct)) {
+              this.orders.push(this.actionStruct);
+            }
+            this.actionStruct[1].actionID = '';
+            break;
+          case 'convoy':
+            this.actionStruct[1].actionID = '';
+            break;
+          //The default logic for a click
+          default:
+            //Toggles the buttons in the popup depending on if the territory has a unit
+            //also responsible for closing the button menu when clicked away
+            if(scripts.validateUser(territory)){
+              this.setState({
+                buttonActionIsVisible: scripts.mouseClickFunc(territory),
+              });
+              //If the buttons have been opened, add listeners to them
+              //If the buttons have been closed, remove listeners (TBA)
+              if (this.state.buttonActionIsVisible)
+                this.addButtonListeners(territory);
+              else this.removeButtonListeners(territory);
+            }
+            break;
+        }
+      });
     }
+
+    //Making the popup follow the mouse
+    displayCanvas.addEventListener('mousemove', scripts.movePopup);
+
+    //Closing the popup when the canvas loses mouse focus
+    displayCanvas.addEventListener('mouseleave', () => {
+      popup.classList.toggle('show');
+    });
+
+    //Opens the popup when reentering the canvas
+    //Also closes the button menu if it was open
+    //and makes the popup follow the mouse again in case it was frozen
+    displayCanvas.addEventListener('mouseenter', () => {
+      popup.classList.toggle('show');
+      popupContainer.setAttribute('mutable', true);
+      this.setState({
+        buttonActionIsVisible: false,
+      });
+    });
+
+    popup.addEventListener('mouseenter', () => {
+      popup.classList.toggle('show');
+    });
+
+    popup.addEventListener('mouseleave', () => {
+      popup.classList.toggle('show');
+    });
+  }
+
+  removeButtonListeners() {}
+  addButtonListeners(territory) {
+    const moveButton = document.getElementById('moveButton');
+    const holdButton = document.getElementById('holdButton');
+    const supportButton = document.getElementById('supportButton');
+    const convoyButton = document.getElementById('convoyButton');
+
+    this.actionStruct[0].unitOrigin = territory.id;
+
+    moveButton.addEventListener('click', e => {
+      this.actionStruct[1].actionID = 'move';
+      this.actionStruct[2].unitDest = scripts.findMovementSpaces(territory);
+    });
+
+    holdButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'hold';
+      this.actionStruct[2].unitDest = territory.id;
+      this.orders.push(this.actionStruct);
+      scripts.holding(this.actionStruct);
+      this.actionStruct[1].actionID = '';
+    });
+
+    supportButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'support';
+      const results = scripts.findSupportSpaces(territory);
+      this.actionStruct[2].unitDest = results[0];
+      this.actionStruct[3].secondaryUnit = results[1];
+    });
+
+    convoyButton.addEventListener('click', () => {
+      this.actionStruct[1].actionID = 'convoy';
+      // scripts.findSupportSpaces(territory);
+    });
+  }
+
+  init(){
+    //Reads the JSON files from the scripts file
+    //This is probably temporary, once the server is running info will be pulled from there
+    let territoriesJSON = scripts.territoriesJSON;
+
+    //Looping through all the territories and adds them to a list
+    for (let i in this.territoryNames) {
+      //territory is the actual SVG object
+      //territoryInfo is the info from the JSON file
+      const territory = document.getElementById(this.territoryNames[i]);
+      const territoryInfo = territoriesJSON[territory.id];
+
+      //Setting default info as empty and color as yellow for highlighting
+      territory.setAttribute('fill', 'yellow');
+      territory.setAttribute('unit', territoryInfo.unit);
+      territory.setAttribute('player', territoryInfo.player);
+      territory.setAttribute('country', territoryInfo.country);
+      territory.setAttribute('countrycolor', territory.getAttribute('fill'));
+      territory.setAttribute('previouscolor', territory.getAttribute('fill'));
+      //Adds country attribute for supply centers
+      if (territoryInfo.isSupplyCenter === 'True' && territoryInfo.country === '') {
+        territory.setAttribute('country', 'Unclaimed');
+      }
+
+      //More details for territories that are owned by a country
+      //These are the starting points
+      if (territoryInfo.country !== '') {
+        //Each country has its own color stored in the JSON
+        const color = this.countryColors[territoryInfo.country];
+
+        //countrycolor attribute will be the color each territory
+        //defaults back to after being highlighted
+        //Fills in the relevant info from the JSON
+        territory.setAttribute('countrycolor', color);
+        territory.setAttribute('fill', color);
+        territory.setAttribute('fill-opacity', 0.20);
+        territory.setAttribute('stroke', color);
+        territory.setAttribute('stroke-width', 10);
+        territory.setAttribute('stroke-opacity', 0.20);
+        territory.setAttribute('previouscolor', color);
+
+        //Makes the needed units visible
+        if (territoryInfo.unit === 'Army') {
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('fill-opacity', '1');
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('stroke-opacity', '1');
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('fill', color);
+        } else if (territoryInfo.unit === 'Fleet') {
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('fill-opacity', '1');
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('stroke-opacity', '1');
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('fill', color);
+        }
+      }
+
+      this.territoryObjects.push(territory);
+    }
+    document.getElementById('popupContainer').setAttribute('mutable', true);
+    this.addMouseListeners();
   }
 
   componentDidMount() {
-    const svgLayer = document.getElementById('map_overlay');
-    if (svgLayer) {
-      /* const svgDoc = svgLayer.contentDocument; */
-      for (let i in this.territoryNames) {
-        const territory = svgLayer.getElementById(this.territoryNames[i]);
-        territory.setAttribute('fill', 'yellow');
-        territory.setAttribute('unit', '');
-        territory.setAttribute('player', '');
-        territory.setAttribute('country', '');
-        if (this.supplyCenters.indexOf(territory.id) > -1) {
-          territory.setAttribute('country', 'Unclaimed');
-        }
-        this.territoryObjects.push(territory);
-      }
-      for (let i in this.starting) {
-        for (let j in this.starting[i]) {
-          const territory = svgLayer.getElementById(this.starting[i][j][0]);
-          territory.setAttribute('fill', this.colors[i]);
-          territory.setAttribute('fill-opacity', 0.25);
-          territory.setAttribute('stroke', this.colors[i]);
-          territory.setAttribute('stroke-width', 10);
-          territory.setAttribute('stroke-opacity', 0.4);
-          territory.setAttribute('country', this.countries[i]);
-          territory.setAttribute('unit', this.starting[i][j][1]);
-        }
-      }
-    }
-
-    document.getElementById('myPopup').classList.toggle('show');
-    document.getElementById('popupContainer').setAttribute('mutable', true);
-    this.addListeners();
+    this.init();
   }
 
   render() {
