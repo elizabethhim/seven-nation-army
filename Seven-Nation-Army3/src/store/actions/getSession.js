@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router';
-// import { genSaltSync, hashSync } from 'bcryptjs';
+import axios from 'axios';
 import {
   // GET_SESSIONS_SUCCESS,
   // GET_SESSIONS_FAIL,
@@ -47,6 +47,7 @@ export const createSession = () => {
   };
 };
 
+/*
 export const joinSession = code => {
   return (dispatch, _, { getFirebase }) => {
     // BUG: GENERATES A 2A TYPE OF HASH, NOT COMPATIBLE WITH PYTHON 2B HASH
@@ -84,4 +85,25 @@ export const joinSession = code => {
         });
       });
   }
+}
+*/
+
+export const joinSession = code => {
+  return (dispatch, getState) => {
+    const token = getState().firebase.auth.stsTokenManager.accessToken;
+    console.log(token);
+    dispatch({
+      type: JOIN_SESSION_SUCCESS,
+      payload: '-LdLRab8HD6zBlXNJMRK',
+    });
+    dispatch(push('/game'));
+
+    // TODO(Chris): Access AWS database and authorize join session.
+    /*axios.post('/api/checkins35.165.246.90:3000/api/joinsession', body).then((res) => {
+      dispatch({
+        type: 'CHECK_IN',
+        payload: res.data,
+      });
+    }).catch(err => console.log(err));*/
+  };
 }
