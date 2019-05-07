@@ -20,29 +20,29 @@ export default class GameList extends Component {
           <thead>
             <tr>
               <th>Room Name</th>
-              <th>Last Name</th>
-              <th>Username</th>
+              <th>Created by</th>
+              <th>Players</th>
               <th />
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Mark</td>
+              <td>The White Stripes</td>
               <td>Otto</td>
-              <td>@mdo</td>
-              <td><Button onClick={this.onClick}>Click me</Button></td>
+              <td>2/7</td>
+              <td><Button onClick={this.onClick}>Join</Button></td>
             </tr>
             <tr>
-              <td>Jacob</td>
+              <td>The Alliance</td>
               <td>Thornton</td>
-              <td>@fat</td>
-              <td><Button onClick={this.onClick}>Click me</Button></td>
+              <td>7/7</td>
+              <td><Button onClick={this.onClick}>Join</Button></td>
             </tr>
             <tr>
-              <td>Larry</td>
+              <td>World War Z</td>
               <td>the Bird</td>
-              <td>@twitter</td>
-              <td><Button onClick={this.onClick}>Click me</Button></td>
+              <td>3/7</td>
+              <td><Button onClick={this.onClick}>Join</Button></td>
             </tr>
           </tbody>
         </Table>
