@@ -108,7 +108,6 @@ export default class Game extends Component {
       buttonActionIsVisible: false,
     };
 
-    this.orders = [];
     this.actionStruct = [
       { unitOrigin: '' },
       { actionID: '' },
@@ -119,6 +118,7 @@ export default class Game extends Component {
     this.userInfo = 'help';
     this.userID = null;
     this.username = "";
+
   }
 
   addMouseListeners() {
@@ -159,7 +159,7 @@ export default class Game extends Component {
             //Regardless of validity, the 'move' action is completed and the game waits for another action
             scripts.resetFill(this.actionStruct[2].unitDest);
             if (scripts.validateMove(territory, this.actionStruct)) {
-              this.orders.push(this.actionStruct);
+              scripts.buildOrders(this.actionStruct);
             }
             this.actionStruct[1].actionID = '';
             break;
@@ -193,7 +193,7 @@ export default class Game extends Component {
               this.actionStruct[3].secondaryUnit[this.actionStruct[2].unitDest]
             );
             if (scripts.validateMove(territory, this.actionStruct)) {
-              this.orders.push(this.actionStruct);
+              scripts.buildOrders(this.actionStruct);
             }
             this.actionStruct[1].actionID = '';
             break;
@@ -248,6 +248,7 @@ export default class Game extends Component {
   }
 
   removeButtonListeners() {}
+
   addButtonListeners(territory) {
     const moveButton = document.getElementById('moveButton');
     const holdButton = document.getElementById('holdButton');
@@ -257,14 +258,14 @@ export default class Game extends Component {
     this.actionStruct[0].unitOrigin = territory.id;
 
     moveButton.addEventListener('click', e => {
-      this.actionStruct[1].actionID = 'move';
+      this.actionStruct[1]['actionID'] = "move";
       this.actionStruct[2].unitDest = scripts.findMovementSpaces(territory);
     });
 
     holdButton.addEventListener('click', () => {
       this.actionStruct[1].actionID = 'hold';
       this.actionStruct[2].unitDest = territory.id;
-      this.orders.push(this.actionStruct);
+      scripts.buildOrders(this.actionStruct);
       scripts.holding(this.actionStruct);
       this.actionStruct[1].actionID = '';
     });

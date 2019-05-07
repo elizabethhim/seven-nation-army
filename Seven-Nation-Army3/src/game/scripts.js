@@ -1,12 +1,53 @@
 import { getFirebase } from 'react-redux-firebase';
 
+export let orders = {'sessionID': ''};
+
+export function buildOrders(action){
+  if(orders['sessionID'] === ''){
+    orders['sessionID'] = getUserId();
+  }
+  let x = 0;
+  for (let i in orders){
+    x+=1;
+  }
+  const exists = orderExists(action);
+  let newObj = [
+    { unitOrigin: action[0].unitOrigin },
+    { actionID: action[1].actionID },
+    { unitDest: action[2].unitDest },
+    { secondaryUnit: action[3].secondaryUnit },
+  ];
+
+  const index = !exists[0] ? 'actionList' + x : 'actionList' + exists[1];
+  orders[index] = newObj
+  getJSON();
+}
+
+function orderExists(action){
+  let x = 0;
+  for(let i in orders){
+    x+=1;
+    const temp = orders['actionList' + x]
+    if(temp){
+      if(temp[0].unitOrigin === action[0].unitOrigin){
+        return [true, x];
+      }
+    }
+  }
+  return [false];
+}
+
 export function getCurrentUser(){
   const firebase = getFirebase();
-  return firebase.auth().currentUser.displayName;
+  return firebase.auth().currentUser;
+}
+
+export function getUserId(){
+  return getCurrentUser().uid;
 }
 
 export function validateUser(territory){
-  return territory.getAttribute('player') === getCurrentUser();
+  return territory.getAttribute('player') === (getCurrentUser()).displayName;
 }
 
 //vars is an array
@@ -335,9 +376,9 @@ export function drawAction(origin, dest, actionId) {
   }
 }
 
-export function getJSON(){
 
-};
+export function getJSON(){
+}
 
 export const territoriesJSON = {
   Adriatic_Sea: {
