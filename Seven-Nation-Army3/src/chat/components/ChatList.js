@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Person from './Person';
 import { getFirebase, firebaseStateReducer } from 'react-redux-firebase';
+import PropTypes from 'prop-types';
 
 export default class ChatList extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export default class ChatList extends Component {
 
   listenForPlayers(playerRef) {
     const playerList = [];
-    playerRef.on('value', snapshot => {
+    playerRef.once('value').then(snapshot => {
 
       snapshot.forEach(element => {
         playerList.push({
@@ -34,11 +35,12 @@ export default class ChatList extends Component {
   }
 
   render() {
-    console.log(this.state.players);
+    // console.log(this.state.players);
     const players = this.state.players.map(el => {
       return (
         <Person
           key={el.id}
+          id={el.id}
           name={el.username}
           isOnline
           status={el.country}
@@ -90,3 +92,4 @@ export default class ChatList extends Component {
     );
   }
 }
+
