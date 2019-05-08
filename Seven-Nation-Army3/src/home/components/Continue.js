@@ -14,6 +14,7 @@ export default class Continue extends Component {
       gameID: '',
     };
     this.toggleModal = this.toggleModal.bind(this);
+    this.getRoomID = this.getRoomID.bind(this);
   }
 
   toggleModal = (showModal, gameID) => {
@@ -21,6 +22,10 @@ export default class Continue extends Component {
       showModal,
       gameID,
     })
+  }
+
+  getRoomID = () => {
+    return this.state.gameID;
   }
 
   render() {
@@ -32,12 +37,12 @@ export default class Continue extends Component {
           <NavbarBrand href="/#/home">Seven Nation Army</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
         </Nav>
-        {showModal ? <JoinModal toggleModal={this.toggleModal} /> : <Gamelist toggleModal={this.toggleModal} />}
+        {showModal ? <JoinModal getRoomID={this.getRoomID} toggleModal={this.toggleModal} /> : <Gamelist toggleModal={this.toggleModal} />}
       </Container>
     );
   }
 }
 
 Continue.propTypes = {
-  toggleModal: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func,
 };

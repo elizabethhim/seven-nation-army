@@ -13,11 +13,13 @@ export default function session(state = initialState, action) {
     case GET_SESSIONS_SUCCESS:
       return {
         ...state,
+        sessions: action.payload,
         sessionError: null,
       };
     case GET_SESSIONS_FAIL:
       return {
         ...state,
+        sessions: null,
         sessionError: 'Could not get list of sessions.',
       };
     case JOIN_SESSION_SUCCESS:

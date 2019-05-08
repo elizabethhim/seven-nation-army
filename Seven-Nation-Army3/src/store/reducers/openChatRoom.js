@@ -7,12 +7,14 @@ export default function openChatRoom(state = initialState, action) {
       case OPEN_CHAT_ROOM_SUCCESS:
         return {
           ...state,
-          roomData: action.payload,
+          roomID: action.payload.roomID,
+          friendID: action.payload.friendID,
         };
       case OPEN_CHAT_ROOM_FAIL:
         return {
           ...state,
-          roomData: null,
+          roomID: null,
+          friendID: null,
         };
       default:
         return state;

@@ -14,46 +14,55 @@ class ChatHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      friendName: " "
+      friendUsername: " "
     };
     this.firebase = getFirebase();
     this.updateFriendUsername = this.updateFriendUsername.bind(this);
   }
 
   updateFriendUsername(props) {
-    if (props.roomData) {
-      console.log('hi');
-      const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.roomData.friendID);
-      friendRef.once("value").then(res => {
-        if (res) {
-          this.setState({ friendName: res.val().username })
-        }
-      });
-    }
+    const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.friendID);
+    friendRef.once("value").then(res => {
+      if (res) {
+        console.log(res.val().username);
+        this.setState({ friendUsername: res.val().username })
+      }
+    });
   }
 
   // eslint-disable-next-line react/no-deprecated
   componentWillReceiveProps(nextProps) {
-    if (this.props.roomData !== nextProps.roomData) {
+    if (this.props.roomID !== nextProps.roomID) {
       this.updateFriendUsername(nextProps);
     }
   }
 
   render() {
+    const roomID = this.props.roomID;
+    const friendID = this.props.friendID;
+    console.log(this.state.friendUsername);
 
     return (
       <div className="chat">
         <ChatHeader
-          name={this.state.friendName}
+          name={this.state.friendUsername}
           totalMessages="100" />
         {/* <!-- end chat-header --> */}
 
         <div className="chat-history">
-          <MessageList />
+          <MessageList 
+            roomID={roomID}
+            friendID={friendID}
+            friendUsername={this.state.friendUsername}
+          />
         </div>
         {/* <!-- end chat-history --> */}
 
-        <SendMessage />
+        <SendMessage 
+          roomID={roomID}
+          friendID={friendID}
+          friendUsername={this.state.friendUsername}
+        />
         {/* <!-- end chat-message --> */}
       </div>
     );
@@ -61,12 +70,14 @@ class ChatHistory extends Component {
 }
 
 ChatHistory.propTypes = {
-  roomData: PropTypes.any,
+  roomID: PropTypes.any,
+  friendID: PropTypes.any,
 };
 
 const mapStateToProps = state => ({
   // console.log(state);
-  roomData: state.chatRoom.roomData
+  roomID: state.chatRoom.roomID,
+  friendID: state.chatRoom.friendID,
 });
 
 export default connect(mapStateToProps)(ChatHistory);

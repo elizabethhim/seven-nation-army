@@ -18,20 +18,23 @@ class ConnectedForm extends Component {
     this.firebase = getFirebase();
     this.userID = null;
     this.username = "";
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
 
-  componentDidMount() {
+  getUserInfo() {
     this.firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.userID = user.uid;
-        //find username
-
+        this.username = user.displayName;
       }
       else {
         console.log("Something went wrong... User is not signed in");
       }
-
     });
+  }
+
+  componentDidMount() {
+    this.getUserInfo();
   }
 
   handleChange = event => {
@@ -43,14 +46,14 @@ class ConnectedForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const messageID = uuidv1();
+    // const messageID = uuidv1();
     const senderID = this.userID;
     const senderName = this.username;
+    const roomID = this.props.roomID;
     const d = new Date();
     const time = d.getHours() + ':' + d.getMinutes() + ', ' + d.getMonth() + "/" + d.getDay() + "/" + d.getFullYear();
     const message = this.state.message;
-    console.log(message);
-    this.props.addMessage({ messageID, senderID, senderName, time, message });
+    this.props.addMessage({ senderID, senderName, time, message, roomID });
     this.setState({ message: "" });
   }
 
@@ -78,6 +81,9 @@ class ConnectedForm extends Component {
 
 ConnectedForm.propTypes = {
   addMessage: PropTypes.func.isRequired,
+  roomID: PropTypes.any,
+  friendID: PropTypes.any,
+  friendUsername: PropTypes.any,
 };
 
 const mapDispatchToProps = dispatch => ({

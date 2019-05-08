@@ -26,8 +26,10 @@ class JoinModal extends Component {
   };
 
   onJoin = event => {
+    const { roomCode } = this.state;
+    const roomID = this.props.getRoomID();
     event.preventDefault();
-    this.props.joinSession(this.state.roomCode);
+    this.props.joinSession(roomID, roomCode);
   }
 
   onCancel = event => {
@@ -37,6 +39,7 @@ class JoinModal extends Component {
 
   render() {
     const { roomCode } = this.state;
+    const { sessionError } = this.props;
     return (
       <Fragment>
         <Card className="LoginCard">
@@ -60,13 +63,20 @@ class JoinModal extends Component {
                 />
               </FormGroup>
 
-              {this.props.sessionError ? (
-                <p style={warningText}>{this.props.sessionError}</p>
-              ) : (
-                  <Fragment />
-                )}
-              <Button color="primary" onClick={this.onJoin}>Join Game</Button>
-              <Button color="primary" onClick={this.onCancel}>Cancel</Button>
+              {sessionError && (
+                <p style={warningText}>{sessionError.message}</p>
+              )}
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Button color="primary" onClick={this.onJoin}>Join Game</Button>
+                <Button color="primary" onClick={this.onCancel}>Cancel</Button>
+              </div>
             </Form>
           </CardBody>
         </Card >
@@ -79,6 +89,7 @@ JoinModal.propTypes = {
   sessionError: PropTypes.string,
   joinSession: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  getRoomID: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -86,7 +97,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  joinSession: roomCode => dispatch(joinSession(roomCode)),
+  joinSession: (roomID, roomCode) => dispatch(joinSession(roomID, roomCode)),
 });
 
 export default connect(

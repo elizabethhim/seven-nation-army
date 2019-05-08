@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router';
 import axios from 'axios';
 import {
-  // GET_SESSIONS_SUCCESS,
-  // GET_SESSIONS_FAIL,
+  GET_SESSIONS_SUCCESS,
+  GET_SESSIONS_FAIL,
   CREATE_SESSION_SUCCESS,
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
@@ -10,9 +10,6 @@ import {
   // CREATE_SESSION_FAIL,
 } from '../actions/actionTypes';
 
-// Chris: Hold-over from when I was testing database access.
-// DEPRECATED:: DO NOT USE
-/*
 export const getSessions = () => {
   return (dispatch, _, { getFirebase }) => {
     getFirebase()
@@ -33,7 +30,6 @@ export const getSessions = () => {
       });
   };
 };
-*/
 
 // TODO: Create a new session in the database with all the correct parameters
 // (Port from Seven-Nation-Army-Backend)
@@ -88,22 +84,35 @@ export const joinSession = code => {
 }
 */
 
-export const joinSession = code => {
+export const joinSession = (roomID, roomCode) => {
   return (dispatch, getState) => {
-    const token = getState().firebase.auth.stsTokenManager.accessToken;
+    const token = getState().firebase.auth.stsTokenManager.accessToken
     console.log(token);
-    dispatch({
-      type: JOIN_SESSION_SUCCESS,
-      payload: '-LdLRab8HD6zBlXNJMRK',
-    });
-    dispatch(push('/game'));
-
-    // TODO(Chris): Access AWS database and authorize join session.
-    /*axios.post('/api/checkins35.165.246.90:3000/api/joinsession', body).then((res) => {
-      dispatch({
-        type: 'CHECK_IN',
-        payload: res.data,
+    axios({
+      method: 'post',
+      url: '35.165.246.90:5000/api/joinsession',
+      data: {
+        sessionID: roomID,
+        passcode: roomCode,
+      },
+      auth: {
+        username: token,
+        password: ''
+      },
+    }).then(res => {
+      console.log('Result', res);
+      /*dispatch({
+        type: JOIN_SESSION_SUCCESS,
+        payload: '-LdLRab8HD6zBlXNJMRK',
       });
-    }).catch(err => console.log(err));*/
+      dispatch(push('/game'));*/
+    }).catch(err => {
+      console.log('Connection Error');
+      dispatch({
+        type: JOIN_SESSION_FAIL,
+        payload: err,
+      })
+    });
+    // TODO(Chris): Access AWS database and authorize join session.
   };
 }
