@@ -11,12 +11,9 @@ class GameList extends Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick = () => {
-    for (let property in this.props.sessions) {
-      console.log(this.props.sessions[property]);
-    }
-    // TODO(Danny): Get row ID and insert into second parameter of this function.
-    this.props.toggleModal(true, '');
+  onClick = event => {
+    console.log(event.target.id);
+    this.props.toggleModal(true, event.target.id);
   }
 
   componentDidMount = () => {
@@ -25,16 +22,15 @@ class GameList extends Component {
 
   render() {
     const { sessions } = this.props;
-    console.log(sessions);
     let list = [];
     for (let gameID in sessions) {
       if (sessions[gameID].hasOwnProperty('participatingUserIDs')) {
         list.push(
-          <tr>
+          <tr key={gameID}>
             <td>{sessions[gameID].title}</td>
             <td>Anonymous</td>
             <td>{`${Object.keys(sessions[gameID].participatingUserIDs).length} / 7`}</td>
-            <td><Button onClick={this.onClick}>Join</Button></td>
+            <td><Button id={gameID} onClick={this.onClick}>Join</Button></td>
           </tr>
         );
       }

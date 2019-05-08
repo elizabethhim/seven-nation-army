@@ -13,8 +13,7 @@ class JoinModal extends Component {
     super(props);
 
     this.state = {
-      roomID: '-Ld_bcgkJ0hKGr_iu32T',
-      roomCode: 'abc123',
+      roomCode: '',
     };
     this.onJoin = this.onJoin.bind(this);
     this.onCancel = this.onCancel.bind(this);
@@ -27,7 +26,8 @@ class JoinModal extends Component {
   };
 
   onJoin = event => {
-    const { roomID, roomCode } = this.state;
+    const { roomCode } = this.state;
+    const roomID = this.props.getRoomID();
     event.preventDefault();
     this.props.joinSession(roomID, roomCode);
   }
@@ -89,6 +89,7 @@ JoinModal.propTypes = {
   sessionError: PropTypes.string,
   joinSession: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  getRoomID: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
