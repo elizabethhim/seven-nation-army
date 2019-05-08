@@ -6,7 +6,7 @@ export default function openChatRoom(friendID) {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 const chatFriendsRef = firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + user.uid + '/chatFriends/' + friendID);
-                const chatRoomsRef = firebase.database().ref('root/chatRooms');
+                const chatroomsRef = firebase.database().ref('root/chatrooms');
 
                 chatFriendsRef.once('value').then(res => {
                     if (res.val()) {
@@ -17,7 +17,7 @@ export default function openChatRoom(friendID) {
                         console.log("Open Chat succeeded - roomID: " + res.val().roomID);
                     }
                     else {
-                        const roomRef = chatRoomsRef.push();
+                        const roomRef = chatroomsRef.push();
                         chatFriendsRef.update({
                             roomID: roomRef.key,
                         }, error => {
