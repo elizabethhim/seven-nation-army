@@ -39,11 +39,26 @@ export class NewGame extends Component {
           <NavbarToggler onClick={this.toggle} />
         </nav>
         <FormGroup>
+          <Label>Game Name</Label>
+          <Input type="text"></Input>
+        </FormGroup>
+        <FormGroup>
           <Label for="exampleSelect">Select Prefered Number of players</Label>
           <Input type="select" name="select" id="exampleSelect">
             {players.map(i => (
               <option key={i}>{i}</option>
             ))}
+          </Input>
+        </FormGroup>
+        <FormGroup>
+          <Label>Adjudication Period</Label>
+          <Input type="select">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>30</option>
+              <option>60</option>
+              <option>120</option>
           </Input>
         </FormGroup>
         {/*TODO: Implement creation of new game session */}
