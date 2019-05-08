@@ -12,9 +12,7 @@ import Continue from './home/components/Continue';
 import NewGame from './home/components/NewGame';
 import Login from './login/login';
 import Register from './login/register';
-import Settings from './settings/settings';
-/* import Help from './help/help'; */
-// import Chat from './game/chat/chat';
+import Settings from './settings/Settings';
 
 export default (
   <AnimatedSwitch
@@ -31,12 +29,9 @@ export default (
     <Route path="/home" component={Home} />
     <Route path="/about" component={About} />
     <Route path="/settings" component={Settings} />
-    {/*<Route path="/map" component={Map} />*/}
     <Route path="/game" component={Game} />
     <Route path="/continue" component={Continue} />
     <Route path="/new" component={NewGame} />
-    {/*<Route path="/help" component={Help} />*/}
-    {/*<Route path ="/chat" component={Chat}/>*/}
     <Route component={PageNotFound} />
   </AnimatedSwitch>
 );

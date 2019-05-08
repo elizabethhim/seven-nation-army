@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, NavbarBrand, NavbarToggler, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
 
+import '../../styles/Setting.scss';
 import Video from '../../common/components/Video';
 import Gamelist from './GameList';
 import JoinModal from './JoinModal';

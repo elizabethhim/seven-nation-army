@@ -8,12 +8,19 @@ import {
   NavbarToggler,
   Button,
   Form,
+  Card,
+  CardBody,
+  CardTitle,
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import '../../styles/Setting.scss';
+import '../../styles/Login.scss';
 import Video from '../../common/components/Video';
 import { createSession } from '../../store/actions/getSession';
+
+const labelStyle = { color: 'black' };
 
 export class NewGame extends Component {
   constructor(props) {
@@ -38,33 +45,38 @@ export class NewGame extends Component {
           <NavbarBrand href="/#/home">Seven Nation Army</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
         </nav>
-        <FormGroup>
-          <Label>Game Name</Label>
-          <Input type="text"></Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="exampleSelect">Select Prefered Number of players</Label>
-          <Input type="select" name="select" id="exampleSelect">
-            {players.map(i => (
-              <option key={i}>{i}</option>
-            ))}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label>Adjudication Period</Label>
-          <Input type="select">
-              <option>5</option>
-              <option>10</option>
-              <option>15</option>
-              <option>30</option>
-              <option>60</option>
-              <option>120</option>
-          </Input>
-        </FormGroup>
-        {/*TODO: Implement creation of new game session */}
-        <Form onSubmit={this.onSubmit}>
-          <Button color="primary">Create New Game</Button>
-        </Form>
+        <Card className="LoginCard">
+          <CardBody>
+            <CardTitle style={labelStyle} className="text-center">New Game</CardTitle>
+            <hr className="my-2" />
+            <Form onSubmit={this.onSubmit}>
+              <FormGroup>
+                <Label style={labelStyle}>Game Name</Label>
+                <Input type="text"></Input>
+              </FormGroup>
+              <FormGroup>
+                <Label style={labelStyle} for="exampleSelect">Prefered # of Players</Label>
+                <Input type="select" name="select" id="exampleSelect">
+                  {players.map(i => (
+                    <option key={i}>{i}</option>
+                  ))}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label style={labelStyle}>Adjudication Period</Label>
+                <Input type="select">
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>60</option>
+                    <option>120</option>
+                </Input>
+              </FormGroup>
+              <Button color="primary">Create New Game</Button>
+            </Form>
+          </CardBody>
+        </Card>
       </Container>
     );
   }

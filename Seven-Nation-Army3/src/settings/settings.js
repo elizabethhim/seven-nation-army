@@ -12,6 +12,9 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Card,
+  CardBody,
+  CardTitle
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,6 +22,9 @@ import PropTypes from 'prop-types';
 import '../styles/Setting.scss';
 import Video from '../common/components/Video';
 import { logout, save, changePassword } from '../store/actions/authUser';
+
+const labelStyle = { color: 'black' };
+const checkStyle = { color: 'black', fontSize: '12px' };
 
 class Settings extends React.Component {
   constructor(props) {
@@ -64,7 +70,7 @@ class Settings extends React.Component {
     return (
       <Container className=".settingsBody">
         <Video />
-        <nav className="navbar navbar-expand-lg">
+        <Nav className="navbar navbar-expand-lg">
           <NavbarBrand href="/#/home">Seven Nation Army</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -81,45 +87,51 @@ class Settings extends React.Component {
               </NavItem>
             </Nav>
           </Collapse>
-        </nav>
-        <Form onSubmit={this.onSubmit.bind(this)}>
-          <FormGroup>
-            <Label for="displayName">Change Display Name</Label>
-            <Input
-              type="text"
-              name="text"
-              id="displayName"
-              placeholder={this.props.auth.displayName}
-              value={displayName}
-              onChange={this.onChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Change Password</Label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="********"
-              value={password}
-              onChange={this.onChange}
-            />
-          </FormGroup>
-          <h1>Preferences</h1>
-          {/* TODO(Christopher: Save inside collections */}
-          <FormGroup>
-            <Label check>
-              <Input type="checkbox" name="checkbox1" /> Notify end of round.
-            </Label>
-          </FormGroup>
-          <FormGroup>
-            <Label check>
-              <Input type="checkbox" name="checkbox2" /> Notify end of game.
-            </Label>
-          </FormGroup>
-          {/* TODO(Christopher: Save inside collections */}
-          <Button color="primary">Save Settings</Button>
-        </Form>
+        </Nav>
+        <Card className="LoginCard">
+          <CardBody>
+            <Form onSubmit={this.onSubmit.bind(this)}>
+              <FormGroup>
+                <Label style={labelStyle} for="displayName">Change Display Name</Label>
+                <Input
+                  type="text"
+                  name="text"
+                  id="displayName"
+                  placeholder={this.props.auth.displayName}
+                  value={displayName}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label style={labelStyle} for="password">Change Password</Label>
+                <Input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="********"
+                  value={password}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+              <legend style={labelStyle}>Preferences</legend>
+              {/* TODO(Christopher): Save inside collections */}
+              <div style={{padding: '10px 0px', marginBottom: '10px'}}>
+                <FormGroup check>
+                  <Label style={checkStyle} check>
+                    <Input type="checkbox" name="checkbox1" /> Notify end of round.
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label style={checkStyle} check>
+                    <Input type="checkbox" name="checkbox2" /> Notify end of game.
+                  </Label>
+                </FormGroup>
+              </div>
+              {/* TODO(Christopher): Save inside collections */}
+              <Button color="primary">Save Settings</Button>
+            </Form>
+          </CardBody>
+        </Card>
       </Container>
     );
   }
