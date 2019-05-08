@@ -115,10 +115,8 @@ export default class Game extends Component {
       { secondaryUnit: '' },
     ];
     this.firebase = getFirebase();
-    this.userInfo = 'help';
-    this.userID = null;
-    this.username = "";
 
+    // function addMouseListeners(){};
   }
 
   addMouseListeners() {
@@ -283,9 +281,8 @@ export default class Game extends Component {
     });
   }
 
-  init(){
-    //Reads the JSON files from the scripts file
-    //This is probably temporary, once the server is running info will be pulled from there
+  updateGameState(){
+    //Reads the JSON file which is pulled from the server
     let territoriesJSON = scripts.territoriesJSON;
 
     //Looping through all the territories and adds them to a list
@@ -309,7 +306,7 @@ export default class Game extends Component {
 
       //More details for territories that are owned by a country
       //These are the starting points
-      if (territoryInfo.country !== '') {
+      if (territoryInfo.country !== '' || territoryInfo.player !== '') {
         //Each country has its own color stored in the JSON
         const color = this.countryColors[territoryInfo.country];
 
@@ -355,7 +352,12 @@ export default class Game extends Component {
   }
 
   componentDidMount() {
-    this.init();
+    let jsonPath = getFirebase().database().ref('root/sessions/' + scripts.sessionID + '/boardState');
+    jsonPath.on('value', (snapshot) =>{
+      scripts.setJSON(snapshot.val());
+      console.log("JSON updated");
+      this.updateGameState();
+    });
   }
 
   render() {
