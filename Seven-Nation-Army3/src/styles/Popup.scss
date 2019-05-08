@@ -10,6 +10,7 @@
 /* Popup container */
 /* The actual popup (appears on top) */
 .popup .popuptext {
+    word-wrap: break-word;
     visibility: hidden;
     width: 160px;
     background-color: rgba(85,85,85,0.9);
