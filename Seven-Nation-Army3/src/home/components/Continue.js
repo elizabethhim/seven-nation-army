@@ -23,6 +23,10 @@ export default class Continue extends Component {
     })
   }
 
+  getRoomID = () => {
+    return '-Ld_bcgkJ0hKGr_iu32T';
+  }
+
   render() {
     const { showModal } = this.state;
     return (

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import '../../styles/Chat.scss';
 import ChatMessage from './ChatMessage';
 
@@ -34,6 +35,13 @@ class ConnectedList extends Component {
     );
   }
 }
+
+ConnectedList.propTypes = {
+  messages: PropTypes.any,
+  roomID: PropTypes.any,
+  friendID: PropTypes.any,
+  friendUsername: PropTypes.any,
+};
 
 const mapStateToProps = state => ({
   // console.log(state);
