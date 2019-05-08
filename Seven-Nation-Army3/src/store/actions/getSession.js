@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router';
 import axios from 'axios';
 import {
-  // GET_SESSIONS_SUCCESS,
-  // GET_SESSIONS_FAIL,
+  GET_SESSIONS_SUCCESS,
+  GET_SESSIONS_FAIL,
   CREATE_SESSION_SUCCESS,
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
@@ -10,9 +10,6 @@ import {
   // CREATE_SESSION_FAIL,
 } from '../actions/actionTypes';
 
-// Chris: Hold-over from when I was testing database access.
-// DEPRECATED:: DO NOT USE
-/*
 export const getSessions = () => {
   return (dispatch, _, { getFirebase }) => {
     getFirebase()
@@ -33,7 +30,6 @@ export const getSessions = () => {
       });
   };
 };
-*/
 
 // TODO: Create a new session in the database with all the correct parameters
 // (Port from Seven-Nation-Army-Backend)
