@@ -283,7 +283,8 @@ export default class Game extends Component {
 
   updateGameState(){
     //Reads the JSON file which is pulled from the server
-    let territoriesJSON = scripts.territoriesJSON;
+    document.getElementById('myPopup').classList.toggle('show');
+    let territoriesJSON = scripts.getJSON();
 
     //Looping through all the territories and adds them to a list
     for (let i in this.territoryNames) {

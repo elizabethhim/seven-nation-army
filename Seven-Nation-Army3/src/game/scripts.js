@@ -1,7 +1,8 @@
 import { getFirebase } from 'react-redux-firebase';
 
 export let orders = { 'sessionID': '' };
-export const sessionID = '-Ld_bcgkJ0hKGr_iu32T';
+export const sessionID = '-Lduo5AlYDGThqCewyuZ';
+// export const sessionID = '-Ld_bcgkJ0hKGr_iu32T';
 // export const sessionID = getFirebase.getSessionID();
 
 export function buildOrders(action) {
@@ -39,6 +40,7 @@ export function getCurrentUser() {
 }
 
 export function getUserId() {
+  console.log(getCurrentUser().uid);
   return getCurrentUser().uid;
 }
 
@@ -376,7 +378,11 @@ export function setJSON(file) {
   territoriesJSON = file;
 }
 
-export let territoriesJSON = {};
+export function getJSON(){
+  return territoriesJSON;
+}
+
+let territoriesJSON = {};
 
 // export const territoriesJSON = {
 //   Adriatic_Sea: {
