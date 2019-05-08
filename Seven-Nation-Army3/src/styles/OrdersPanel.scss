@@ -1,0 +1,39 @@
+.resize_fit_top_right {
+    position: absolute; 
+    width: auto;
+    max-width: 175px;
+    height: auto;
+    max-height: 435px;
+    right: 20px;
+    top: 20px;
+    background-color: rgba(67,70,81,0.95);
+    overflow: auto;
+    border-radius: 6px;
+    padding: 10px;
+    user-drag: none; 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.hr{
+    margin: 0;
+    padding: 0;
+}
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.minimize-orderspanel {
+    background: transparent;
+    border-color: transparent;
+    color: white;
+    display: flex;
+    height: 30px;
+    z-index: 2;
+}
+.orders{
+    font-size: 2.5vh;
+}

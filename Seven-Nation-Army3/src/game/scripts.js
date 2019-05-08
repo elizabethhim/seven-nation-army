@@ -1,32 +1,60 @@
 import { getFirebase } from 'react-redux-firebase';
 
-export let orders = { 'sessionID': '' };
-export const sessionID = '-Lduo5AlYDGThqCewyuZ';
-// export const sessionID = '-Ld_bcgkJ0hKGr_iu32T';
-// export const sessionID = getFirebase.getSessionID();
+export const sessionID = '-Ld_bcgkJ0hKGr_iu32T';
+export let orders = { 'sessionID': sessionID };
+export let ordersList = [];
+let territoriesJSON = {};
 
+      ///////////////////////////
+      //*Firebase Interactions*//
+      ///////////////////////////  
+//gets the current user
+function getCurrentUser() {
+  return getFirebase().auth().currentUser;
+}
+//submits current orders
+export function submitOrders() {
+  const action = orders;
+  getFirebase().database().ref('root/sessions/' + sessionID + '/participatingUserIDs/' + getCurrentUser().uid).set({
+    action
+  });
+}
+
+      ///////////////////////////
+      //*        Orders       *//
+      ///////////////////////////
+//Creates the orders{} object that will be sent to the server
 export function buildOrders(action) {
-  if (orders['sessionID'] === '') {
-    orders['sessionID'] = sessionID;
-  }
   const x = Object.keys(orders).length;
   const exists = orderExists(action);
-  let newObj = [
-    { unitOrigin: action[0].unitOrigin },
-    { actionID: action[1].actionID },
-    { unitDest: action[2].unitDest },
-    { secondaryUnit: action[3].secondaryUnit },
-  ];
+  let actionID = 0;
+  if(action[1].actionID == 'move'){
+    actionID = 1;
+  }else if(action[1].actionID == 'support'){
+    actionID = 2;
+  }else if(action[1].actionID == 'convoy'){
+    actionID = 3;
+  }
+  const secondaryUnit = action[3].secondaryUnit === '' ? 'none' : action[3].secondaryUnit;
+  let newObj = {
+    actionType: actionID,
+    secondaryUnit: secondaryUnit,
+    unitDest: action[2].unitDest,
+    unitOrigin: action[0].unitOrigin,
+  };
 
   const index = !exists[0] ? 'actionList' + x : 'actionList' + exists[1];
   orders[index] = newObj
+  makeOrdersList();
 }
 
+//Checks to see if an order for a territory already exists
+//Returns a bool and index if found
 function orderExists(action) {
   for (let i = 1; i <= Object.keys(orders).length; i += 1) {
     const temp = orders[`actionList${i}`]
     if (temp) {
-      if (temp[0].unitOrigin === action[0].unitOrigin) {
+      if (temp['unitOrigin'] === action[0].unitOrigin) {
         return [true, i];
       }
     }
@@ -34,18 +62,46 @@ function orderExists(action) {
   return [false];
 }
 
-export function getCurrentUser() {
-  const firebase = getFirebase();
-  return firebase.auth().currentUser;
+//Deletes an order from the orders object
+function deleteOrder(action){
+  const exists = orderExists(action)[0];
+  if(exists){
+    const index = orderExists(action)[1];
+    const key = 'actionList' + index;
+    delete orders[key]
+  }
 }
 
-export function getUserId() {
-  console.log(getCurrentUser().uid);
-  return getCurrentUser().uid;
+//Essentially a toString method for the orders objects
+//Used to display the orders on the right side panel
+function makeOrdersList(){
+  //Blank list so we start fresh every time
+  let tempList = [];
+  for (let i = 1; i < Object.keys(orders).length; i++){
+    //Temporary order for ease of coding
+    const temp = orders[`actionList${i}`];
+    let ordersString = temp['unitOrigin'];
+
+    switch(temp['actionType']){
+      case (1):
+        ordersString += ' moves to ' + temp['unitDest'];
+        break;
+      case (0):
+        ordersString += ' holds.';
+        break;
+      case (2):
+        ordersString += ' supports ' + temp['unitDest'];
+        break;
+      default:
+        break;
+    }
+    tempList.push(ordersString);
+  }
+  ordersList = tempList;
 }
 
 export function validateUser(territory) {
-  return territory.getAttribute('player') === getUserId().displayName;
+  return territory.getAttribute('player') === getCurrentUser().uid;
 }
 
 //vars is an array
@@ -133,6 +189,10 @@ export function validateMove(territory, action) {
       drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
     }
   }
+  if(!valid){
+    deleteActionDrawings(action[0].unitOrigin);
+    deleteOrder(action);
+  }
   return valid;
 }
 
@@ -142,14 +202,16 @@ export function findMovementSpaces(territory) {
 
   for (let i = 0; i < adjacencyList.length; i++) {
     const adjacentTerritory = document.getElementById(adjacencyList[i]);
-    if (
-      (territoriesJSON[territory.id].unit === 'Fleet' &&
-        territoriesJSON[adjacentTerritory.id].spaceType !== 'landlocked') ||
-      (territoriesJSON[territory.id].unit === 'Army' &&
-        territoriesJSON[adjacentTerritory.id].spaceType !== 'water') ||
-      territoriesJSON[adjacentTerritory.id].spaceType === 'coast'
-    ) {
-      validMoveSpaces.push(adjacentTerritory);
+    if(adjacentTerritory){
+      if (
+        (territoriesJSON[territory.id].unit === 'Fleet' &&
+          territoriesJSON[adjacentTerritory.id].spaceType !== 'landlocked') ||
+        (territoriesJSON[territory.id].unit === 'Army' &&
+          territoriesJSON[adjacentTerritory.id].spaceType !== 'water') ||
+        territoriesJSON[adjacentTerritory.id].spaceType === 'coast'
+      ) {
+        validMoveSpaces.push(adjacentTerritory);
+      }
     }
   }
   setFill([validMoveSpaces, 'green', '.15']);
@@ -170,19 +232,21 @@ export function findSupportSpaces(territory) {
       const msAdjacentTerritory = document.getElementById(
         moveSpaceAdjacentTerritories[j]
       );
-      const msATMovementSpaces = findMovementSpaces(msAdjacentTerritory);
-      resetFill(msATMovementSpaces);
-      if (
-        msAdjacentTerritory.id !== territory.id &&
-        territoriesJSON[msAdjacentTerritory.id].unit !== '' &&
-        msATMovementSpaces.includes(moveSpace) &&
-        !validSupportSpaces.includes(msAdjacentTerritory)
-      ) {
-        validSupportSpaces.push(msAdjacentTerritory);
-        if (!secondaryUnit[msAdjacentTerritory.id]) {
-          secondaryUnit[msAdjacentTerritory.id] = [moveSpace];
-        } else {
-          secondaryUnit[msAdjacentTerritory.id].push(moveSpace);
+      if(msAdjacentTerritory){
+        const msATMovementSpaces = findMovementSpaces(msAdjacentTerritory);
+        resetFill(msATMovementSpaces);
+        if (
+          msAdjacentTerritory.id !== territory.id &&
+          territoriesJSON[msAdjacentTerritory.id].unit !== '' &&
+          msATMovementSpaces.includes(moveSpace) &&
+          !validSupportSpaces.includes(msAdjacentTerritory)
+        ) {
+          validSupportSpaces.push(msAdjacentTerritory);
+          if (!secondaryUnit[msAdjacentTerritory.id]) {
+            secondaryUnit[msAdjacentTerritory.id] = [moveSpace];
+          } else {
+            secondaryUnit[msAdjacentTerritory.id].push(moveSpace);
+          }
         }
       }
     }
@@ -228,8 +292,7 @@ export function holding(action) {
   drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
 }
 
-export function drawAction(origin, dest, actionId) {
-  //delete markings if already exist
+function deleteActionDrawings(origin){
   let arrow = document.getElementById(origin + '_Arrow');
   let hold = document.getElementById(origin + '_Hold');
   if (arrow) {
@@ -241,6 +304,10 @@ export function drawAction(origin, dest, actionId) {
   if (hold) {
     hold.parentNode.removeChild(hold);
   }
+}
+export function drawAction(origin, dest, actionId) {
+  //delete markings if already exist
+  deleteActionDrawings(origin);
 
   if (actionId === 'hold') {
     const territory = territoriesJSON[origin];
@@ -382,7 +449,6 @@ export function getJSON(){
   return territoriesJSON;
 }
 
-let territoriesJSON = {};
 
 // export const territoriesJSON = {
 //   Adriatic_Sea: {

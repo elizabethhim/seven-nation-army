@@ -5,6 +5,7 @@ import * as scripts from './scripts.js';
 import PopUp from './popup/PopUp';
 import ChatContainer from '../chat/components/ChatContainer';
 import LegendContainer from '../legend/LegendContainer';
+import OrdersPanelContainer from '../orderspanel/OrdersPanelContainer';
 import Map from './map/map';
 import { getFirebase } from 'react-redux-firebase';
 
@@ -114,11 +115,18 @@ export default class Game extends Component {
       { unitDest: '' },
       { secondaryUnit: '' },
     ];
-    this.firebase = getFirebase();
 
-    // function addMouseListeners(){};
   }
 
+  closeButtons(){
+    this.setState({
+      buttonActionIsVisible: false,
+    });
+    document.getElementById('popupContainer').setAttribute('mutable', true);
+    if(!document.getElementById('myPopup').classList.contains('show')){
+      document.getElementById('myPopup').classList.toggle('show');
+    };
+  }
   addMouseListeners() {
     const displayCanvas = document.getElementById('displayCanvas');
     const popup = document.getElementById('myPopup');
@@ -230,10 +238,7 @@ export default class Game extends Component {
     //and makes the popup follow the mouse again in case it was frozen
     displayCanvas.addEventListener('mouseenter', () => {
       popup.classList.toggle('show');
-      popupContainer.setAttribute('mutable', true);
-      this.setState({
-        buttonActionIsVisible: false,
-      });
+      this.closeButtons();
     });
 
     popup.addEventListener('mouseenter', () => {
@@ -258,6 +263,7 @@ export default class Game extends Component {
     moveButton.addEventListener('click', e => {
       this.actionStruct[1]['actionID'] = "move";
       this.actionStruct[2].unitDest = scripts.findMovementSpaces(territory);
+      this.closeButtons();
     });
 
     holdButton.addEventListener('click', () => {
@@ -266,24 +272,30 @@ export default class Game extends Component {
       scripts.buildOrders(this.actionStruct);
       scripts.holding(this.actionStruct);
       this.actionStruct[1].actionID = '';
+      this.closeButtons();
     });
 
     supportButton.addEventListener('click', () => {
-      this.actionStruct[1].actionID = 'support';
       const results = scripts.findSupportSpaces(territory);
-      this.actionStruct[2].unitDest = results[0];
-      this.actionStruct[3].secondaryUnit = results[1];
+      if (results[0].length !== 0){
+        this.actionStruct[1].actionID = 'support';
+        this.actionStruct[2].unitDest = results[0];
+        this.actionStruct[3].secondaryUnit = results[1];
+      }
+      this.closeButtons();
     });
 
     convoyButton.addEventListener('click', () => {
-      this.actionStruct[1].actionID = 'convoy';
-      // scripts.findSupportSpaces(territory);
+      this.closeButtons();
+      // this.actionStruct[1].actionID = 'convoy';
     });
   }
 
   updateGameState(){
     //Reads the JSON file which is pulled from the server
-    document.getElementById('myPopup').classList.toggle('show');
+    if(!document.getElementById('myPopup').classList.contains('show')){
+      document.getElementById('myPopup').classList.toggle('show');
+    };
     let territoriesJSON = scripts.getJSON();
 
     //Looping through all the territories and adds them to a list
@@ -310,7 +322,6 @@ export default class Game extends Component {
       if (territoryInfo.country !== '' || territoryInfo.player !== '') {
         //Each country has its own color stored in the JSON
         const color = this.countryColors[territoryInfo.country];
-
         //countrycolor attribute will be the color each territory
         //defaults back to after being highlighted
         //Fills in the relevant info from the JSON
@@ -333,6 +344,12 @@ export default class Game extends Component {
           document
             .getElementById(territory.id + '_Army')
             .setAttribute('fill', color);
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('fill-opacity', '0');
+          document
+            .getElementById(territory.id + '_Fleet')
+            .setAttribute('stroke-opacity', '0');
         } else if (territoryInfo.unit === 'Fleet') {
           document
             .getElementById(territory.id + '_Fleet')
@@ -343,6 +360,12 @@ export default class Game extends Component {
           document
             .getElementById(territory.id + '_Fleet')
             .setAttribute('fill', color);
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('fill-opacity', '0');
+          document
+            .getElementById(territory.id + '_Army')
+            .setAttribute('stroke-opacity', '0');
         }
       }
 
@@ -350,6 +373,9 @@ export default class Game extends Component {
     }
     document.getElementById('popupContainer').setAttribute('mutable', true);
     this.addMouseListeners();
+    document.getElementById('submitOrders').addEventListener('click', () =>{
+      scripts.submitOrders();
+    });
   }
 
   componentDidMount() {
@@ -362,11 +388,13 @@ export default class Game extends Component {
   }
 
   render() {
+
     return (
       <Fragment>
         <ChatContainer />
         <Map />
         <PopUp buttonIsVisible={this.state.buttonActionIsVisible} />
+        <OrdersPanelContainer ordersList={scripts.ordersList} />
         <LegendContainer />
       </Fragment>
     );
