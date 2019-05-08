@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from 'reactstrap';
 import '../styles/BackButton.scss';
+import { leaveSession } from '../store/actions/getSession';
 
-export default class BackButton extends Component {
+class BackButton extends Component {
   render() {
+    const { leaveSession } = this.props;
     return (
-      <NavLink to="/home">
-        <Button className="back-button">
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </Button>
-      </NavLink>
+      <Button className="back-button" onClick={leaveSession}>
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </Button>
     );
   }
 }
+
+BackButton.propTypes = {
+  leaveSession: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
+  leaveSession: () => dispatch(leaveSession()),
+});
+
+export default connect(null, mapDispatchToProps)(BackButton)

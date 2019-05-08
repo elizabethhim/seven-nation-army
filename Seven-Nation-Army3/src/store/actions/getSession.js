@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router';
-import axios from 'axios';
+// import axios from 'axios';
 import {
   GET_SESSIONS_SUCCESS,
   GET_SESSIONS_FAIL,
@@ -7,6 +7,7 @@ import {
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
   JOIN_SESSION_FAIL,
+  LEAVE_SESSION,
   // CREATE_SESSION_FAIL,
 } from '../actions/actionTypes';
 
@@ -43,24 +44,21 @@ export const createSession = () => {
   };
 };
 
-/*
-export const joinSession = code => {
+export const leaveSession = () => {
+  return dispatch => {
+    dispatch({
+      type: LEAVE_SESSION,
+    });
+    dispatch(push('./home'))
+  }
+}
+
+export const joinSession = (roomID, roomCode) => {
   return (dispatch, _, { getFirebase }) => {
-    // BUG: GENERATES A 2A TYPE OF HASH, NOT COMPATIBLE WITH PYTHON 2B HASH
-    // const hash = hashSync(code, 14);
-    // console.log(hash);
     getFirebase()
       .ref('root/sessions')
       .once('value', sessions => {
         const sessionList = sessions.val();
-        let roomID = '';
-        console.log('Sessions', sessionList);
-        for (let sessionID in sessionList) {
-          if (code === sessionList[sessionID].hashedPasscode) {
-            roomID = sessionList[sessionID].hashedPasscode;
-            break;
-          }
-        }
         if (roomID !== '') {
           dispatch({
             type: JOIN_SESSION_SUCCESS,
@@ -82,8 +80,8 @@ export const joinSession = code => {
       });
   }
 }
-*/
 
+/*
 export const joinSession = (roomID, roomCode) => {
   return (dispatch, getState) => {
     const token = getState().firebase.auth.stsTokenManager.accessToken
@@ -91,21 +89,21 @@ export const joinSession = (roomID, roomCode) => {
     axios({
       method: 'post',
       url: '35.165.246.90:5000/api/joinsession',
+      headers: {
+        'content-type': 'multipart/form-data',
+        'Authorization': `Basic ${token}`,
+      },
       data: {
         sessionID: roomID,
         passcode: roomCode,
       },
-      auth: {
-        username: token,
-        password: ''
-      },
     }).then(res => {
       console.log('Result', res);
-      /*dispatch({
+      dispatch({
         type: JOIN_SESSION_SUCCESS,
         payload: '-LdLRab8HD6zBlXNJMRK',
       });
-      dispatch(push('/game'));*/
+      dispatch(push('/game'));
     }).catch(err => {
       console.log('Connection Error');
       dispatch({
@@ -116,3 +114,4 @@ export const joinSession = (roomID, roomCode) => {
     // TODO(Chris): Access AWS database and authorize join session.
   };
 }
+*/

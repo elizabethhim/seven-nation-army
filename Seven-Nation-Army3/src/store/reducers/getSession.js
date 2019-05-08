@@ -4,6 +4,7 @@ import {
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
   JOIN_SESSION_FAIL,
+  LEAVE_SESSION,
 } from '../actions/actionTypes';
 
 const initialState = {};
@@ -26,6 +27,7 @@ export default function session(state = initialState, action) {
       return {
         ...state,
         session: action.payload,
+        sessions: null,
         sessionError: null,
       };
     case JOIN_SESSION_NO_MATCH:
@@ -39,6 +41,13 @@ export default function session(state = initialState, action) {
         ...state,
         session: null,
         sessionError: action.payload,
+      }
+    case LEAVE_SESSION:
+      return {
+        ...state,
+        session: null,
+        sessions: null,
+        sessionError: null,
       }
     default:
       return state;
