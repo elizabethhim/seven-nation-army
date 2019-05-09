@@ -19,20 +19,29 @@ export default class MessageList extends Component {
   }
 
   listenForNewMessages(props) {
-    this.chatroomRef = this.firebase.database().ref('root/chatrooms/' + props.roomID);
-    this.chatroomListener = this.chatroomRef.on('value', snapshot => {
-      const messageList = [];
-      snapshot.forEach(element => {
-        messageList.push({
-          senderID: element.val().senderID,
-          senderName: element.val().senderName,
-          time: element.val().time,
-          message: element.val().message,
-          messageID: element.key,
+    this.firebase.auth().onAuthStateChanged((user) => { 
+
+      this.chatroomRef = this.firebase.database().ref('root/chatrooms/' + props.roomID);
+      this.chatroomListener = this.chatroomRef.on('value', snapshot => {
+        const messageList = [];
+        
+        snapshot.forEach(element => {
+          let myMessage = true;
+          if(user.uid != element.val().senderID) {
+            myMessage = false;
+          }
+          messageList.push({
+            senderID: element.val().senderID,
+            senderName: element.val().senderName,
+            time: element.val().time,
+            message: element.val().message,
+            messageID: element.key,
+            myMessage: myMessage,
+          });
         });
-      });
-      this.setState({
-        messages: messageList,
+        this.setState({
+          messages: messageList,
+        });
       });
     });
   }
@@ -53,7 +62,7 @@ export default class MessageList extends Component {
       this.state.messages.map(el => (
         <ChatMessage
           key={el.messageID}
-          myMessage={true}
+          myMessage={el.myMessage}
           time={el.time}
           name={el.senderName}
           message={el.message}
