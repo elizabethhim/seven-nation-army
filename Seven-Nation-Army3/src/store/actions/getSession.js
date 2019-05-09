@@ -103,13 +103,23 @@ export const joinSession = (roomID, roomCode) => {
       }
     }).then(res => {
       console.log('Result', res);
-      dispatch({
-        type: JOIN_SESSION_SUCCESS,
-        payload: '-LdLRab8HD6zBlXNJMRK',
-      });
-      dispatch(push('/game'));
+      if((res['data'])['data'] === 'User added'){
+        dispatch({
+          type: JOIN_SESSION_SUCCESS,
+          payload: '-LdLRab8HD6zBlXNJMRK',
+        });
+        dispatch(push('/game'));
+      }else{
+        dispatch({
+          type: JOIN_SESSION_NO_MATCH,
+          payload: (res['data'])['data'] ,
+        });
+      }
+      
+      
     }).catch(err => {
       console.log('Connection Error');
+      console.log(err);
       dispatch({
         type: JOIN_SESSION_FAIL,
         payload: err,

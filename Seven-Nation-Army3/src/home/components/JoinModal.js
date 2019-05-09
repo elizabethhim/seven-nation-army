@@ -64,7 +64,7 @@ class JoinModal extends Component {
               </FormGroup>
 
               {sessionError && (
-                <p style={warningText}>{sessionError.message}</p>
+                <p style={warningText}>{sessionError}</p>
               )}
 
               <div
