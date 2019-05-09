@@ -1,14 +1,15 @@
 import { getFirebase } from 'react-redux-firebase';
 
 export const sessionID = '-LeP3gmCkPL26h66oecN';
-let orders = { 'sessionID': sessionID };
+let orders = { sessionID: sessionID };
 export let ordersList = [];
 let territoriesJSON = {};
 let players = {};
+export let adjudicationPeriod = 0;
 
-      ///////////////////////////
-      //*Firebase Interactions*//
-      ///////////////////////////  
+///////////////////////////
+//*Firebase Interactions*//
+///////////////////////////
 //gets the current user
 function getCurrentUser() {
   return getFirebase().auth().currentUser;
@@ -19,36 +20,55 @@ export function validateUser(territory) {
 //submits current orders
 export function submitOrders() {
   const action = orders;
-  getFirebase().database().ref('root/sessions/' + sessionID + '/participatingUserIDs/' + getCurrentUser().uid).set({
-    action
-  });
+  getFirebase()
+    .database()
+    .ref(
+      'root/sessions/' +
+        sessionID +
+        '/participatingUserIDs/' +
+        getCurrentUser().uid
+    )
+    .set({
+      action,
+    });
 }
-export function getPlayers(){
-  var playersRef = getFirebase().database().ref('root/sessions/' + sessionID + '/participatingUserIDs/');
+export function getPlayers() {
+  var playersRef = getFirebase()
+    .database()
+    .ref('root/sessions/' + sessionID + '/participatingUserIDs/');
   playersRef.on('value', function(snapshot) {
-    for(let x in snapshot.val()){
-      players[x]= snapshot.val()[x].displayName;
-      console.log(players);
+    for (let x in snapshot.val()) {
+      players[x] = snapshot.val()[x].displayName;
     }
   });
 }
+export function getAdjudicationPeriod() {
+  return getFirebase()
+    .database()
+    .ref('root/sessions/' + sessionID + '/adjudicationPeriod')
+    .once('value')
+    .then(function(snapshot) {
+      adjudicationPeriod = snapshot.val();
+    });
+}
 
-      ///////////////////////////
-      //*        Orders       *//
-      ///////////////////////////
+///////////////////////////
+//*        Orders       *//
+///////////////////////////
 //Creates the orders{} object that will be sent to the server
 export function buildOrders(action) {
   const x = Object.keys(orders).length;
   const exists = orderExists(action);
   let actionID = 0;
-  if(action[1].actionID == 'move'){
+  if (action[1].actionID === 'move') {
     actionID = 1;
-  }else if(action[1].actionID == 'support'){
+  } else if (action[1].actionID === 'support') {
     actionID = 2;
-  }else if(action[1].actionID == 'convoy'){
+  } else if (action[1].actionID === 'convoy') {
     actionID = 3;
   }
-  const secondaryUnit = action[3].secondaryUnit === '' ? 'none' : action[3].secondaryUnit;
+  const secondaryUnit =
+    action[3].secondaryUnit === '' ? 'none' : action[3].secondaryUnit;
   let newObj = {
     actionType: actionID,
     secondaryUnit: secondaryUnit,
@@ -57,14 +77,14 @@ export function buildOrders(action) {
   };
 
   const index = !exists[0] ? 'actionList' + x : 'actionList' + exists[1];
-  orders[index] = newObj
+  orders[index] = newObj;
   makeOrdersList();
 }
 //Checks to see if an order for a territory already exists
 //Returns a bool and index if found
 function orderExists(action) {
   for (let i = 1; i <= Object.keys(orders).length; i += 1) {
-    const temp = orders[`actionList${i}`]
+    const temp = orders[`actionList${i}`];
     if (temp) {
       if (temp['unitOrigin'] === action[0].unitOrigin) {
         return [true, i];
@@ -75,31 +95,31 @@ function orderExists(action) {
 }
 
 //Deletes an order from the orders object
-function deleteOrder(action){
+function deleteOrder(action) {
   const exists = orderExists(action);
-  if(exists[0]){
+  if (exists[0]) {
     const key = 'actionList' + exists[1];
-    delete orders[key]
+    delete orders[key];
   }
 }
 //Essentially a toString method for the orders objects
 //Used to display the orders on the right side panel
-function makeOrdersList(){
+function makeOrdersList() {
   //Blank list so we start fresh every time
   let tempList = [];
-  for (let i = 1; i < Object.keys(orders).length; i++){
+  for (let i = 1; i < Object.keys(orders).length; i++) {
     //Temporary order for ease of coding
     const temp = orders[`actionList${i}`];
     let ordersString = temp['unitOrigin'];
 
-    switch(temp['actionType']){
-      case (1):
+    switch (temp['actionType']) {
+      case 1:
         ordersString += ' moves to ' + temp['unitDest'];
         break;
-      case (0):
+      case 0:
         ordersString += ' holds.';
         break;
-      case (2):
+      case 2:
         ordersString += ' supports ' + temp['unitDest'];
         break;
       default:
@@ -110,17 +130,17 @@ function makeOrdersList(){
   ordersList = tempList;
 }
 //clears out the orders and the map when the JSON is updated
-export function cleanUp(){
-  for(let x in orders){
+export function cleanUp() {
+  for (let x in orders) {
     deleteActionDrawings(orders[x]['unitOrigin']);
   }
-  orders = { 'sessionID': sessionID };
+  orders = { sessionID: sessionID };
   makeOrdersList();
 }
 
-      ///////////////////////////
-      //*    Coloring Stuff   *//
-      ///////////////////////////
+///////////////////////////
+//*    Coloring Stuff   *//
+///////////////////////////
 //vars is an array
 //vars[0] = array of territory objects, can be just one
 //vars[1] = color
@@ -141,12 +161,15 @@ export function setFill(vars) {
 export function resetFill(territories) {
   for (let i = 0; i < territories.length; i++) {
     let opacity =
-      territories[i].getAttribute('countrycolor') === 'yellow' ? 0 : 0.20;
+      territories[i].getAttribute('countrycolor') === 'yellow' ? 0 : 0.2;
     territories[i].setAttribute(
       'fill',
       territories[i].getAttribute('countrycolor')
     );
-    territories[i].setAttribute('stroke', territories[i].getAttribute('countrycolor'));
+    territories[i].setAttribute(
+      'stroke',
+      territories[i].getAttribute('countrycolor')
+    );
     territories[i].setAttribute('stroke-opacity', opacity);
     territories[i].setAttribute(
       'previouscolor',
@@ -159,7 +182,7 @@ export function resetFill(territories) {
 export function highlight(territory) {
   territory.setAttribute('previouscolor', territory.getAttribute('fill'));
   territory.setAttribute('fill', 'yellow');
-  territory.setAttribute('fill-opacity', .25);
+  territory.setAttribute('fill-opacity', 0.25);
 }
 //Removes the yellow color when the mouse exits
 export function deHighlight(territory) {
@@ -169,9 +192,9 @@ export function deHighlight(territory) {
   territory.setAttribute('fill', territory.getAttribute('previouscolor'));
 }
 
-      ///////////////////////////
-      //*     Pop-up Stuff    *//
-      ///////////////////////////
+///////////////////////////
+//*     Pop-up Stuff    *//
+///////////////////////////
 //Builds the string that will go within the popup
 export function buildString(territory) {
   const territoryName = `Territory: ${territory.id}<br/>`;
@@ -199,7 +222,7 @@ export function movePopup(e) {
   y = 100 >= y ? 100 : y;
   const popupContainer = document.getElementById('popupContainer');
 
-  if (popupContainer.getAttribute('mutable') === 'true') {
+  if (popupContainer && popupContainer.getAttribute('mutable') === 'true') {
     popupContainer.style.top = y + 'px';
     popupContainer.style.left = x + 'px';
   }
@@ -222,10 +245,10 @@ export function mouseClickFunc(territory) {
   return buttonState;
 }
 
-      ///////////////////////////
-      //*    Movement Stuff   *//
-      ///////////////////////////
-//Makes sure only valid selections are made for 
+///////////////////////////
+//*    Movement Stuff   *//
+///////////////////////////
+//Makes sure only valid selections are made for
 //move or support orders
 export function validateMove(territory, action) {
   let valid = false;
@@ -247,7 +270,7 @@ export function validateMove(territory, action) {
       drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
     }
   }
-  if(!valid){
+  if (!valid) {
     deleteActionDrawings(action[0].unitOrigin);
     deleteOrder(action);
   }
@@ -261,7 +284,7 @@ export function findMovementSpaces(territory) {
 
   for (let i = 0; i < adjacencyList.length; i++) {
     const adjacentTerritory = document.getElementById(adjacencyList[i]);
-    if(adjacentTerritory){
+    if (adjacentTerritory) {
       if (
         (territoriesJSON[territory.id].unit === 'Fleet' &&
           territoriesJSON[adjacentTerritory.id].spaceType !== 'landlocked') ||
@@ -291,7 +314,7 @@ export function findSupportSpaces(territory) {
       const msAdjacentTerritory = document.getElementById(
         moveSpaceAdjacentTerritories[j]
       );
-      if(msAdjacentTerritory){
+      if (msAdjacentTerritory) {
         const msATMovementSpaces = findMovementSpaces(msAdjacentTerritory);
         resetFill(msATMovementSpaces);
         if (
@@ -311,16 +334,16 @@ export function findSupportSpaces(territory) {
     }
   }
 
-  setFill([validSupportSpaces, 'green', 0.20]);
+  setFill([validSupportSpaces, 'green', 0.2]);
   return [validSupportSpaces, secondaryUnit];
 }
 
-      ///////////////////////////
-      //*  Map Drawing Stuff  *//
-      ///////////////////////////
+///////////////////////////
+//*  Map Drawing Stuff  *//
+///////////////////////////
 //Deletes any drawings that already exists
 //Includes holds, arrowheads, and lines
-function deleteActionDrawings(origin){
+function deleteActionDrawings(origin) {
   let arrow = document.getElementById(origin + '_Arrow');
   let hold = document.getElementById(origin + '_Hold');
   if (arrow) {
@@ -367,8 +390,7 @@ export function drawAction(origin, dest, actionId) {
       holdIcon.setAttribute('cy', coords[1] + 6);
     }
     document.getElementById('arrowContainer').append(holdIcon);
-  }
-  else {
+  } else {
     //Getting coords for arrow start and end of arrow
     const originPoints = [
       parseInt(document.getElementById(origin + '_Army').getAttribute('cx')),
@@ -385,7 +407,7 @@ export function drawAction(origin, dest, actionId) {
     const d = Math.round(
       Math.sqrt(
         Math.pow(originPoints[0] - destinPoints[0], 2) +
-        Math.pow(originPoints[1] - destinPoints[1], 2)
+          Math.pow(originPoints[1] - destinPoints[1], 2)
       )
     );
     const curveAmount = 3;
@@ -465,7 +487,8 @@ export function drawAction(origin, dest, actionId) {
     arrowLine.setAttribute('class', 'arrow');
     arrowLine.setAttribute('id', origin + '_Arrow');
     arrowLine.setAttribute('d', linePath);
-    if (actionId === 'support') arrowLine.setAttribute('stroke-dasharray', '8 8');
+    if (actionId === 'support')
+      arrowLine.setAttribute('stroke-dasharray', '8 8');
 
     arrowHead.setAttribute('class', 'arrowhead');
     arrowHead.setAttribute('id', origin + '_Arrowhead');
@@ -481,6 +504,6 @@ export function setJSON(file) {
   territoriesJSON = file;
 }
 
-export function getJSON(){
+export function getJSON() {
   return territoriesJSON;
 }

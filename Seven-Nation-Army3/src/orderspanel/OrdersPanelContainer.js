@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import PropTypes from 'prop-types';
 
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,15 +25,22 @@ export default class OrdersPanelContainer extends Component {
   render() {
     const { ordersPanelIsVisible } = this.state;
     const { ordersList } = this.props;
+
     return (
       <Fragment>
         {ordersPanelIsVisible ? (
-          <OrdersPanel orders={ordersList} toggleOrdersPanel={this.toggleOrdersPanel} />
+          <OrdersPanel
+            orders={ordersList}
+            toggleOrdersPanel={this.toggleOrdersPanel}
+          />
         ) : (
-          <div id='ordersContainer' className="resize_fit_top_right">
+          <div id="ordersContainer" className="resize_fit_top_right">
             <span className="orders-header">
               <text>Orders</text>
-              <Button className="minimize-orderspanel" onClick={this.toggleOrdersPanel}>
+              <Button
+                className="minimize-orderspanel"
+                onClick={this.toggleOrdersPanel}
+              >
                 <FontAwesomeIcon icon={faAngleDown} />
               </Button>
             </span>
@@ -44,7 +50,3 @@ export default class OrdersPanelContainer extends Component {
     );
   }
 }
-
-OrdersPanelContainer.propTypes = {
-  ordersList: PropTypes.array.isRequired,
-};

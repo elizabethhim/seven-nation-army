@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Countdown from '../countdown/countdown';
 
 import '../styles/OrdersPanel.scss';
-
 
 const buttonColor = {
   backgroundColor: '#434651',
@@ -17,31 +17,34 @@ export default class OrdersPanel extends Component {
     super(props);
     this.state = {
       ordersList: [],
-    }
+    };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     const { toggleOrdersPanel } = this.props.toggleOrdersPanel;
-
     return (
       <div className="resize_fit_top_right">
         <span className="orders-header">
           <text>Orders</text>
-          <Button className="minimize-orderspanel" onClick={toggleOrdersPanel}>
+          <Button
+            style={{ padding: '0 1vw 2vw 0' }}
+            className="minimize-orderspanel"
+            onClick={toggleOrdersPanel}
+          >
             <FontAwesomeIcon icon={faAngleUp} />
           </Button>
         </span>
         {this.props.orders.map(order => (
-          <p className='orders' key={order}>
+          <p className="orders" key={order}>
             • {order}
           </p>
         ))}
         <Button id="submitOrders" style={buttonColor}>
           Submit
         </Button>
+        <Countdown />
       </div>
     );
   }

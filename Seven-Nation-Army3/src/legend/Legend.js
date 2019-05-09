@@ -17,7 +17,7 @@ export default class Legend extends Component {
     super(props);
     this.state = {
       players: [],
-    }
+    };
     this.playerRef = getFirebase()
       .database()
       .ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/');

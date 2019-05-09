@@ -14,7 +14,7 @@ export default class PopUp extends Component {
     return (
       <div className="popup" id="popupContainer">
         <span className="popuptext" id="myPopup">
-          <p id="popupText"/>
+          <p id="popupText" />
           {buttonIsVisible && (
             <ButtonGroup vertical>
               <ButtonGroup>

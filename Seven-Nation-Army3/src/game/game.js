@@ -9,20 +9,20 @@ import OrdersPanelContainer from '../orderspanel/OrdersPanelContainer';
 import Map from './map/map';
 import { getFirebase } from 'react-redux-firebase';
 
+export let isFirstRun = true;
+
 export default class Game extends Component {
   constructor(props) {
     super(props);
 
-    this.isFirstRun = true;
-
     this.countryColors = {
-      'Russia':'#dd1efa',
-      'Austria_Hungary': '#c41717',
-      'Turkey': '#c49e17',
-      'Italy': '#2bb213',
-      'Germany': '#d896ea',
-      'France': '#3cb6c4',
-      'England': '#070291'
+      Russia: '#dd1efa',
+      Austria_Hungary: '#c41717',
+      Turkey: '#c49e17',
+      Italy: '#2bb213',
+      Germany: '#d896ea',
+      France: '#3cb6c4',
+      England: '#070291',
     };
 
     //Used to iterate through the JSON and SVG objects
@@ -116,17 +116,16 @@ export default class Game extends Component {
       { unitDest: '' },
       { secondaryUnit: '' },
     ];
-
   }
 
-  closeButtons(){
+  closeButtons() {
     this.setState({
       buttonActionIsVisible: false,
     });
     document.getElementById('popupContainer').setAttribute('mutable', true);
-    if(!document.getElementById('myPopup').classList.contains('show')){
+    if (!document.getElementById('myPopup').classList.contains('show')) {
       document.getElementById('myPopup').classList.toggle('show');
-    };
+    }
   }
   addMouseListeners() {
     const displayCanvas = document.getElementById('displayCanvas');
@@ -183,7 +182,7 @@ export default class Game extends Component {
               scripts.setFill([
                 this.actionStruct[3].secondaryUnit[territory.id],
                 'green',
-                0.20,
+                0.2,
               ]);
             } else {
               this.actionStruct[1].actionID = '';
@@ -211,7 +210,7 @@ export default class Game extends Component {
           default:
             //Toggles the buttons in the popup depending on if the territory has a unit
             //also responsible for closing the button menu when clicked away
-            if(scripts.validateUser(territory)){
+            if (scripts.validateUser(territory)) {
               this.setState({
                 buttonActionIsVisible: scripts.mouseClickFunc(territory),
               });
@@ -262,7 +261,7 @@ export default class Game extends Component {
     this.actionStruct[0].unitOrigin = territory.id;
 
     moveButton.addEventListener('click', e => {
-      this.actionStruct[1]['actionID'] = "move";
+      this.actionStruct[1]['actionID'] = 'move';
       this.actionStruct[2].unitDest = scripts.findMovementSpaces(territory);
       this.closeButtons();
     });
@@ -278,7 +277,7 @@ export default class Game extends Component {
 
     supportButton.addEventListener('click', () => {
       const results = scripts.findSupportSpaces(territory);
-      if (results[0].length !== 0){
+      if (results[0].length !== 0) {
         this.actionStruct[1].actionID = 'support';
         this.actionStruct[2].unitDest = results[0];
         this.actionStruct[3].secondaryUnit = results[1];
@@ -292,11 +291,11 @@ export default class Game extends Component {
     });
   }
 
-  updateGameState(){
+  updateGameState() {
     //Reads the JSON file which is pulled from the server
-    if(!document.getElementById('myPopup').classList.contains('show')){
+    if (!document.getElementById('myPopup').classList.contains('show')) {
       document.getElementById('myPopup').classList.toggle('show');
-    };
+    }
     let territoriesJSON = scripts.getJSON();
 
     //Looping through all the territories and adds them to a list
@@ -315,7 +314,10 @@ export default class Game extends Component {
       territory.setAttribute('previouscolor', territory.getAttribute('fill'));
 
       //Adds country attribute for supply centers
-      if (territoryInfo.isSupplyCenter === 'True' && territoryInfo.country === '') {
+      if (
+        territoryInfo.isSupplyCenter === 'True' &&
+        territoryInfo.country === ''
+      ) {
         territory.setAttribute('country', 'Unclaimed');
       }
 
@@ -329,10 +331,10 @@ export default class Game extends Component {
         //Fills in the relevant info from the JSON
         territory.setAttribute('countrycolor', color);
         territory.setAttribute('fill', color);
-        territory.setAttribute('fill-opacity', 0.20);
+        territory.setAttribute('fill-opacity', 0.2);
         territory.setAttribute('stroke', color);
         territory.setAttribute('stroke-width', 10);
-        territory.setAttribute('stroke-opacity', 0.20);
+        territory.setAttribute('stroke-opacity', 0.2);
         territory.setAttribute('previouscolor', color);
         //Makes the needed units visible and hides the others
         if (territoryInfo.unit === 'Army') {
@@ -372,28 +374,32 @@ export default class Game extends Component {
 
       this.territoryObjects.push(territory);
     }
-    if(this.isFirstRun){
+    if (isFirstRun) {
       this.addMouseListeners();
-      document.getElementById('submitOrders').addEventListener('click', scripts.submitOrders());
+      document
+        .getElementById('submitOrders')
+        .addEventListener('click', scripts.submitOrders());
       scripts.getPlayers();
-      this.isFirstRun = false;
-    }else{
+      scripts.getAdjudicationPeriod();
+      isFirstRun = false;
+    } else {
       scripts.cleanUp();
     }
     document.getElementById('popupContainer').setAttribute('mutable', true);
   }
 
   componentDidMount() {
-    let jsonPath = getFirebase().database().ref('root/sessions/' + scripts.sessionID + '/boardState');
-    jsonPath.on('value', (snapshot) =>{
+    let jsonPath = getFirebase()
+      .database()
+      .ref('root/sessions/' + scripts.sessionID + '/boardState');
+    jsonPath.on('value', snapshot => {
       scripts.setJSON(snapshot.val());
-      console.log("JSON updated");
+      console.log('Game state updated');
       this.updateGameState();
     });
   }
 
   render() {
-
     return (
       <Fragment>
         <ChatContainer />
