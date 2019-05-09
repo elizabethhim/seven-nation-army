@@ -9,22 +9,28 @@ export default class ChatList extends Component {
       players: []
     };
     const firebase = getFirebase();
+    this.firebase = firebase;
     this.playerRef = firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/');
   }
 
   listenForPlayers(playerRef) {
-    const playerList = [];
-    playerRef.once('value').then(snapshot => {
+    this.firebase.auth().onAuthStateChanged((user) => { 
 
-      snapshot.forEach(element => {
-        playerList.push({
-          id: element.key,
-          username: element.val().username,
-          country: element.val().country
+      const playerList = [];
+      playerRef.once('value').then(snapshot => {
+      
+        snapshot.forEach(element => {
+          if(user.uid != element.key) {
+            playerList.push({
+              id: element.key,
+              username: element.val().username,
+              country: element.val().country
+            });
+          }
         });
-      });
-      this.setState({
-        players: playerList,
+        this.setState({
+          players: playerList,
+        });
       });
     });
   }
