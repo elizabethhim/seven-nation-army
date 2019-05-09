@@ -24,7 +24,6 @@ class ChatHistory extends Component {
     const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.friendID);
     friendRef.once("value").then(res => {
       if (res) {
-        console.log(res.val().username);
         this.setState({ friendUsername: res.val().username })
       }
     });
@@ -40,7 +39,6 @@ class ChatHistory extends Component {
   render() {
     const roomID = this.props.roomID;
     const friendID = this.props.friendID;
-    console.log(this.state.friendUsername);
 
     return (
       <div className="chat">

@@ -12,7 +12,7 @@ import Continue from './home/components/Continue';
 import NewGame from './home/components/NewGame';
 import Login from './login/login';
 import Register from './login/register';
-import Settings from './settings/Settings';
+import Settings from './settings/settings';
 
 export default (
   <AnimatedSwitch

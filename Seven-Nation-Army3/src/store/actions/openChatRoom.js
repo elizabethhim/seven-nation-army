@@ -27,6 +27,19 @@ export default function openChatRoom(friendID) {
                                     payload: error,
                                 });
                                 console.log("Update failed - roomID to " + roomRef.key);
+                            } 
+                        });
+
+                        const newFriendChatroomRef = firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + friendID + '/chatFriends/' + user.uid);
+                        newFriendChatroomRef.update({
+                            roomID: roomRef.key,
+                        }, error => {
+                            if (error) {
+                                dispatch({
+                                    type: OPEN_CHAT_ROOM_FAIL,
+                                    payload: error,
+                                });
+                                console.log("Update failed - roomID to " + roomRef.key);
                             } else {
                                 dispatch({
                                     type: OPEN_CHAT_ROOM_SUCCESS,
