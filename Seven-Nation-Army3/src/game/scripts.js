@@ -1,9 +1,10 @@
 import { getFirebase } from 'react-redux-firebase';
 
-export const sessionID = '-Ld_bcgkJ0hKGr_iu32T';
-export let orders = { 'sessionID': sessionID };
+export const sessionID = '-LeP3gmCkPL26h66oecN';
+let orders = { 'sessionID': sessionID };
 export let ordersList = [];
 let territoriesJSON = {};
+let players = {};
 
       ///////////////////////////
       //*Firebase Interactions*//
@@ -20,6 +21,15 @@ export function submitOrders() {
   const action = orders;
   getFirebase().database().ref('root/sessions/' + sessionID + '/participatingUserIDs/' + getCurrentUser().uid).set({
     action
+  });
+}
+export function getPlayers(){
+  var playersRef = getFirebase().database().ref('root/sessions/' + sessionID + '/participatingUserIDs/');
+  playersRef.on('value', function(snapshot) {
+    for(let x in snapshot.val()){
+      players[x]= snapshot.val()[x].displayName;
+      console.log(players);
+    }
   });
 }
 
@@ -72,7 +82,6 @@ function deleteOrder(action){
     delete orders[key]
   }
 }
-
 //Essentially a toString method for the orders objects
 //Used to display the orders on the right side panel
 function makeOrdersList(){
@@ -109,11 +118,9 @@ export function cleanUp(){
   makeOrdersList();
 }
 
-
-
-
-
-
+      ///////////////////////////
+      //*    Coloring Stuff   *//
+      ///////////////////////////
 //vars is an array
 //vars[0] = array of territory objects, can be just one
 //vars[1] = color
@@ -128,7 +135,6 @@ export function setFill(vars) {
     vars[0][i].setAttribute('fill-opacity', vars[2]);
   }
 }
-
 //territories is an array
 //iterates over the array and calls setFill
 //will set the fill to whatever the previous color was
@@ -149,13 +155,13 @@ export function resetFill(territories) {
     territories[i].setAttribute('fill-opacity', opacity);
   }
 }
-
+//Colors the territory yellow when the mouse hovers over it
 export function highlight(territory) {
   territory.setAttribute('previouscolor', territory.getAttribute('fill'));
   territory.setAttribute('fill', 'yellow');
   territory.setAttribute('fill-opacity', .25);
 }
-
+//Removes the yellow color when the mouse exits
 export function deHighlight(territory) {
   if (territory.getAttribute('previouscolor') === 'yellow') {
     territory.setAttribute('fill-opacity', 0);
@@ -163,6 +169,43 @@ export function deHighlight(territory) {
   territory.setAttribute('fill', territory.getAttribute('previouscolor'));
 }
 
+      ///////////////////////////
+      //*     Pop-up Stuff    *//
+      ///////////////////////////
+//Builds the string that will go within the popup
+export function buildString(territory) {
+  const territoryName = `Territory: ${territory.id}<br/>`;
+  const country =
+    territory.getAttribute('country') !== ''
+      ? `Country: ${territory.getAttribute('country')}<br/>`
+      : '';
+  const unit =
+    territory.getAttribute('unit') !== ''
+      ? `Unit: ${territory.getAttribute('unit')}<br/>`
+      : '';
+  const player =
+    territory.getAttribute('player') !== ''
+      ? `Player: ${players[territory.getAttribute('player')]}<br/>`
+      : '';
+
+  return country + territoryName + unit + player;
+}
+//Moves the popup to follow the cursor
+export function movePopup(e) {
+  let x = e.clientX + 85;
+  let y = e.clientY - 20;
+
+  x = x >= window.innerWidth - 85 ? window.innerWidth - 85 : x;
+  y = 100 >= y ? 100 : y;
+  const popupContainer = document.getElementById('popupContainer');
+
+  if (popupContainer.getAttribute('mutable') === 'true') {
+    popupContainer.style.top = y + 'px';
+    popupContainer.style.left = x + 'px';
+  }
+}
+//Opens the popup or not
+//Really badly done, needs to be reworked
 export function mouseClickFunc(territory) {
   let buttonState;
   const popupContainer = document.getElementById('popupContainer');
@@ -179,6 +222,11 @@ export function mouseClickFunc(territory) {
   return buttonState;
 }
 
+      ///////////////////////////
+      //*    Movement Stuff   *//
+      ///////////////////////////
+//Makes sure only valid selections are made for 
+//move or support orders
 export function validateMove(territory, action) {
   let valid = false;
   if (action[1].actionID === 'gettingsecondaryunit') {
@@ -205,7 +253,8 @@ export function validateMove(territory, action) {
   }
   return valid;
 }
-
+//Highlights everything that is a valid movement space
+//and returns a list of territories that are valid
 export function findMovementSpaces(territory) {
   const adjacencyList = territoriesJSON[territory.id].adjacencyList;
   let validMoveSpaces = [];
@@ -227,7 +276,7 @@ export function findMovementSpaces(territory) {
   setFill([validMoveSpaces, 'green', '.15']);
   return validMoveSpaces;
 }
-
+//Theres some bugs with this one, needs to be redone
 export function findSupportSpaces(territory) {
   const moveSpaces = findMovementSpaces(territory);
   resetFill(moveSpaces);
@@ -266,42 +315,11 @@ export function findSupportSpaces(territory) {
   return [validSupportSpaces, secondaryUnit];
 }
 
-export function buildString(territory) {
-  const territoryName = `Territory: ${territory.id}<br/>`;
-  const country =
-    territory.getAttribute('country') !== ''
-      ? `Country: ${territory.getAttribute('country')}<br/>`
-      : '';
-  const unit =
-    territory.getAttribute('unit') !== ''
-      ? `Unit: ${territory.getAttribute('unit')}<br/>`
-      : '';
-  const player =
-    territory.getAttribute('player') !== ''
-      ? `Player: ${territory.getAttribute('player')}<br/>`
-      : '';
-
-  return country + territoryName + unit + player;
-}
-
-export function movePopup(e) {
-  let x = e.clientX + 85;
-  let y = e.clientY - 20;
-
-  x = x >= window.innerWidth - 85 ? window.innerWidth - 85 : x;
-  y = 100 >= y ? 100 : y;
-  const popupContainer = document.getElementById('popupContainer');
-
-  if (popupContainer.getAttribute('mutable') === 'true') {
-    popupContainer.style.top = y + 'px';
-    popupContainer.style.left = x + 'px';
-  }
-}
-
-export function holding(action) {
-  drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
-}
-
+      ///////////////////////////
+      //*  Map Drawing Stuff  *//
+      ///////////////////////////
+//Deletes any drawings that already exists
+//Includes holds, arrowheads, and lines
 function deleteActionDrawings(origin){
   let arrow = document.getElementById(origin + '_Arrow');
   let hold = document.getElementById(origin + '_Hold');
@@ -315,6 +333,14 @@ function deleteActionDrawings(origin){
     hold.parentNode.removeChild(hold);
   }
 }
+//Calls the drawAction function for holds
+export function holding(action) {
+  drawAction(action[0].unitOrigin, action[2].unitDest, action[1].actionID);
+}
+//Draws the action
+//Circle for hold
+//Solid arrow for move
+//Dashed for support
 export function drawAction(origin, dest, actionId) {
   //delete markings if already exist
   deleteActionDrawings(origin);
@@ -458,936 +484,3 @@ export function setJSON(file) {
 export function getJSON(){
   return territoriesJSON;
 }
-
-
-// export const territoriesJSON = {
-//   Adriatic_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Albania', 'Apulia', 'Ionian_Sea', 'Trieste', 'Venice'],
-//   },
-//   Aegean_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Bulgaria',
-//       'Constantinople',
-//       'Eastern_Mediterranean',
-//       'Greece',
-//       'Ionian_Sea',
-//       'Smyrna',
-//     ],
-//   },
-//   Albania: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Adriatic_Sea',
-//       'Greece',
-//       'Ionian_Sea',
-//       'Serbia',
-//       'Trieste',
-//     ],
-//   },
-//   Ankara: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Turkey',
-//     adjacencyList: ['Armenia', 'Black_Sea', 'Constantinople', 'Smyrna'],
-//   },
-//   Apulia: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Adriatic_Sea', 'Ionian_Sea', 'Naples', 'Rome', 'Venice'],
-//   },
-//   Armenia: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Ankara', 'Black_Sea', 'Sevastopol', 'Smyrna', 'Syria'],
-//   },
-//   Baltic_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Berlin',
-//       'Denmark',
-//       'Gulf_of_Bothnia',
-//       'Kiel',
-//       'Livonia',
-//       'Prussia',
-//       'Sweden',
-//     ],
-//   },
-//   Barents_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Finland', 'Norway', 'Norwegian_Sea', 'St_Petersburg'],
-//   },
-//   Belgium: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Burgundy',
-//       'English_Channel',
-//       'Holland',
-//       'North_Sea',
-//       'Picardy',
-//       'Ruhr',
-//     ],
-//   },
-//   Berlin: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Germany',
-//     adjacencyList: ['Baltic_Sea', 'Kiel', 'Munich', 'Prussia', 'Silesia'],
-//   },
-//   Black_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Ankara',
-//       'Armenia',
-//       'Bulgaria',
-//       'Constantinople',
-//       'Rumania',
-//       'Sevastopol',
-//     ],
-//   },
-//   Bohemia: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Galicia', 'Munich', 'Silesia', 'Tyrolia', 'Vienna'],
-//   },
-//   Brest: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'France',
-//     adjacencyList: [
-//       'English_Channel',
-//       'Gascony',
-//       'Mid-Atlantic_Ocean',
-//       'Paris',
-//       'Picardy',
-//     ],
-//   },
-//   Budapest: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Austria_Hungary',
-//     adjacencyList: ['Galicia', 'Rumania', 'Serbia', 'Trieste', 'Vienna'],
-//   },
-//   Bulgaria: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Aegean_Sea',
-//       'Black_Sea',
-//       'Constantinople',
-//       'Greece',
-//       'Rumania',
-//       'Serbia',
-//     ],
-//   },
-//   Burgundy: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Belgium',
-//       'Gascony',
-//       'Marseilles',
-//       'Munich',
-//       'Paris',
-//       'Picardy',
-//       'Ruhr',
-//     ],
-//   },
-//   Clyde: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Edinburgh',
-//       'Liverpool',
-//       'North_Atlantic_Ocean',
-//       'Norwegian_Sea',
-//     ],
-//   },
-//   Constantinople: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Turkey',
-//     adjacencyList: ['Aegean_Sea', 'Ankara', 'Black_Sea', 'Bulgaria', 'Smyrna'],
-//   },
-//   Denmark: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Baltic_Sea',
-//       'Helgoland_Bight',
-//       'Kiel',
-//       'North_Sea',
-//       'Skagerrak',
-//       'Sweden',
-//     ],
-//   },
-//   Eastern_Mediterranean: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Aegean_Sea', 'Ionian_Sea', 'Smyrna', 'Syria'],
-//   },
-//   Edinburgh: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'England',
-//     adjacencyList: [
-//       'Clyde',
-//       'Liverpool',
-//       'North_Sea',
-//       'Norwegian_Sea',
-//       'Yorkshire',
-//     ],
-//   },
-//   English_Channel: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Belgium',
-//       'Brest',
-//       'Irish_Sea',
-//       'London',
-//       'Mid-Atlantic_Ocean',
-//       'North_Sea',
-//       'Picardy',
-//       'Wales',
-//     ],
-//   },
-//   Finland: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Adriatic_Sea',
-//       'Gulf_of_Bothnia',
-//       'Norway',
-//       'St_Petersburg',
-//       'Sweden',
-//     ],
-//   },
-//   Galicia: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Bohemia',
-//       'Budapest',
-//       'Rumania',
-//       'Silesia',
-//       'Ukraine',
-//       'Vienna',
-//       'Warsaw',
-//     ],
-//   },
-//   Gascony: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Brest',
-//       'Burgundy',
-//       'Marseilles',
-//       'Mid-Atlantic_Ocean',
-//       'Paris',
-//       'Spain',
-//     ],
-//   },
-//   Greece: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Aegean_Sea',
-//       'Albania',
-//       'Bulgaria',
-//       'Ionian_Sea',
-//       'Serbia',
-//     ],
-//   },
-//   Gulf_of_Bothnia: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Baltic_Sea',
-//       'Finland',
-//       'Livonia',
-//       'St_Petersburg',
-//       'Sweden',
-//     ],
-//   },
-//   Gulf_of_Lyon: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Marseilles',
-//       'Piedmont',
-//       'Spain',
-//       'Tuscany',
-//       'Tyrrhenian_Sea',
-//       'Western_Mediterranean',
-//     ],
-//   },
-//   Helgoland_Bight: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Denmark', 'Holland', 'Kiel', 'North_Sea'],
-//   },
-//   Holland: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Belgium', 'Helgoland_Bight', 'Kiel', 'North_Sea', 'Ruhr'],
-//   },
-//   Ionian_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Adriatic_Sea',
-//       'Aegean_Sea',
-//       'Albania',
-//       'Apulia',
-//       'Eastern_Mediterranean',
-//       'Greece',
-//       'Naples',
-//       'Tunis',
-//       'Tyrrhenian_Sea',
-//     ],
-//   },
-//   Irish_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'English_Channel',
-//       'Mid-Atlantic_Ocean',
-//       'North_Atlantic_Ocean',
-//       'Wales',
-//     ],
-//   },
-//   Kiel: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Germany',
-//     adjacencyList: [
-//       'Baltic_Sea',
-//       'Berlin',
-//       'Denmark',
-//       'Helgoland_Bight',
-//       'Holland',
-//       'Munich',
-//       'Ruhr',
-//     ],
-//   },
-//   Liverpool: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'England',
-//     adjacencyList: [
-//       'Clyde',
-//       'Edinburgh',
-//       'Irish_Sea',
-//       'North_Atlantic_Ocean',
-//       'Wales',
-//       'Yorkshire',
-//     ],
-//   },
-//   Livonia: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Baltic_Sea',
-//       'Gulf_of_Bothnia',
-//       'Moscow',
-//       'Prussia',
-//       'St_Petersburg',
-//       'Warsaw',
-//     ],
-//   },
-//   London: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'England',
-//     adjacencyList: ['English_Channel', 'North_Sea', 'Wales', 'Yorkshire'],
-//   },
-//   Marseilles: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'France',
-//     adjacencyList: ['Burgundy', 'Gascony', 'Gulf_of_Lyon', 'Piedmont', 'Spain'],
-//   },
-//   'Mid-Atlantic_Ocean': {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Brest',
-//       'English_Channel',
-//       'Gascony',
-//       'Irish_Sea',
-//       'Irish_Sea',
-//       'North_Africa',
-//       'North_Atlantic_Ocean',
-//       'Portugal',
-//       'Spain',
-//       'Western_Mediterranean',
-//     ],
-//   },
-//   Moscow: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: 'zunigaenrique',
-//     country: 'Russia',
-//     adjacencyList: [
-//       'Livonia',
-//       'Sevastopol',
-//       'St_Petersburg',
-//       'Ukraine',
-//       'Warsaw',
-//     ],
-//   },
-//   Munich: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Germany',
-//     adjacencyList: [
-//       'Berlin',
-//       'Bohemia',
-//       'Burgundy',
-//       'Kiel',
-//       'Ruhr',
-//       'Silesia',
-//       'Tyrolia',
-//     ],
-//   },
-//   Naples: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Italy',
-//     adjacencyList: ['Apulia', 'Ionian_Sea', 'Rome', 'Tyrrhenian_Sea'],
-//   },
-//   North_Atlantic_Ocean: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Mid-Atlantic_Ocean', 'Tunis', 'Western_Mediterranean'],
-//   },
-//   North_Africa: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Clyde',
-//       'Irish_Sea',
-//       'Liverpool',
-//       'Mid-Atlantic_Ocean',
-//       'Norwegian_Sea',
-//     ],
-//   },
-//   North_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Belgium',
-//       'Denmark',
-//       'Edinburgh',
-//       'English_Channel',
-//       'Helgoland_Bight',
-//       'Holland',
-//       'London',
-//       'Norway',
-//       'Norwegian_Sea',
-//       'Skagerrak',
-//       'Yorkshire',
-//     ],
-//   },
-//   Norway: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Barents_Sea',
-//       'Finland',
-//       'North_Sea',
-//       'Norwegian_Sea',
-//       'Skagerrak',
-//       'St_Petersburg',
-//       'Sweden',
-//     ],
-//   },
-//   Norwegian_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Barents_Sea',
-//       'Clyde',
-//       'Edinburgh',
-//       'North_Atlantic_Ocean',
-//       'North_Sea',
-//       'Norway',
-//     ],
-//   },
-//   Paris: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'France',
-//     adjacencyList: ['Brest', 'Burgundy', 'Gascony', 'Picardy'],
-//   },
-//   Picardy: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Belgium', 'Brest', 'Burgundy', 'English_Channel', 'Paris'],
-//   },
-//   Piedmont: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Gulf_of_Lyon',
-//       'Marseilles',
-//       'Tuscany',
-//       'Tyrolia',
-//       'Venice',
-//     ],
-//   },
-//   Portugal: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Mid-Atlantic_Ocean', 'Spain'],
-//   },
-//   Prussia: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Baltic_Sea', 'Berlin', 'Livonia', 'Silesia', 'Warsaw'],
-//   },
-//   Rome: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Italy',
-//     adjacencyList: ['Apulia', 'Naples', 'Tuscany', 'Tyrrhenian_Sea', 'Venice'],
-//   },
-//   Ruhr: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Belgium', 'Burgundy', 'Holland', 'Kiel', 'Munich'],
-//   },
-//   Rumania: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Black_Sea',
-//       'Budapest',
-//       'Bulgaria',
-//       'Galicia',
-//       'Serbia',
-//       'Sevastopol',
-//       'Ukraine',
-//     ],
-//   },
-//   Serbia: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Albania',
-//       'Budapest',
-//       'Bulgaria',
-//       'Greece',
-//       'Rumania',
-//       'Trieste',
-//     ],
-//   },
-//   Sevastopol: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Russia',
-//     adjacencyList: ['Armenia', 'Black_Sea', 'Moscow', 'Rumania', 'Ukraine'],
-//   },
-//   Silesia: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Berlin',
-//       'Bohemia',
-//       'Galicia',
-//       'Munich',
-//       'Prussia',
-//       'Warsaw',
-//     ],
-//   },
-//   Skagerrak: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Denmark', 'North_Sea', 'Norway', 'Sweden'],
-//   },
-//   Smyrna: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Turkey',
-//     adjacencyList: [
-//       'Aegean_Sea',
-//       'Ankara',
-//       'Armenia',
-//       'Constantinople',
-//       'Eastern_Mediterranean',
-//       'Syria',
-//     ],
-//   },
-//   Spain: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Gascony',
-//       'Gulf_of_Lyon',
-//       'Marseilles',
-//       'Mid-Atlantic_Ocean',
-//       'Portugal',
-//       'Western_Mediterranean',
-//     ],
-//   },
-//   St_Petersburg: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Russia',
-//     adjacencyList: [
-//       'Barents_Sea',
-//       'Finland',
-//       'Gulf_of_Bothnia',
-//       'Livonia',
-//       'Moscow',
-//       'Norway',
-//     ],
-//   },
-//   Sweden: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Baltic_Sea',
-//       'Denmark',
-//       'Finland',
-//       'Gulf_of_Bothnia',
-//       'Norway',
-//       'Skagerrak',
-//     ],
-//   },
-//   Syria: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Armenia', 'Eastern_Mediterranean', 'Smyrna'],
-//   },
-//   Trieste: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Fleet',
-//     player: '',
-//     country: 'Austria_Hungary',
-//     adjacencyList: [
-//       'Adriatic_Sea',
-//       'Albania',
-//       'Budapest',
-//       'Serbia',
-//       'Tyrolia',
-//       'Venice',
-//       'Vienna',
-//     ],
-//   },
-//   Tunis: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Ionian_Sea',
-//       'North_Africa',
-//       'Tyrrhenian_Sea',
-//       'Western_Mediterranean',
-//     ],
-//   },
-//   Tuscany: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Gulf_of_Lyon',
-//       'Piedmont',
-//       'Rome',
-//       'Tyrrhenian_Sea',
-//       'Venice',
-//     ],
-//   },
-//   Tyrolia: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Bohemia', 'Munich', 'Trieste', 'Venice', 'Vienna'],
-//   },
-//   Tyrrhenian_Sea: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Gulf_of_Lyon',
-//       'Ionian_Sea',
-//       'Naples',
-//       'Rome',
-//       'Tunis',
-//       'Tuscany',
-//       'Western_Mediterranean',
-//     ],
-//   },
-//   Ukraine: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Galicia', 'Moscow', 'Rumania', 'Sevastopol', 'Warsaw'],
-//   },
-//   Venice: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Italy',
-//     adjacencyList: [
-//       'Adriatic_Sea',
-//       'Apulia',
-//       'Piedmont',
-//       'Rome',
-//       'Trieste',
-//       'Tuscany',
-//       'Tyrolia',
-//     ],
-//   },
-//   Vienna: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Austria_Hungary',
-//     adjacencyList: ['Bohemia', 'Budapest', 'Galicia', 'Trieste', 'Tyrolia'],
-//   },
-//   Wales: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'English_Channel',
-//       'Irish_Sea',
-//       'Liverpool',
-//       'London',
-//       'Yorkshire',
-//     ],
-//   },
-//   Warsaw: {
-//     spaceType: 'landlocked',
-//     isSupplyCenter: 'True',
-//     unit: 'Army',
-//     player: '',
-//     country: 'Russia',
-//     adjacencyList: [
-//       'Galicia',
-//       'Livonia',
-//       'Moscow',
-//       'Prussia',
-//       'Silesia',
-//       'Ukraine',
-//     ],
-//   },
-//   Western_Mediterranean: {
-//     spaceType: 'water',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: [
-//       'Gulf_of_Lyon',
-//       'Mid-Atlantic_Ocean',
-//       'North_Africa',
-//       'Spain',
-//       'Tunis',
-//       'Tyrrhenian_Sea',
-//     ],
-//   },
-//   Yorkshire: {
-//     spaceType: 'coast',
-//     isSupplyCenter: 'False',
-//     unit: '',
-//     player: '',
-//     country: '',
-//     adjacencyList: ['Edinburgh', 'Liverpool', 'London', 'North_Sea', 'Wales'],
-//   },
-// };

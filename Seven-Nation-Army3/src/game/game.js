@@ -374,7 +374,8 @@ export default class Game extends Component {
     }
     if(this.isFirstRun){
       this.addMouseListeners();
-      document.getElementById('submitOrders').addEventListener('click', scripts.submitOrders());   
+      document.getElementById('submitOrders').addEventListener('click', scripts.submitOrders());
+      scripts.getPlayers();
       this.isFirstRun = false;
     }else{
       scripts.cleanUp();
