@@ -61,8 +61,8 @@ export class NewGame extends Component {
         </nav>
         <Card className="LoginCard">
           <CardBody>
-            <CardTitle style={labelStyle} className="text-center">New Game</CardTitle>
-            <hr className="my-2" />
+            <CardTitle style={labelStyle} className="text-center">Create New Game</CardTitle>
+            <hr className="my-2" />< br />
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label style={labelStyle}>Game Title</Label>
@@ -93,14 +93,15 @@ export class NewGame extends Component {
                   id="adjudicationPeriod"
                   onChange={this.onChange}
                   value={this.state.adjudicationPeriod}
+                  
                 
                 >
-                    <option>5</option>
-                    <option>10</option>
-                    <option>15</option>
-                    <option>30</option>
-                    <option>60</option>
-                    <option>120</option>
+                    <option>5 minutes</option>
+                    <option>10 minutes</option>
+                    <option>15 minutes</option>
+                    <option>30 minutes</option>
+                    <option>1 hour</option>
+                    <option>2 hours</option>
                 </Input>
               </FormGroup>
               <Button color="primary" onClick={this.onSubmit}>Create New Game</Button>
