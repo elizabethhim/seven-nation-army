@@ -12,6 +12,9 @@ let territoriesJSON = {};
 function getCurrentUser() {
   return getFirebase().auth().currentUser;
 }
+export function validateUser(territory) {
+  return territory.getAttribute('player') === getCurrentUser().uid;
+}
 //submits current orders
 export function submitOrders() {
   const action = orders;
@@ -47,7 +50,6 @@ export function buildOrders(action) {
   orders[index] = newObj
   makeOrdersList();
 }
-
 //Checks to see if an order for a territory already exists
 //Returns a bool and index if found
 function orderExists(action) {
@@ -64,10 +66,9 @@ function orderExists(action) {
 
 //Deletes an order from the orders object
 function deleteOrder(action){
-  const exists = orderExists(action)[0];
-  if(exists){
-    const index = orderExists(action)[1];
-    const key = 'actionList' + index;
+  const exists = orderExists(action);
+  if(exists[0]){
+    const key = 'actionList' + exists[1];
     delete orders[key]
   }
 }
@@ -99,10 +100,19 @@ function makeOrdersList(){
   }
   ordersList = tempList;
 }
-
-export function validateUser(territory) {
-  return territory.getAttribute('player') === getCurrentUser().uid;
+//clears out the orders and the map when the JSON is updated
+export function cleanUp(){
+  for(let x in orders){
+    deleteActionDrawings(orders[x]['unitOrigin']);
+  }
+  orders = { 'sessionID': sessionID };
+  makeOrdersList();
 }
+
+
+
+
+
 
 //vars is an array
 //vars[0] = array of territory objects, can be just one

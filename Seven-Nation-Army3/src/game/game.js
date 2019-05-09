@@ -13,6 +13,7 @@ export default class Game extends Component {
   constructor(props) {
     super(props);
 
+    this.isFirstRun = true;
 
     this.countryColors = {
       'Russia':'#dd1efa',
@@ -312,6 +313,7 @@ export default class Game extends Component {
       territory.setAttribute('country', territoryInfo.country);
       territory.setAttribute('countrycolor', territory.getAttribute('fill'));
       territory.setAttribute('previouscolor', territory.getAttribute('fill'));
+
       //Adds country attribute for supply centers
       if (territoryInfo.isSupplyCenter === 'True' && territoryInfo.country === '') {
         territory.setAttribute('country', 'Unclaimed');
@@ -332,8 +334,7 @@ export default class Game extends Component {
         territory.setAttribute('stroke-width', 10);
         territory.setAttribute('stroke-opacity', 0.20);
         territory.setAttribute('previouscolor', color);
-
-        //Makes the needed units visible
+        //Makes the needed units visible and hides the others
         if (territoryInfo.unit === 'Army') {
           document
             .getElementById(territory.id + '_Army')
@@ -371,11 +372,14 @@ export default class Game extends Component {
 
       this.territoryObjects.push(territory);
     }
+    if(this.isFirstRun){
+      this.addMouseListeners();
+      document.getElementById('submitOrders').addEventListener('click', scripts.submitOrders());   
+      this.isFirstRun = false;
+    }else{
+      scripts.cleanUp();
+    }
     document.getElementById('popupContainer').setAttribute('mutable', true);
-    this.addMouseListeners();
-    document.getElementById('submitOrders').addEventListener('click', () =>{
-      scripts.submitOrders();
-    });
   }
 
   componentDidMount() {
