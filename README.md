@@ -2,6 +2,10 @@
 
 You are one of the seven Great Powers prior to World War I and your goal is to conquer all of Europe! (well, at least half)
 
+## Backend Repository
+[Flask backend for the app](https://github.com/MataMercer/SevenNationArmyBackend)
+
+
 ## The Team
 
 ---
@@ -13,3 +17,5 @@ You are one of the seven Great Powers prior to World War I and your goal is to c
 [Mercer Denholm](https://github.com/MataMercer)\
 [Samantha Wiley](https://github.com/samanthawiley)\
 [Tomas Ponce](https://github.com/Ponce-1)
+
+
