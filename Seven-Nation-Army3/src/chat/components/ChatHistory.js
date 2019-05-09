@@ -21,7 +21,7 @@ class ChatHistory extends Component {
   }
 
   updateFriendUsername(props) {
-    const friendRef = this.firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/' + props.friendID);
+    const friendRef = this.firebase.database().ref('root/sessions/-LeTFyD10JE1O-GKaU14/participatingUserIDs/' + props.friendID);
     friendRef.once("value").then(res => {
       if (res) {
         this.setState({ friendUsername: res.val().username })

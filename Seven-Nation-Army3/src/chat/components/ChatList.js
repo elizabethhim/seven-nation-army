@@ -10,7 +10,7 @@ export default class ChatList extends Component {
     };
     const firebase = getFirebase();
     this.firebase = firebase;
-    this.playerRef = firebase.database().ref('root/sessions/-LdLRGh4fGk1rD5Zd_Np/players/');
+    this.playerRef = firebase.database().ref('root/sessions/-LeTFyD10JE1O-GKaU14/participatingUserIDs/');
   }
 
   listenForPlayers(playerRef) {
