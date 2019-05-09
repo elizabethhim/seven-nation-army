@@ -1,6 +1,6 @@
 import { getFirebase } from 'react-redux-firebase';
 
-export const sessionID = '-LeP3gmCkPL26h66oecN';
+export const sessionID = '-LeTFyD10JE1O-GKaU14';
 let orders = { sessionID: sessionID };
 export let ordersList = [];
 let territoriesJSON = {};
@@ -31,6 +31,7 @@ export function submitOrders() {
     .set({
       action,
     });
+    console.log(orders);
 }
 export function getPlayers() {
   var playersRef = getFirebase()

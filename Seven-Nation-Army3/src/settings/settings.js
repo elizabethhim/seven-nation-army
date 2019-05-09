@@ -75,6 +75,11 @@ class Settings extends React.Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+             <NavItem>
+               <NavLink href={"/#/help"}>
+                    Help
+                </NavLink>
+              </NavItem>
               <NavItem>
                 <NavLink href="https://github.com/elizabethhim/Seven-Nation-Army">
                   GitHub
