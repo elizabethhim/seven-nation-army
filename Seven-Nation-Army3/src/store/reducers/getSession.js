@@ -1,6 +1,8 @@
 import {
   GET_SESSIONS_SUCCESS,
   GET_SESSIONS_FAIL,
+  CREATE_SESSION_SUCCESS,
+  CREATE_SESSION_FAIL,
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
   JOIN_SESSION_FAIL,
@@ -22,6 +24,20 @@ export default function session(state = initialState, action) {
         ...state,
         sessions: null,
         sessionError: 'Could not get list of sessions.',
+      };
+    case CREATE_SESSION_SUCCESS:
+      return {
+        ...state,
+        session: action.payload,
+        sessions: null,
+        sessionError: null,
+      };
+    case CREATE_SESSION_FAIL:
+      return {
+        ...state,
+        session: action.payload,
+        sessions: null,
+        sessionError: null,
       };
     case JOIN_SESSION_SUCCESS:
       return {

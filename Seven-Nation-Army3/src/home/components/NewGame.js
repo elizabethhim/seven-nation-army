@@ -27,13 +27,27 @@ export class NewGame extends Component {
     super(props);
 
     this.state = {
-      players: [...Array(7).keys()].map(x => x + 1),
+      title:'',
+      passcode: '',
+      adjudicationPeriod:'5',
+
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit = () => {
-    this.props.createSession();
+  onChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value,
+    });
+  };
+
+
+  onSubmit = event => {
+    const {title} = this.state;
+    const {passcode} = this.state;
+    const {adjudicationPeriod} = this.state;
+    event.preventDefault();
+    this.props.createSession(title, passcode, adjudicationPeriod);
   };
 
   render() {
@@ -51,20 +65,36 @@ export class NewGame extends Component {
             <hr className="my-2" />
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Label style={labelStyle}>Game Name</Label>
-                <Input type="text"></Input>
+                <Label style={labelStyle}>Game Title</Label>
+                <Input 
+                  type="text"
+                  name="title"
+                  id="title"
+                  placeholder="Enter game title"
+                  value={this.state.title}
+                  onChange={this.onChange}
+                ></Input>
               </FormGroup>
               <FormGroup>
-                <Label style={labelStyle} for="exampleSelect">Prefered # of Players</Label>
-                <Input type="select" name="select" id="exampleSelect">
-                  {players.map(i => (
-                    <option key={i}>{i}</option>
-                  ))}
-                </Input>
+                <Label style={labelStyle}>Passcode</Label>
+                <Input type="text"
+                  type="text"
+                  name="passcode"
+                  id="passcode"
+                  placeholder="Enter passcode "
+                  value={this.state.passcode}
+                  onChange={this.onChange}
+                
+                ></Input>
               </FormGroup>
               <FormGroup>
                 <Label style={labelStyle}>Adjudication Period</Label>
-                <Input type="select">
+                <Input type="select"
+                  id="adjudicationPeriod"
+                  onChange={this.onChange}
+                  value={this.state.adjudicationPeriod}
+                
+                >
                     <option>5</option>
                     <option>10</option>
                     <option>15</option>
@@ -73,7 +103,7 @@ export class NewGame extends Component {
                     <option>120</option>
                 </Input>
               </FormGroup>
-              <Button color="primary">Create New Game</Button>
+              <Button color="primary" onClick={this.onSubmit}>Create New Game</Button>
             </Form>
           </CardBody>
         </Card>
@@ -87,7 +117,7 @@ NewGame.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  createSession: () => dispatch(createSession()),
+  createSession: (title, passcode, adjudicationPeriod) => dispatch(createSession(title, passcode, adjudicationPeriod)),
 });
 
 export default connect(

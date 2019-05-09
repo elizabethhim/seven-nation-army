@@ -4,6 +4,7 @@ import {
   GET_SESSIONS_SUCCESS,
   GET_SESSIONS_FAIL,
   CREATE_SESSION_SUCCESS,
+  CREATE_SESSION_FAIL,
   JOIN_SESSION_SUCCESS,
   JOIN_SESSION_NO_MATCH,
   JOIN_SESSION_FAIL,
@@ -34,13 +35,51 @@ export const getSessions = () => {
 
 // TODO: Create a new session in the database with all the correct parameters
 // (Port from Seven-Nation-Army-Backend)
-export const createSession = () => {
-  return dispatch => {
-    dispatch({
-      type: CREATE_SESSION_SUCCESS,
-      payload: null,
+export const createSession = (title, passcode, adjudicationPeriod) => {
+  return (dispatch, getState) => {
+    const token = getState().firebase.auth.stsTokenManager.accessToken
+    const bodyFormData = new FormData();
+    bodyFormData.set('title', title);
+    bodyFormData.set('passcode', passcode);
+    bodyFormData.set('adjudicationPeriod', adjudicationPeriod);
+    console.log(token);
+    axios({
+      method: 'post',
+      url: 'http://35.165.246.90:5000/api/createsession',
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: bodyFormData,
+      auth: {
+        username: token,
+        password: ''
+      }
+    }).then(res => {
+      console.log('Result', res);
+      if((res['data'])['data'] === 'session created'){
+        dispatch({
+          type: CREATE_SESSION_SUCCESS,
+          payload: '-LdLRab8HD6zBlXNJMRK',
+        });
+        dispatch(push('/game'));
+      }else{
+        dispatch({
+          type: CREATE_SESSION_FAIL,
+          payload: (res['data'])['data'] ,
+        });
+      }
+      
+      
+    }).catch(err => {
+      console.log('Connection Error');
+      console.log(err);
+      dispatch({
+        type: CREATE_SESSION_FAIL,
+        payload: err,
+      })
     });
-    dispatch(push('/game'));
+    // TODO(Chris): Access AWS database and authorize join session.
   };
 };
 

@@ -20,15 +20,20 @@ class GameList extends Component {
     this.props.getSessions();
   }
 
+
+
   render() {
     const { sessions } = this.props;
     let list = [];
     for (let gameID in sessions) {
       if (sessions[gameID].hasOwnProperty('participatingUserIDs')) {
+        const gameMasterID = ((Object.keys(sessions[gameID].participatingUserIDs).filter((value)=>{return value===sessions[gameID].gameMasterUserID})));
         list.push(
           <tr key={gameID}>
             <td>{sessions[gameID].title}</td>
-            <td>Anonymous</td>
+            <td>{`${
+              sessions[gameID].participatingUserIDs[gameMasterID] && sessions[gameID].participatingUserIDs[gameMasterID].displayName !==undefined ? sessions[gameID].participatingUserIDs[gameMasterID].displayName: 'Anonymous'
+            }`}</td>
             <td>{`${Object.keys(sessions[gameID].participatingUserIDs).length} / 7`}</td>
             <td><Button id={gameID} onClick={this.onClick}>Join</Button></td>
           </tr>
