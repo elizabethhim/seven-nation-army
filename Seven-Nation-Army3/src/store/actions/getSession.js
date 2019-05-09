@@ -85,6 +85,9 @@ export const leaveSession = () => {
 export const joinSession = (roomID, roomCode) => {
   return (dispatch, getState) => {
     const token = getState().firebase.auth.stsTokenManager.accessToken
+    const bodyFormData = new FormData();
+    bodyFormData.set('sessionID', roomID);
+    bodyFormData.set('passcode', roomCode);
     console.log(token);
     axios({
       method: 'post',
@@ -93,10 +96,7 @@ export const joinSession = (roomID, roomCode) => {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      data: {
-        sessionID: roomID,
-        passcode: roomCode,
-      },
+      data: bodyFormData,
       auth: {
         username: token,
         password: ''
