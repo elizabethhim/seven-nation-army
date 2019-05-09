@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router';
-// import axios from 'axios';
+import axios from 'axios';
 import {
   GET_SESSIONS_SUCCESS,
   GET_SESSIONS_FAIL,
@@ -53,50 +53,54 @@ export const leaveSession = () => {
   }
 }
 
-export const joinSession = (roomID, roomCode) => {
-  return (dispatch, _, { getFirebase }) => {
-    getFirebase()
-      .ref('root/sessions')
-      .once('value', sessions => {
-        const sessionList = sessions.val();
-        if (roomID !== '') {
-          dispatch({
-            type: JOIN_SESSION_SUCCESS,
-            payload: sessionList[roomID],
-          });
-          dispatch(push('/game'));
-        } else {
-          dispatch({
-            type: JOIN_SESSION_NO_MATCH,
-            payload: 'Not a valid room code.',
-          });
-        }
-      })
-      .catch(err => {
-        dispatch({
-          type: JOIN_SESSION_FAIL,
-          payload: err,
-        });
-      });
-  }
-}
+// export const joinSession = (roomID, roomCode) => {
+//   return (dispatch, _, { getFirebase }) => {
+//     getFirebase()
+//       .ref('root/sessions')
+//       .once('value', sessions => {
+//         const sessionList = sessions.val();
+//         if (roomID !== '') {
+//           dispatch({
+//             type: JOIN_SESSION_SUCCESS,
+//             payload: sessionList[roomID],
+//           });
+//           dispatch(push('/game'));
+//         } else {
+//           dispatch({
+//             type: JOIN_SESSION_NO_MATCH,
+//             payload: 'Not a valid room code.',
+//           });
+//         }
+//       })
+//       .catch(err => {
+//         dispatch({
+//           type: JOIN_SESSION_FAIL,
+//           payload: err,
+//         });
+//       });
+//   }
+// }
 
-/*
+
 export const joinSession = (roomID, roomCode) => {
   return (dispatch, getState) => {
     const token = getState().firebase.auth.stsTokenManager.accessToken
     console.log(token);
     axios({
       method: 'post',
-      url: '35.165.246.90:5000/api/joinsession',
+      url: 'http://35.165.246.90:5000/api/joinsession',
+      withCredentials: true,
       headers: {
-        'content-type': 'multipart/form-data',
-        'Authorization': `Basic ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
       data: {
         sessionID: roomID,
         passcode: roomCode,
       },
+      auth: {
+        username: token,
+        password: ''
+      }
     }).then(res => {
       console.log('Result', res);
       dispatch({
@@ -114,4 +118,4 @@ export const joinSession = (roomID, roomCode) => {
     // TODO(Chris): Access AWS database and authorize join session.
   };
 }
-*/
+
