@@ -13,6 +13,7 @@ import NewGame from './home/components/NewGame';
 import Login from './login/login';
 import Register from './login/register';
 import Settings from './settings/settings';
+import HelpPage from './help/help';
 
 export default (
   <AnimatedSwitch
@@ -32,6 +33,7 @@ export default (
     <Route path="/game" component={Game} />
     <Route path="/continue" component={Continue} />
     <Route path="/new" component={NewGame} />
+    <Route path="/help" component={HelpPage}/>
     <Route component={PageNotFound} />
   </AnimatedSwitch>
 );
