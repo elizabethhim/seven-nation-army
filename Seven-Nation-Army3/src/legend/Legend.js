@@ -25,7 +25,7 @@ export default class Legend extends Component {
 
   listenForPlayers = playerRef => {
     const playerList = [];
-    playerRef.on('value', snapshot => {
+    playerRef.once('value').then(snapshot => {
       snapshot.forEach(element => {
         playerList.push({
           id: element.key,

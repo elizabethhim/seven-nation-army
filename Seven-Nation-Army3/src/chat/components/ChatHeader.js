@@ -14,7 +14,8 @@ export default class ChatHeader extends Component {
                 /> */}
                 <div className="chat-about">
                     <div className="chat-with">Chat with {name}</div>
-                    <div className="chat-num-messages">already {totalMessages} messages</div>
+                    {/* <div className="chat-num-messages">already {totalMessages} messages</div> */}
+                    <div className="chat-num-messages">Let the scheming begin!</div>
                 </div>
                 <i className="fa fa-star" />
         </div>
